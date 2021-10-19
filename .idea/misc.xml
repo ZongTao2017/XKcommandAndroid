@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/ic_menu_circle_selector.xml" value="0.217" />
+        <entry key="app/src/main/res/drawable/ic_menu_color_selector.xml" value="0.147" />
+        <entry key="app/src/main/res/drawable/ic_menu_control_selector.xml" value="0.217" />
+        <entry key="app/src/main/res/drawable/ic_menu_customize_selector.xml" value="0.217" />
+        <entry key="app/src/main/res/drawable/ic_menu_magic_selector.xml" value="0.217" />
+        <entry key="app/src/main/res/drawable/ic_menu_palette_selector.xml" value="0.217" />
+        <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.23897707231040563" />
+        <entry key="app/src/main/res/layout-land/fragment_control.xml" value="0.23897707231040563" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2115036231884058" />
+        <entry key="app/src/main/res/layout/activity_main_landscape.xml" value="0.2115036231884058" />
+        <entry key="app/src/main/res/layout/fragment_control.xml" value="0.2115036231884058" />
+        <entry key="app/src/main/res/layout/fragment_main.xml" value="0.2115036231884058" />
+        <entry key="app/src/main/res/layout/tabs_icon.xml" value="0.2115036231884058" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

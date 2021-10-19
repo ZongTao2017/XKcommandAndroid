@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="topBarHeight">50dp</dimen>
+    <dimen name="bottomTabsHeight">50dp</dimen>
+    <dimen name="statusBarHeight">65dp</dimen>
+    <dimen name="statusBarWidth">60dp</dimen>
+    <dimen name="multiDotsHeight">15dp</dimen>
+</resources>
