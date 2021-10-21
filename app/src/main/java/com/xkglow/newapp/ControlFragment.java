@@ -5,6 +5,7 @@ import static com.xkglow.newapp.Helper.Helper.ICON_SIZE;
 import static com.xkglow.newapp.Helper.Helper.PADDING;
 import static com.xkglow.newapp.Helper.Helper.dpToPx;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -24,11 +26,30 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class ControlFragment extends Fragment {
+    private static final int SIZE = 8;
+    private boolean[] buttonStatus;
+    private boolean[] release;
+    private boolean powerOn;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control, container, false);
+
+        buttonStatus = new boolean[SIZE];
+        release = new boolean[SIZE];
+        for (int i = 0; i < SIZE; i++) {
+            buttonStatus[i] = false;
+            if (i < SIZE / 2) {
+                release[i] = false;
+            } else {
+                release[i] = true;
+            }
+        }
+        powerOn = true;
+
+        final int padding = dpToPx(getContext(), 20);
+
         final FrameLayout frameLayout = view.findViewById(R.id.frame_layout);
         frameLayout.post(new Runnable() {
             @Override
@@ -50,22 +71,36 @@ public class ControlFragment extends Fragment {
                 int realIconSize = (int) (iconSize * ICON_RATIO);
                 int resize = (iconSize - realIconSize) / 2;
 
-                FrameLayout button1 = new FrameLayout(getContext());
-                button1.setClipChildren(false);
-                button1.setClipToPadding(false);
-                FrameLayout button2 = new FrameLayout(getContext());
-                FrameLayout button3 = new FrameLayout(getContext());
-                FrameLayout button4 = new FrameLayout(getContext());
-                FrameLayout button5 = new FrameLayout(getContext());
-                FrameLayout button6 = new FrameLayout(getContext());
-                FrameLayout button7 = new FrameLayout(getContext());
-                FrameLayout button8 = new FrameLayout(getContext());
+                ControlButton button1 = new ControlButton(getContext());
+                button1.setReleased(false);
+                button1.setText("1");
+                ControlButton button2 = new ControlButton(getContext());
+                button2.setReleased(false);
+                button2.setText("2");
+                ControlButton button3 = new ControlButton(getContext());
+                button3.setReleased(false);
+                button3.setText("3");
+                ControlButton button4 = new ControlButton(getContext());
+                button4.setReleased(false);
+                button4.setText("4");
+                ControlButton button5 = new ControlButton(getContext());
+                button5.setReleased(true);
+                button5.setText("5");
+                ControlButton button6 = new ControlButton(getContext());
+                button6.setReleased(true);
+                button6.setText("6");
+                ControlButton button7 = new ControlButton(getContext());
+                button7.setReleased(true);
+                button7.setText("7");
+                ControlButton button8 = new ControlButton(getContext());
+                button8.setReleased(true);
+                button8.setText("8");
 
                 FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(realIconSize, realIconSize);
                 layoutParams1.leftMargin = paddingH + resize;
                 layoutParams1.topMargin = paddingV + resize;
                 if (horizontal) {
-                    layoutParams1.leftMargin = resize;
+                    layoutParams1.leftMargin = resize + padding;
                 }
                 button1.setLayoutParams(layoutParams1);
                 frameLayout.addView(button1);
@@ -74,7 +109,7 @@ public class ControlFragment extends Fragment {
                 layoutParams2.leftMargin = paddingH * 2 + iconSize + resize;
                 layoutParams2.topMargin = paddingV + resize;
                 if (horizontal) {
-                    layoutParams2.leftMargin = paddingH + iconSize + resize;
+                    layoutParams2.leftMargin = paddingH + iconSize + resize + padding;
                 }
                 button2.setLayoutParams(layoutParams2);
                 frameLayout.addView(button2);
@@ -83,7 +118,7 @@ public class ControlFragment extends Fragment {
                 layoutParams3.leftMargin = paddingH + resize;
                 layoutParams3.topMargin = paddingV * 2 + iconSize + resize;
                 if (horizontal) {
-                    layoutParams3.leftMargin = paddingH * 2 + iconSize * 2 + resize;
+                    layoutParams3.leftMargin = paddingH * 2 + iconSize * 2 + resize + padding;
                     layoutParams3.topMargin = paddingV + resize;
                 }
                 button3.setLayoutParams(layoutParams3);
@@ -93,7 +128,7 @@ public class ControlFragment extends Fragment {
                 layoutParams4.leftMargin = paddingH * 2 + iconSize + resize;
                 layoutParams4.topMargin = paddingV * 2 + iconSize + resize;
                 if (horizontal) {
-                    layoutParams4.leftMargin = paddingH * 3 + iconSize * 3 + resize;
+                    layoutParams4.leftMargin = paddingH * 3 + iconSize * 3 + resize + padding;
                     layoutParams4.topMargin = paddingV + resize;
                 }
                 button4.setLayoutParams(layoutParams4);
@@ -103,7 +138,7 @@ public class ControlFragment extends Fragment {
                 layoutParams5.leftMargin = paddingH + resize;
                 layoutParams5.topMargin = paddingV * 3 + iconSize * 2 + resize;
                 if (horizontal) {
-                    layoutParams5.leftMargin = resize;
+                    layoutParams5.leftMargin = resize + padding;
                     layoutParams5.topMargin = paddingV * 2 + iconSize + resize;
                 }
                 button5.setLayoutParams(layoutParams5);
@@ -113,7 +148,7 @@ public class ControlFragment extends Fragment {
                 layoutParams6.leftMargin = paddingH * 2 + iconSize + resize;
                 layoutParams6.topMargin = paddingV * 3 + iconSize * 2 + resize;
                 if (horizontal) {
-                    layoutParams6.leftMargin = paddingH + iconSize + resize;
+                    layoutParams6.leftMargin = paddingH + iconSize + resize + padding;
                     layoutParams6.topMargin = paddingV * 2 + iconSize + resize;
                 }
                 button6.setLayoutParams(layoutParams6);
@@ -123,7 +158,7 @@ public class ControlFragment extends Fragment {
                 layoutParams7.leftMargin = paddingH + resize;
                 layoutParams7.topMargin = paddingV * 4 + iconSize * 3 + resize;
                 if (horizontal) {
-                    layoutParams7.leftMargin = paddingH * 2 + iconSize * 2 + resize;
+                    layoutParams7.leftMargin = paddingH * 2 + iconSize * 2 + resize + padding;
                     layoutParams7.topMargin = paddingV * 2 + iconSize + resize;
                 }
                 button7.setLayoutParams(layoutParams7);
@@ -133,59 +168,17 @@ public class ControlFragment extends Fragment {
                 layoutParams8.leftMargin = paddingH * 2 + iconSize + resize;
                 layoutParams8.topMargin = paddingV * 4 + iconSize * 3 + resize;
                 if (horizontal) {
-                    layoutParams8.leftMargin = paddingH * 3 + iconSize * 3 + resize;
+                    layoutParams8.leftMargin = paddingH * 3 + iconSize * 3 + resize + padding;
                     layoutParams8.topMargin = paddingV * 2 + iconSize + resize;
                 }
                 button8.setLayoutParams(layoutParams8);
                 frameLayout.addView(button8);
 
-                FrameLayout.LayoutParams imageLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                ImageView image1 = new ImageView(getContext());
-                ImageView image2 = new ImageView(getContext());
-                ImageView image3 = new ImageView(getContext());
-                ImageView image4 = new ImageView(getContext());
-                ImageView image5 = new ImageView(getContext());
-                ImageView image6 = new ImageView(getContext());
-                ImageView image7 = new ImageView(getContext());
-                ImageView image8 = new ImageView(getContext());
-                image1.setImageResource(R.drawable.button_unpressed);
-                image2.setImageResource(R.drawable.button_unpressed);
-                image3.setImageResource(R.drawable.button_unpressed);
-                image4.setImageResource(R.drawable.button_unpressed);
-                image5.setImageResource(R.drawable.button_unpressed);
-                image6.setImageResource(R.drawable.button_unpressed);
-                image7.setImageResource(R.drawable.button_unpressed);
-                image8.setImageResource(R.drawable.button_unpressed);
-                image1.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image2.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image3.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image4.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image5.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image6.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image7.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image8.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image1.setLayoutParams(imageLayoutParams);
-                image2.setLayoutParams(imageLayoutParams);
-                image3.setLayoutParams(imageLayoutParams);
-                image4.setLayoutParams(imageLayoutParams);
-                image5.setLayoutParams(imageLayoutParams);
-                image6.setLayoutParams(imageLayoutParams);
-                image7.setLayoutParams(imageLayoutParams);
-                image8.setLayoutParams(imageLayoutParams);
-                button1.addView(image1);
-                button2.addView(image2);
-                button3.addView(image3);
-                button4.addView(image4);
-                button5.addView(image5);
-                button6.addView(image6);
-                button7.addView(image7);
-                button8.addView(image8);
-
                 FrameLayout power = new FrameLayout(getContext());
                 int size = dpToPx(getContext(), 60);
                 FrameLayout.LayoutParams powerLayoutParams = new FrameLayout.LayoutParams(size, size);
                 if (horizontal) {
-                    powerLayoutParams.leftMargin = (int) (iconSize * 2 + paddingH * 1.5f - size / 2);
+                    powerLayoutParams.leftMargin = (int) (iconSize * 2 + paddingH * 1.5f - size / 2) + padding;
                     powerLayoutParams.gravity = Gravity.CENTER_VERTICAL;
                 } else {
                     powerLayoutParams.gravity = Gravity.CENTER;
@@ -193,19 +186,59 @@ public class ControlFragment extends Fragment {
                 power.setLayoutParams(powerLayoutParams);
                 frameLayout.addView(power);
 
-                ImageView powerBgImageView = new ImageView(getContext());
+                final ImageView powerBgImageView = new ImageView(getContext());
                 powerBgImageView.setLayoutParams(new FrameLayout.LayoutParams(size, size));
                 powerBgImageView.setImageResource(R.drawable.power_base_unpressed);
                 powerBgImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 power.addView(powerBgImageView);
 
-                ImageView powerImageView = new ImageView(getContext());
                 FrameLayout.LayoutParams powerImageLayoutParams = new FrameLayout.LayoutParams(size / 2, size / 2);
                 powerImageLayoutParams.gravity = Gravity.CENTER;
+
+                final ImageView powerBgImageView2 = new ImageView(getContext());
+                powerBgImageView2.setLayoutParams(powerImageLayoutParams);
+                powerBgImageView2.setImageResource(R.drawable.power_base_pressed);
+                powerBgImageView2.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                power.addView(powerBgImageView2);
+                powerBgImageView2.setVisibility(View.GONE);
+
+                final ImageView powerImageView = new ImageView(getContext());
                 powerImageView.setLayoutParams(powerImageLayoutParams);
                 powerImageView.setImageResource(R.drawable.power);
                 powerImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                powerImageView.setColorFilter(0xffffffff);
                 power.addView(powerImageView);
+
+                power.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        int action = event.getActionMasked();
+                        if (action == MotionEvent.ACTION_DOWN) {
+                            if (powerOn) {
+                                powerBgImageView.setVisibility(View.GONE);
+                                powerBgImageView2.setVisibility(View.VISIBLE);
+                                powerImageView.setColorFilter(0xffff0000);
+                            } else {
+                                powerBgImageView.setVisibility(View.VISIBLE);
+                                powerBgImageView2.setVisibility(View.GONE);
+                                powerImageView.setColorFilter(0xffffffff);
+                            }
+                            powerOn = !powerOn;
+                            button1.setPowerOn(powerOn);
+                            button2.setPowerOn(powerOn);
+                            button3.setPowerOn(powerOn);
+                            button4.setPowerOn(powerOn);
+                            button5.setPowerOn(powerOn);
+                            button6.setPowerOn(powerOn);
+                            button7.setPowerOn(powerOn);
+                            button8.setPowerOn(powerOn);
+                        }
+                        return true;
+                    }
+                });
+
+
+
             }
         });
 
