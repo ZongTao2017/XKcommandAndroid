@@ -85,30 +85,25 @@ public class ControlButton extends FrameLayout {
         if (!powerOn) return false;
         int action = event.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
+            imageUnpressed.setVisibility(View.GONE);
+            imagePressed.setVisibility(View.VISIBLE);
             if (released) {
-                imageUnpressed.setVisibility(View.GONE);
-                imagePressed.setVisibility(View.VISIBLE);
                 imageIllumination.setVisibility(View.VISIBLE);
             } else {
                 if (!pressed) {
-                    imageUnpressed.setVisibility(View.GONE);
-                    imagePressed.setVisibility(View.VISIBLE);
                     imageIllumination.setVisibility(View.VISIBLE);
                 } else {
-                    imageUnpressed.setVisibility(View.VISIBLE);
-                    imagePressed.setVisibility(View.GONE);
                     imageIllumination.setVisibility(View.GONE);
                 }
                 pressed = !pressed;
             }
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+            imageUnpressed.setVisibility(View.VISIBLE);
+            imagePressed.setVisibility(View.GONE);
             if (released) {
-                imageUnpressed.setVisibility(View.VISIBLE);
-                imagePressed.setVisibility(View.GONE);
                 imageIllumination.setVisibility(View.GONE);
             }
         }
         return true;
-
     }
 }

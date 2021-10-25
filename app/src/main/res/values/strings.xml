@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">XKNewApp</string>
+    <string name="controller_title">Button</string>
+    <string name="controller_detail">Button actions &amp; linked channels</string>
+    <string name="sensor_title">Sensor Wire</string>
+    <string name="sensor_detail">Sensor actions &amp; linked channels</string>
+    <string name="channel_title">Output Channel</string>
+    <string name="channel_detail">Channel name &amp; max output limit</string>
+    <string name="system_title">System</string>
+    <string name="system_detail">XKNewApp</string>
 </resources>

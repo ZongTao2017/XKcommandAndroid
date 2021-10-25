@@ -26,30 +26,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class ControlFragment extends Fragment {
-    private static final int SIZE = 8;
-    private boolean[] buttonStatus;
-    private boolean[] release;
     private boolean powerOn;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control, container, false);
-
-        buttonStatus = new boolean[SIZE];
-        release = new boolean[SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            buttonStatus[i] = false;
-            if (i < SIZE / 2) {
-                release[i] = false;
-            } else {
-                release[i] = true;
-            }
-        }
         powerOn = true;
-
         final int padding = dpToPx(getContext(), 20);
-
         final FrameLayout frameLayout = view.findViewById(R.id.frame_layout);
         frameLayout.post(new Runnable() {
             @Override
@@ -101,6 +85,7 @@ public class ControlFragment extends Fragment {
                 layoutParams1.topMargin = paddingV + resize;
                 if (horizontal) {
                     layoutParams1.leftMargin = resize + padding;
+                    layoutParams1.topMargin = paddingV * 2 + iconSize + resize;
                 }
                 button1.setLayoutParams(layoutParams1);
                 frameLayout.addView(button1);
@@ -109,7 +94,8 @@ public class ControlFragment extends Fragment {
                 layoutParams2.leftMargin = paddingH * 2 + iconSize + resize;
                 layoutParams2.topMargin = paddingV + resize;
                 if (horizontal) {
-                    layoutParams2.leftMargin = paddingH + iconSize + resize + padding;
+                    layoutParams2.leftMargin = resize + padding;
+                    layoutParams2.topMargin = paddingV + resize;
                 }
                 button2.setLayoutParams(layoutParams2);
                 frameLayout.addView(button2);
@@ -118,8 +104,8 @@ public class ControlFragment extends Fragment {
                 layoutParams3.leftMargin = paddingH + resize;
                 layoutParams3.topMargin = paddingV * 2 + iconSize + resize;
                 if (horizontal) {
-                    layoutParams3.leftMargin = paddingH * 2 + iconSize * 2 + resize + padding;
-                    layoutParams3.topMargin = paddingV + resize;
+                    layoutParams3.leftMargin = paddingH + iconSize + resize + padding;
+                    layoutParams3.topMargin = paddingV * 2 + iconSize + resize;
                 }
                 button3.setLayoutParams(layoutParams3);
                 frameLayout.addView(button3);
@@ -128,7 +114,7 @@ public class ControlFragment extends Fragment {
                 layoutParams4.leftMargin = paddingH * 2 + iconSize + resize;
                 layoutParams4.topMargin = paddingV * 2 + iconSize + resize;
                 if (horizontal) {
-                    layoutParams4.leftMargin = paddingH * 3 + iconSize * 3 + resize + padding;
+                    layoutParams4.leftMargin = paddingH + iconSize + resize + padding;
                     layoutParams4.topMargin = paddingV + resize;
                 }
                 button4.setLayoutParams(layoutParams4);
@@ -138,7 +124,7 @@ public class ControlFragment extends Fragment {
                 layoutParams5.leftMargin = paddingH + resize;
                 layoutParams5.topMargin = paddingV * 3 + iconSize * 2 + resize;
                 if (horizontal) {
-                    layoutParams5.leftMargin = resize + padding;
+                    layoutParams5.leftMargin = paddingH * 2 + iconSize * 2 + resize + padding;
                     layoutParams5.topMargin = paddingV * 2 + iconSize + resize;
                 }
                 button5.setLayoutParams(layoutParams5);
@@ -148,8 +134,8 @@ public class ControlFragment extends Fragment {
                 layoutParams6.leftMargin = paddingH * 2 + iconSize + resize;
                 layoutParams6.topMargin = paddingV * 3 + iconSize * 2 + resize;
                 if (horizontal) {
-                    layoutParams6.leftMargin = paddingH + iconSize + resize + padding;
-                    layoutParams6.topMargin = paddingV * 2 + iconSize + resize;
+                    layoutParams6.leftMargin = paddingH * 2 + iconSize * 2 + resize + padding;
+                    layoutParams6.topMargin = paddingV + resize;
                 }
                 button6.setLayoutParams(layoutParams6);
                 frameLayout.addView(button6);
@@ -158,7 +144,7 @@ public class ControlFragment extends Fragment {
                 layoutParams7.leftMargin = paddingH + resize;
                 layoutParams7.topMargin = paddingV * 4 + iconSize * 3 + resize;
                 if (horizontal) {
-                    layoutParams7.leftMargin = paddingH * 2 + iconSize * 2 + resize + padding;
+                    layoutParams7.leftMargin = paddingH * 3 + iconSize * 3 + resize + padding;
                     layoutParams7.topMargin = paddingV * 2 + iconSize + resize;
                 }
                 button7.setLayoutParams(layoutParams7);
@@ -169,7 +155,7 @@ public class ControlFragment extends Fragment {
                 layoutParams8.topMargin = paddingV * 4 + iconSize * 3 + resize;
                 if (horizontal) {
                     layoutParams8.leftMargin = paddingH * 3 + iconSize * 3 + resize + padding;
-                    layoutParams8.topMargin = paddingV * 2 + iconSize + resize;
+                    layoutParams8.topMargin = paddingV + resize;
                 }
                 button8.setLayoutParams(layoutParams8);
                 frameLayout.addView(button8);
@@ -236,9 +222,6 @@ public class ControlFragment extends Fragment {
                         return true;
                     }
                 });
-
-
-
             }
         });
 

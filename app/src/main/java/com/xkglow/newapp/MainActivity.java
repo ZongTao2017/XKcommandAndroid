@@ -95,19 +95,19 @@ public class MainActivity extends FragmentActivity {
                     layoutParams.height = (int) ((iconSize * 2 + paddingV) * STATUS_RATIO);
 
                     FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) logo.getLayoutParams();
-                    layoutParams1.leftMargin = dpToPx(MainActivity.this, 80) +
+                    layoutParams1.leftMargin = dpToPx(MainActivity.this, 60) +
                             (int) (iconSize * 2 + paddingH * 1.5f - layoutParams1.width / 2);
                     logo.setLayoutParams(layoutParams1);
 
                     FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) signal.getLayoutParams();
-                    layoutParams2.leftMargin = dpToPx(MainActivity.this, 80) +
+                    layoutParams2.leftMargin = dpToPx(MainActivity.this, 60) +
                             iconSize * 4 + paddingH * 3 - layoutParams2.width;
                     signal.setLayoutParams(layoutParams2);
+
+
                 }
 
                 image.setLayoutParams(layoutParams);
-
-
             }
         });
     }
