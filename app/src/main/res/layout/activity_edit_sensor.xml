@@ -20,7 +20,7 @@
                 android:tint="@color/white"/>
         </FrameLayout>
         <TextView
-            android:id="@+id/sensor_name"
+            android:id="@+id/sensor_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -89,24 +89,30 @@
                 android:textColor="@color/gray"
                 android:text="SENSOR FUNCTION" />
             <LinearLayout
+                android:id="@+id/radio_button_dim"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/radio_selected"
-                    android:scaleType="fitXY"/>
+                android:background="@color/tab_bg"
+                android:foreground="?android:attr/selectableItemBackground">
+                <FrameLayout
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/radio_button_image_dim"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/radio_selected"
+                        android:scaleType="fitXY"/>
+                </FrameLayout>
                 <TextView
+                    android:id="@+id/dim_text"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:textColor="@color/white"
                     android:lines="1"
@@ -128,23 +134,28 @@
                 android:layout_marginStart="60dp"
                 android:background="@color/gray" />
             <LinearLayout
+                android:id="@+id/radio_button_trigger"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
                 android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/radio_unselected"
-                    android:scaleType="fitXY"/>
+                android:background="@color/tab_bg"
+                android:foreground="?android:attr/selectableItemBackground">
+                <FrameLayout
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/radio_button_image_trigger"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/radio_unselected"
+                        android:scaleType="fitXY"/>
+                </FrameLayout>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:textColor="@color/white"
                     android:lines="1"
@@ -160,448 +171,389 @@
                     android:tint="@color/gray"
                     android:scaleType="fitXY"/>
             </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:textSize="14sp"
-                android:textColor="@color/gray"
-                android:text="BUTTON BACK LIGHT" />
             <LinearLayout
+                android:id="@+id/button_back_light"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:background="@color/tab_bg">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:text="Brightness when triggered"/>
-                <FrameLayout
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center"
-                        android:tint="@color/blue"
-                        android:src="@drawable/minus"/>
-                </FrameLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:text="100%"/>
-                <FrameLayout
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="10dp">
-                    <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center"
-                        android:src="@drawable/plus"
-                        android:tint="@color/blue" />
-                </FrameLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray"
+                    android:text="BUTTON BACK LIGHT" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/tab_bg">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:text="Brightness when triggered"/>
+                    <FrameLayout
+                        android:id="@+id/minus"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center_vertical"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <ImageView
+                            android:id="@+id/minus_image"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:scaleType="fitXY"
+                            android:layout_gravity="center"
+                            android:tint="@color/blue"
+                            android:src="@drawable/minus"/>
+                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/brightness"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:text="100%"/>
+                    <FrameLayout
+                        android:id="@+id/plus"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <ImageView
+                            android:id="@+id/plus_image"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:scaleType="fitXY"
+                            android:layout_gravity="center"
+                            android:src="@drawable/plus"
+                            android:tint="@color/blue" />
+                    </FrameLayout>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    android:text="Only one sensor can be used for button back light dimming function."/>
             </LinearLayout>
-            <TextView
+            <LinearLayout
+                android:id="@+id/channel_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/gray"
-                android:textSize="12sp"
-                android:text="Only one sensor can be used for button back light dimming function."/>
-            <TextView
-                android:layout_width="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray"
+                    android:text="LINKED CHANNELS" />
+                <LinearLayout
+                    android:id="@+id/channel_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/channel_image_1"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/check_selected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Channel 1"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginStart="60dp"
+                    android:background="@color/gray" />
+                <LinearLayout
+                    android:id="@+id/channel_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/channel_image_2"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/check_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Channel 2"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginStart="60dp"
+                    android:background="@color/gray" />
+                <LinearLayout
+                    android:id="@+id/channel_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/channel_image_3"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/check_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Channel 3"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginStart="60dp"
+                    android:background="@color/gray" />
+                <LinearLayout
+                    android:id="@+id/channel_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/channel_image_4"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/check_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Channel 4"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginStart="60dp"
+                    android:background="@color/gray" />
+                <LinearLayout
+                    android:id="@+id/channel_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/channel_image_5"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/check_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Channel 5"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginStart="60dp"
+                    android:background="@color/gray" />
+                <LinearLayout
+                    android:id="@+id/channel_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/channel_image_6"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/check_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Channel 6"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginStart="60dp"
+                    android:background="@color/gray" />
+                <LinearLayout
+                    android:id="@+id/channel_7"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/channel_image_7"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/check_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Channel 7"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginStart="60dp"
+                    android:background="@color/gray" />
+                <LinearLayout
+                    android:id="@+id/channel_8"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/channel_image_8"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/check_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Channel 8"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    android:text="A channel can link to multiple sensors. If sensors are triggered simutaneoursly, the order of sensor priority on the same channel is Sensor 1 > 2 > 3."/>
+            </LinearLayout>
+            <com.xkglow.xkcommand.ActionView
+                android:id="@+id/action_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:textSize="14sp"
-                android:textColor="@color/gray"
-                android:text="LINKED CHANNELS" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/check_selected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Channel 1"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/check_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Channel 2"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/check_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Channel 3"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/check_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Channel 4"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/check_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Channel 5"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/check_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Channel 6"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/check_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Channel 7"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/check_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Channel 8"/>
-            </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/gray"
-                android:textSize="12sp"
-                android:text="A channel can link to multiple sensors. If sensors are triggered simutaneoursly, the order of sensor priority on the same channel is Sensor 1 > 2 > 3."/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:textSize="14sp"
-                android:textColor="@color/gray"
-                android:text="ACTION" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/radio_selected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Full On"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/radio_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Strobe"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/radio_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="50% power on"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginStart="60dp"
-                android:background="@color/gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/radio_unselected"
-                    android:scaleType="fitXY"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="60% power on"/>
-            </LinearLayout>
+                android:layout_marginTop="20dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

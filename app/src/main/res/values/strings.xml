@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">XKNewApp</string>
+    <string name="app_name">XKcommand</string>
     <string name="controller_title">Button</string>
     <string name="controller_detail">Button actions &amp; linked channels</string>
     <string name="sensor_title">Sensor Wire</string>

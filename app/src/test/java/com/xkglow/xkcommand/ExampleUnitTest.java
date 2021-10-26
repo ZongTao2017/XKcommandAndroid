@@ -1,4 +1,4 @@
-package com.xkglow.newapp;
+package com.xkglow.xkcommand;
 
 import org.junit.Test;
 

@@ -11,7 +11,11 @@
         <entry key="app/src/main/res/drawable/ic_menu_palette_selector.xml" value="0.217" />
         <entry key="app/src/main/res/layout-land/activity_main.xml" value="0.23897707231040563" />
         <entry key="app/src/main/res/layout-land/fragment_control.xml" value="0.23897707231040563" />
+        <entry key="app/src/main/res/layout/action.xml" value="0.2115036231884058" />
+        <entry key="app/src/main/res/layout/action_layout.xml" value="0.2318840579710145" />
+        <entry key="app/src/main/res/layout/activity_edit_name.xml" value="0.2318840579710145" />
         <entry key="app/src/main/res/layout/activity_edit_sensor.xml" value="0.2115036231884058" />
+        <entry key="app/src/main/res/layout/activity_edit_sensor_name.xml" value="0.2115036231884058" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2115036231884058" />
         <entry key="app/src/main/res/layout/activity_main_landscape.xml" value="0.2115036231884058" />
         <entry key="app/src/main/res/layout/activity_sensor_wire.xml" value="0.2115036231884058" />

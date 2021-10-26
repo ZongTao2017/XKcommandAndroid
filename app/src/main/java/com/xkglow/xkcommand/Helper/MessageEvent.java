@@ -1,4 +1,4 @@
-package com.xkglow.newapp.Helper;
+package com.xkglow.xkcommand.Helper;
 
 public class MessageEvent {
     public MessageEventType type;

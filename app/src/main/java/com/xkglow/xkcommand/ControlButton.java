@@ -1,8 +1,7 @@
-package com.xkglow.newapp;
+package com.xkglow.xkcommand;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.Image;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.xkglow.newapp.Helper.Helper;
+import com.xkglow.xkcommand.Helper.Helper;
 
 public class ControlButton extends FrameLayout {
     private ImageView imagePressed;

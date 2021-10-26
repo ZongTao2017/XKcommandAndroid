@@ -1,4 +1,4 @@
-package com.xkglow.newapp;
+package com.xkglow.xkcommand;
 
 import androidx.fragment.app.Fragment;
 

@@ -1,11 +1,10 @@
-package com.xkglow.newapp;
+package com.xkglow.xkcommand;
 
-import static com.xkglow.newapp.Helper.Helper.ICON_SIZE;
-import static com.xkglow.newapp.Helper.Helper.PADDING;
-import static com.xkglow.newapp.Helper.Helper.STATUS_RATIO;
-import static com.xkglow.newapp.Helper.Helper.dpToPx;
+import static com.xkglow.xkcommand.Helper.Helper.ICON_SIZE;
+import static com.xkglow.xkcommand.Helper.Helper.PADDING;
+import static com.xkglow.xkcommand.Helper.Helper.STATUS_RATIO;
+import static com.xkglow.xkcommand.Helper.Helper.dpToPx;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -15,15 +14,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.xkglow.xkcommand.Helper.AppGlobal;
 
 public class MainActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
@@ -39,6 +38,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AppGlobal.init();
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

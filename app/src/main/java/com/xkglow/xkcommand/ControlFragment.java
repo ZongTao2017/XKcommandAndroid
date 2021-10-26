@@ -1,16 +1,12 @@
-package com.xkglow.newapp;
+package com.xkglow.xkcommand;
 
-import static com.xkglow.newapp.Helper.Helper.ICON_RATIO;
-import static com.xkglow.newapp.Helper.Helper.ICON_SIZE;
-import static com.xkglow.newapp.Helper.Helper.PADDING;
-import static com.xkglow.newapp.Helper.Helper.dpToPx;
+import static com.xkglow.xkcommand.Helper.Helper.ICON_RATIO;
+import static com.xkglow.xkcommand.Helper.Helper.ICON_SIZE;
+import static com.xkglow.xkcommand.Helper.Helper.PADDING;
+import static com.xkglow.xkcommand.Helper.Helper.dpToPx;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TabWidget;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

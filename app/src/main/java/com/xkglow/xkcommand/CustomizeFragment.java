@@ -1,4 +1,4 @@
-package com.xkglow.newapp;
+package com.xkglow.xkcommand;
 
 import android.content.Intent;
 import android.os.Bundle;

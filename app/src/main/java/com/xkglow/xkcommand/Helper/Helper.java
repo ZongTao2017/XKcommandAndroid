@@ -1,4 +1,4 @@
-package com.xkglow.newapp.Helper;
+package com.xkglow.xkcommand.Helper;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
