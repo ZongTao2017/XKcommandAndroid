@@ -16,11 +16,18 @@ public class CustomizeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_customize, container, false);
+        FrameLayout controller = view.findViewById(R.id.controller);
+        controller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SelectButtonActivity.class));
+            }
+        });
         FrameLayout sensor = view.findViewById(R.id.sensor);
         sensor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SensorWireActivity.class));
+                startActivity(new Intent(getActivity(), SelectSensorActivity.class));
             }
         });
         return view;

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,16 +13,17 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
+import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.Helper.SensorData;
+import com.xkglow.xkcommand.View.ActionView;
 
 public class EditSensorActivity extends Activity {
     SensorData sensorData;
-    TextView sensorNameTextView, brightnessTextView, dimTextView;
+    TextView sensorNameTextView, brightnessTextView, dimTextView, noChannelSelectedTextView;
     LinearLayout radioButtonDim, radioButtonTrigger, channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8;
     FrameLayout minus, plus;
     ImageView radioButtonDimImage, radioButtonTriggerImage, channelImage1, channelImage2, channelImage3, channelImage4, channelImage5, channelImage6, channelImage7, channelImage8, minusImage, plusImage;
-    LinearLayout dimLayout, channelLayout;
-    ActionView actionView;
+    LinearLayout dimLayout, channelLayout, actionLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,23 +82,16 @@ public class EditSensorActivity extends Activity {
 
         dimLayout = findViewById(R.id.button_back_light);
         channelLayout = findViewById(R.id.channel_layout);
-        actionView = findViewById(R.id.action_view);
+        actionLayout = findViewById(R.id.action_layout);
         brightnessTextView = findViewById(R.id.brightness);
+        noChannelSelectedTextView = findViewById(R.id.no_channel_selected);
 
         if (sensorData.function == 0) {
             setButtonBackLight();
         } else {
             setButtonTrigger();
         }
-        setChannel(channelImage1, sensorData.channels[0]);
-        setChannel(channelImage2, sensorData.channels[1]);
-        setChannel(channelImage3, sensorData.channels[2]);
-        setChannel(channelImage4, sensorData.channels[3]);
-        setChannel(channelImage5, sensorData.channels[4]);
-        setChannel(channelImage6, sensorData.channels[5]);
-        setChannel(channelImage7, sensorData.channels[6]);
-        setChannel(channelImage8, sensorData.channels[7]);
-        actionView.setSensorData(sensorData);
+        setChannels();
         brightnessTextView.setText(sensorData.brightness + "%");
 
         radioButtonDim.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +140,7 @@ public class EditSensorActivity extends Activity {
             public void onClick(View v) {
                 sensorData.channels[0] = !sensorData.channels[0];
                 AppGlobal.setSensor(sensorData);
-                setChannel(channelImage1, sensorData.channels[0]);
+                setChannels();
             }
         });
         channel2.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +148,7 @@ public class EditSensorActivity extends Activity {
             public void onClick(View v) {
                 sensorData.channels[1] = !sensorData.channels[1];
                 AppGlobal.setSensor(sensorData);
-                setChannel(channelImage2, sensorData.channels[1]);
+                setChannels();
             }
         });
         channel3.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +156,7 @@ public class EditSensorActivity extends Activity {
             public void onClick(View v) {
                 sensorData.channels[2] = !sensorData.channels[2];
                 AppGlobal.setSensor(sensorData);
-                setChannel(channelImage3, sensorData.channels[2]);
+                setChannels();
             }
         });
         channel4.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +164,7 @@ public class EditSensorActivity extends Activity {
             public void onClick(View v) {
                 sensorData.channels[3] = !sensorData.channels[3];
                 AppGlobal.setSensor(sensorData);
-                setChannel(channelImage4, sensorData.channels[3]);
+                setChannels();
             }
         });
         channel5.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +172,7 @@ public class EditSensorActivity extends Activity {
             public void onClick(View v) {
                 sensorData.channels[4] = !sensorData.channels[4];
                 AppGlobal.setSensor(sensorData);
-                setChannel(channelImage5, sensorData.channels[4]);
+                setChannels();
             }
         });
         channel6.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +180,7 @@ public class EditSensorActivity extends Activity {
             public void onClick(View v) {
                 sensorData.channels[5] = !sensorData.channels[5];
                 AppGlobal.setSensor(sensorData);
-                setChannel(channelImage6, sensorData.channels[5]);
+                setChannels();
             }
         });
         channel7.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +188,7 @@ public class EditSensorActivity extends Activity {
             public void onClick(View v) {
                 sensorData.channels[6] = !sensorData.channels[6];
                 AppGlobal.setSensor(sensorData);
-                setChannel(channelImage7, sensorData.channels[6]);
+                setChannels();
             }
         });
         channel8.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +196,7 @@ public class EditSensorActivity extends Activity {
             public void onClick(View v) {
                 sensorData.channels[7] = !sensorData.channels[7];
                 AppGlobal.setSensor(sensorData);
-                setChannel(channelImage8, sensorData.channels[7]);
+                setChannels();
             }
         });
     }
@@ -229,7 +224,7 @@ public class EditSensorActivity extends Activity {
         radioButtonDimImage.setImageResource(R.drawable.radio_selected);
         radioButtonTriggerImage.setImageResource(R.drawable.radio_unselected);
         dimLayout.setVisibility(View.VISIBLE);
-        actionView.setVisibility(View.GONE);
+        actionLayout.setVisibility(View.GONE);
         channelLayout.setVisibility(View.GONE);
     }
 
@@ -237,7 +232,7 @@ public class EditSensorActivity extends Activity {
         radioButtonDimImage.setImageResource(R.drawable.radio_unselected);
         radioButtonTriggerImage.setImageResource(R.drawable.radio_selected);
         dimLayout.setVisibility(View.GONE);
-        actionView.setVisibility(View.VISIBLE);
+        actionLayout.setVisibility(View.VISIBLE);
         channelLayout.setVisibility(View.VISIBLE);
     }
 
@@ -253,6 +248,98 @@ public class EditSensorActivity extends Activity {
             minusImage.setColorFilter(getResources().getColor(R.color.blue));
             plus.setClickable(true);
             minus.setClickable(true);
+        }
+    }
+
+    private void setChannels() {
+        actionLayout.removeAllViews();
+        boolean flag = false;
+        setChannel(channelImage1, sensorData.channels[0]);
+        if (sensorData.channels[0]) {
+            flag = true;
+            ActionView actionView = new ActionView(EditSensorActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
+            actionView.setLayoutParams(layoutParams);
+            actionView.setActionName("ACTION - CHANNEL 1");
+            actionLayout.addView(actionView);
+        }
+        setChannel(channelImage2, sensorData.channels[1]);
+        if (sensorData.channels[1]) {
+            flag = true;
+            ActionView actionView = new ActionView(EditSensorActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
+            actionView.setLayoutParams(layoutParams);
+            actionView.setActionName("ACTION - CHANNEL 2");
+            actionLayout.addView(actionView);
+        }
+        setChannel(channelImage3, sensorData.channels[2]);
+        if (sensorData.channels[2]) {
+            flag = true;
+            ActionView actionView = new ActionView(EditSensorActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
+            actionView.setLayoutParams(layoutParams);
+            actionView.setActionName("ACTION - CHANNEL 3");
+            actionLayout.addView(actionView);
+        }
+        setChannel(channelImage4, sensorData.channels[3]);
+        if (sensorData.channels[3]) {
+            flag = true;
+            ActionView actionView = new ActionView(EditSensorActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
+            actionView.setLayoutParams(layoutParams);
+            actionView.setActionName("ACTION - CHANNEL 4");
+            actionLayout.addView(actionView);
+        }
+        setChannel(channelImage5, sensorData.channels[4]);
+        if (sensorData.channels[4]) {
+            flag = true;
+            ActionView actionView = new ActionView(EditSensorActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
+            actionView.setLayoutParams(layoutParams);
+            actionView.setActionName("ACTION - CHANNEL 5");
+            actionLayout.addView(actionView);
+        }
+        setChannel(channelImage6, sensorData.channels[5]);
+        if (sensorData.channels[5]) {
+            flag = true;
+            ActionView actionView = new ActionView(EditSensorActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
+            actionView.setLayoutParams(layoutParams);
+            actionView.setActionName("ACTION - CHANNEL 6");
+            actionLayout.addView(actionView);
+        }
+        setChannel(channelImage7, sensorData.channels[6]);
+        if (sensorData.channels[6]) {
+            flag = true;
+            ActionView actionView = new ActionView(EditSensorActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
+            actionView.setLayoutParams(layoutParams);
+            actionView.setActionName("ACTION - CHANNEL 7");
+            actionLayout.addView(actionView);
+        }
+        setChannel(channelImage8, sensorData.channels[7]);
+        if (sensorData.channels[7]) {
+            flag = true;
+            ActionView actionView = new ActionView(EditSensorActivity.this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
+            actionView.setLayoutParams(layoutParams);
+            actionView.setActionName("ACTION - CHANNEL 8");
+            actionLayout.addView(actionView);
+        }
+        if (flag) {
+            noChannelSelectedTextView.setVisibility(View.GONE);
+            actionLayout.setVisibility(View.VISIBLE);
+        } else {
+            noChannelSelectedTextView.setVisibility(View.VISIBLE);
+            actionLayout.setVisibility(View.GONE);
         }
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,7 +21,7 @@
                 android:tint="@color/white"/>
         </FrameLayout>
         <TextView
-            android:id="@+id/sensor_id"
+            android:id="@+id/button_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -28,7 +29,7 @@
             android:textSize="16sp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:text="Sensor Name"/>
+            android:text="Button"/>
     </FrameLayout>
     <View
         android:layout_width="match_parent"
@@ -41,45 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/edit_sensor_name"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:layout_marginTop="30dp"
-                android:background="@color/tab_bg">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="50dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Sensor Name"/>
-                <TextView
-                    android:id="@+id/sensor_name"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|end"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/gray"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Sensor Name 1"/>
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/right_arrow"
-                    android:tint="@color/gray" />
-            </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,7 +51,7 @@
                 android:textColor="@color/gray"
                 android:text="SENSOR FUNCTION" />
             <LinearLayout
-                android:id="@+id/radio_button_dim"
+                android:id="@+id/button_icon_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
                 android:orientation="horizontal"
@@ -100,7 +62,7 @@
                     android:layout_width="60dp"
                     android:layout_height="match_parent">
                     <ImageView
-                        android:id="@+id/radio_button_image_dim"
+                        android:id="@+id/radio_button_icon"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
@@ -108,25 +70,34 @@
                         android:scaleType="fitXY"/>
                 </FrameLayout>
                 <TextView
-                    android:id="@+id/dim_text"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="50dp"
                     android:textColor="@color/white"
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
-                    android:text="Dim button back light at night"/>
+                    android:text="Select preset icon"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical|end"
+                    android:id="@+id/button_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/button_icon1"
+                    android:scaleType="fitCenter" />
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginStart="10dp"
                     android:layout_marginEnd="20dp"
-                    android:src="@drawable/info"
-                    android:tint="@color/gray"
-                    android:scaleType="fitXY"/>
+                    android:src="@drawable/right_arrow"
+                    android:tint="@color/gray" />
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -134,7 +105,7 @@
                 android:layout_marginStart="60dp"
                 android:background="@color/gray" />
             <LinearLayout
-                android:id="@+id/radio_button_trigger"
+                android:id="@+id/button_image_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
                 android:orientation="horizontal"
@@ -144,7 +115,7 @@
                     android:layout_width="60dp"
                     android:layout_height="match_parent">
                     <ImageView
-                        android:id="@+id/radio_button_image_trigger"
+                        android:id="@+id/radio_button_image"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
@@ -152,103 +123,193 @@
                         android:scaleType="fitXY"/>
                 </FrameLayout>
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="50dp"
+                    android:textColor="@color/white"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="Select preset icon"/>
+                <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:id="@+id/button_image"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/app_icon"
+                    android:scaleType="fitCenter" />
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/right_arrow"
+                    android:tint="@color/gray" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginStart="60dp"
+                android:background="@color/gray" />
+            <LinearLayout
+                android:id="@+id/button_text_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/topBarHeight"
+                android:orientation="horizontal"
+                android:background="@color/tab_bg"
+                android:foreground="?android:attr/selectableItemBackground">
+                <FrameLayout
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/radio_button_text"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/radio_unselected"
+                        android:scaleType="fitXY"/>
+                </FrameLayout>
+                <TextView
+                    android:id="@+id/button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginEnd="20dp"
                     android:textColor="@color/white"
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
-                    android:text="Trigger output action"/>
+                    android:text="Use name"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/white"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="High Beam"/>
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginEnd="20dp"
-                    android:src="@drawable/info"
+                    android:src="@drawable/right_arrow"
                     android:tint="@color/gray"
                     android:scaleType="fitXY"/>
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/button_back_light"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="1px"
+                android:layout_marginStart="60dp"
+                android:background="@color/gray" />
+            <LinearLayout
+                android:id="@+id/button_na_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/bottomTabsHeight"
+                android:orientation="horizontal"
+                android:background="@color/tab_bg"
+                android:foreground="?android:attr/selectableItemBackground">
+                <FrameLayout
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/radio_button_na"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/radio_unselected"
+                        android:scaleType="fitXY"/>
+                </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="20dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/gray"
-                    android:text="BUTTON BACK LIGHT" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/topBarHeight"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/tab_bg">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:text="Brightness when triggered"/>
-                    <FrameLayout
-                        android:id="@+id/minus"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center_vertical"
-                        android:foreground="?android:attr/selectableItemBackground">
-                        <ImageView
-                            android:id="@+id/minus_image"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:scaleType="fitXY"
-                            android:layout_gravity="center"
-                            android:tint="@color/blue"
-                            android:src="@drawable/minus"/>
-                    </FrameLayout>
-                    <TextView
-                        android:id="@+id/brightness"
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:text="100%"/>
-                    <FrameLayout
-                        android:id="@+id/plus"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="10dp"
-                        android:foreground="?android:attr/selectableItemBackground">
-                        <ImageView
-                            android:id="@+id/plus_image"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:scaleType="fitXY"
-                            android:layout_gravity="center"
-                            android:src="@drawable/plus"
-                            android:tint="@color/blue" />
-                    </FrameLayout>
-                </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/gray"
-                    android:textSize="12sp"
-                    android:text="Only one sensor can be used for button back light dimming function."/>
+                    android:textColor="@color/white"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="N/A"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:text="MOMENTARY SWITCH" />
+            <LinearLayout
+                android:id="@+id/momentary_switch_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/topBarHeight"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:background="@color/tab_bg"
+                android:foreground="?android:attr/selectableItemBackground">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/white"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="Turn off when button is released"/>
+                <com.xkglow.xkcommand.View.SwitchView
+                    android:id="@+id/switch_momentary"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="20dp"
+                    custom:switch_type="1" />
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:text="SYNC ALL CHANNELS" />
+            <LinearLayout
+                android:id="@+id/sync_all_channels_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/topBarHeight"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:background="@color/tab_bg"
+                android:foreground="?android:attr/selectableItemBackground">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/white"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="Same action for all channels"/>
+                <com.xkglow.xkcommand.View.SwitchView
+                    android:id="@+id/switch_sync"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="20dp"
+                    custom:switch_type="1" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/channel_layout"
@@ -539,15 +600,6 @@
                         android:textSize="16sp"
                         android:text="Channel 8"/>
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/gray"
-                    android:textSize="12sp"
-                    android:text="A channel can link to multiple sensors. If sensors are triggered simutaneoursly, the order of sensor priority on the same channel is Sensor 1 > 2 > 3."/>
             </LinearLayout>
             <TextView
                 android:id="@+id/no_channel_selected"

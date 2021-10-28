@@ -3,6 +3,7 @@ package com.xkglow.xkcommand.Helper;
 public class AppGlobal {
     private static SensorData[] sensors;
     private static boolean hasDim;
+    private static ButtonData[] buttons;
 
     public static void init() {
         sensors = new SensorData[3];
@@ -10,6 +11,16 @@ public class AppGlobal {
         sensors[1] = new SensorData("Sensor 2", "Sensor Name 2");
         sensors[2] = new SensorData("Sensor 3", "Sensor Name 3");
         hasDim = false;
+
+        buttons = new ButtonData[8];
+        buttons[0] = new ButtonData(1);
+        buttons[1] = new ButtonData(2);
+        buttons[2] = new ButtonData(3);
+        buttons[3] = new ButtonData(4);
+        buttons[4] = new ButtonData(5);
+        buttons[5] = new ButtonData(6);
+        buttons[6] = new ButtonData(7);
+        buttons[7] = new ButtonData(8);
     }
 
     public static void setSensor(SensorData sensorData) {
@@ -35,5 +46,29 @@ public class AppGlobal {
 
     public static boolean hasDim() {
         return hasDim;
+    }
+
+    public static ButtonData[] getButtons() {
+        return buttons;
+    }
+
+    public static ButtonData getButton(int id) {
+        for (ButtonData buttonData : buttons) {
+            if (buttonData.id == id) {
+                return buttonData;
+            }
+        }
+        return null;
+    }
+
+    public static void setButton(ButtonData buttonData) {
+        for (ButtonData buttonData1 : buttons) {
+            if (buttonData.id == buttonData1.id) {
+                buttonData1.action = buttonData.action;
+                buttonData1.channels = buttonData.channels;
+                buttonData1.sync = buttonData.sync;
+                buttonData1.momentary = buttonData.momentary;
+            }
+        }
     }
 }

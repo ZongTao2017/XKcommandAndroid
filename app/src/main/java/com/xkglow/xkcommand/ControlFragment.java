@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.xkglow.xkcommand.View.ControlButton;
+
 public class ControlFragment extends Fragment {
     private boolean powerOn;
 
@@ -51,28 +53,28 @@ public class ControlFragment extends Fragment {
 
                 ControlButton button1 = new ControlButton(getContext());
                 button1.setReleased(false);
-                button1.setText("1");
+                button1.setButtonId(1);
                 ControlButton button2 = new ControlButton(getContext());
                 button2.setReleased(false);
-                button2.setText("2");
+                button2.setButtonId(2);
                 ControlButton button3 = new ControlButton(getContext());
                 button3.setReleased(false);
-                button3.setText("3");
+                button3.setButtonId(3);
                 ControlButton button4 = new ControlButton(getContext());
                 button4.setReleased(false);
-                button4.setText("4");
+                button4.setButtonId(4);
                 ControlButton button5 = new ControlButton(getContext());
                 button5.setReleased(true);
-                button5.setText("5");
+                button5.setButtonId(5);
                 ControlButton button6 = new ControlButton(getContext());
                 button6.setReleased(true);
-                button6.setText("6");
+                button6.setButtonId(6);
                 ControlButton button7 = new ControlButton(getContext());
                 button7.setReleased(true);
-                button7.setText("7");
+                button7.setButtonId(7);
                 ControlButton button8 = new ControlButton(getContext());
                 button8.setReleased(true);
-                button8.setText("8");
+                button8.setButtonId(8);
 
                 FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(realIconSize, realIconSize);
                 layoutParams1.leftMargin = paddingH + resize;

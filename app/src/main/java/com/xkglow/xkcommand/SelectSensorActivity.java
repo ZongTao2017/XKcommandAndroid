@@ -11,13 +11,13 @@ import androidx.annotation.Nullable;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
 
-public class SensorWireActivity extends Activity {
+public class SelectSensorActivity extends Activity {
     TextView sensorName1, sensorName2, sensorName3;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sensor_wire);
+        setContentView(R.layout.activity_select_sensor);
 
         FrameLayout back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -31,7 +31,7 @@ public class SensorWireActivity extends Activity {
         sensor1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SensorWireActivity.this, EditSensorActivity.class);
+                Intent intent = new Intent(SelectSensorActivity.this, EditSensorActivity.class);
                 intent.putExtra("sensor", AppGlobal.getSensors()[0]);
                 startActivity(intent);
             }
@@ -41,7 +41,7 @@ public class SensorWireActivity extends Activity {
         sensor2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SensorWireActivity.this, EditSensorActivity.class);
+                Intent intent = new Intent(SelectSensorActivity.this, EditSensorActivity.class);
                 intent.putExtra("sensor", AppGlobal.getSensors()[1]);
                 startActivity(intent);
             }
@@ -51,7 +51,7 @@ public class SensorWireActivity extends Activity {
         sensor3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SensorWireActivity.this, EditSensorActivity.class);
+                Intent intent = new Intent(SelectSensorActivity.this, EditSensorActivity.class);
                 intent.putExtra("sensor", AppGlobal.getSensors()[2]);
                 startActivity(intent);
             }

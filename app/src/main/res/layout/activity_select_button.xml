@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight">
+        <FrameLayout
+            android:id="@+id/back"
+            android:layout_width="@dimen/topBarHeight"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:src="@drawable/left_arrow"
+                android:scaleType="fitCenter"
+                android:tint="@color/white"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="Select Button"/>
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</FrameLayout>

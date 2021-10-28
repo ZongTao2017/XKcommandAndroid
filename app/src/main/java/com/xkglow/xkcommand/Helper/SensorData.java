@@ -17,8 +17,7 @@ public class SensorData implements Serializable {
         this.function = 1;
         this.brightness = 100;
         this.channels = new boolean[8];
-        Arrays.fill(channels, false);
+        Arrays.fill(this.channels, false);
         this.channels[0] = true;
-        this.action = 0;
     }
 }

@@ -16,4 +16,9 @@
     <color name="grayTextColor">#969696</color>
     <color name="gray">#5b5b5b</color>
     <color name="blue">#009be3</color>
+    <color name="red">#ff0000</color>
+
+    <color name="switch_green">#30c459</color>
+    <color name="switch_gray">#94979A</color>
+    <color name="switch_light_gray">#C4C4C4</color>
 </resources>

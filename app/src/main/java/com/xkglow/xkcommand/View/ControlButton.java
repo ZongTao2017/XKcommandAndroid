@@ -1,7 +1,8 @@
-package com.xkglow.xkcommand;
+package com.xkglow.xkcommand.View;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,9 +13,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.xkglow.xkcommand.EditButtonActivity;
+import com.xkglow.xkcommand.Helper.AppGlobal;
+import com.xkglow.xkcommand.Helper.ButtonData;
 import com.xkglow.xkcommand.Helper.Helper;
+import com.xkglow.xkcommand.R;
 
 public class ControlButton extends FrameLayout {
+    private int id;
     private ImageView imagePressed;
     private ImageView imageUnpressed;
     private ImageView imageIllumination;
@@ -22,6 +28,7 @@ public class ControlButton extends FrameLayout {
     private boolean released;
     private boolean pressed;
     private boolean powerOn;
+    private boolean editButton;
 
     public ControlButton(@NonNull Context context) {
         super(context);
@@ -29,6 +36,7 @@ public class ControlButton extends FrameLayout {
         released = false;
         pressed = false;
         powerOn = true;
+        editButton = false;
 
         FrameLayout.LayoutParams imageLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imagePressed = new ImageView(context);
@@ -62,8 +70,9 @@ public class ControlButton extends FrameLayout {
         addView(textView);
     }
 
-    public void setText(String s) {
-        textView.setText(s);
+    public void setButtonId(int id) {
+        this.id = id;
+        textView.setText(id + "");
     }
 
     public void setReleased(boolean released) {
@@ -84,6 +93,13 @@ public class ControlButton extends FrameLayout {
         if (!powerOn) return false;
         int action = event.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
+            if (editButton) {
+                Intent intent = new Intent(getContext(), EditButtonActivity.class);
+                ButtonData buttonData = AppGlobal.getButton(id);
+                intent.putExtra("button", buttonData);
+                getContext().startActivity(intent);
+                return false;
+            }
             imageUnpressed.setVisibility(View.GONE);
             imagePressed.setVisibility(View.VISIBLE);
             if (released) {
@@ -104,5 +120,9 @@ public class ControlButton extends FrameLayout {
             }
         }
         return true;
+    }
+
+    public void setEditButton() {
+        editButton = true;
     }
 }
