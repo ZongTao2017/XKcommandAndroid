@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/backgroundColor">
     <FrameLayout
         android:layout_width="match_parent"
@@ -27,17 +27,28 @@
             android:textSize="16sp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:text="Sensor Name 1"/>
+            android:text="Select Preset Icon"/>
+        <FrameLayout
+            android:id="@+id/done"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="end|center_vertical"
+                android:layout_marginEnd="12.5dp"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:text="Done" />
+        </FrameLayout>
     </FrameLayout>
-    <EditText
-        android:id="@+id/edit_name"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/topBarHeight"
-        android:layout_marginTop="20dp"
-        android:paddingLeft="20dp"
-        android:background="@color/tab_bg"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/grayTextColor">
-    </EditText>
+        android:layout_height="1px"
+        android:background="@color/gray"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

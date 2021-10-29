@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xkglow.xkcommand">
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
@@ -21,6 +23,9 @@
         <activity android:name=".EditNameActivity" />
         <activity android:name=".SelectButtonActivity" />
         <activity android:name=".EditButtonActivity" />
+        <activity android:name=".EditButtonIconActivity" />
+        <activity android:name=".EditButtonImageActivity" />
+        <activity android:name=".CameraActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

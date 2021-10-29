@@ -4,6 +4,7 @@ public class AppGlobal {
     private static SensorData[] sensors;
     private static boolean hasDim;
     private static ButtonData[] buttons;
+    public static int loaderId;
 
     public static void init() {
         sensors = new SensorData[3];
@@ -21,6 +22,8 @@ public class AppGlobal {
         buttons[5] = new ButtonData(6);
         buttons[6] = new ButtonData(7);
         buttons[7] = new ButtonData(8);
+
+        loaderId = 1;
     }
 
     public static void setSensor(SensorData sensorData) {

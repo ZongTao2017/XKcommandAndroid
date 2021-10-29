@@ -4,6 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.30885416666666665" />
+        <entry key="../xkcommand/app/src/main/res/drawable/rect_border.xml" value="0.2285" />
+        <entry key="../xkcommand/app/src/main/res/layout/activity_camera.xml" value="0.2164855072463768" />
+        <entry key="../xkcommand/app/src/main/res/layout/activity_edit_button.xml" value="0.2318840579710145" />
+        <entry key="../xkcommand/app/src/main/res/layout/activity_edit_button_icon.xml" value="0.2318840579710145" />
+        <entry key="../xkcommand/app/src/main/res/layout/activity_edit_name.xml" value="0.2164855072463768" />
+        <entry key="../xkcommand/app/src/main/res/layout/recycler_view_item.xml" value="0.2318840579710145" />
         <entry key="app/src/main/res/drawable/ic_menu_circle_selector.xml" value="0.217" />
         <entry key="app/src/main/res/drawable/ic_menu_color_selector.xml" value="0.147" />
         <entry key="app/src/main/res/drawable/ic_menu_control_selector.xml" value="0.217" />

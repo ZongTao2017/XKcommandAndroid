@@ -50,197 +50,261 @@
                 android:textSize="12sp"
                 android:textColor="@color/gray"
                 android:text="SENSOR FUNCTION" />
-            <LinearLayout
-                android:id="@+id/button_icon_layout"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                android:background="@color/tab_bg"
-                android:foreground="?android:attr/selectableItemBackground">
-                <FrameLayout
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent">
+                android:background="@color/tab_bg">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/tab_bg">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/radio_button_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/radio_selected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="50dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Select preset icon"/>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
                     <ImageView
-                        android:id="@+id/radio_button_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/radio_selected"
-                        android:scaleType="fitXY"/>
-                </FrameLayout>
-                <TextView
-                    android:layout_width="wrap_content"
+                        android:id="@+id/button_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/button_icon1"
+                        android:scaleType="fitCenter" />
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/right_arrow"
+                        android:tint="@color/gray" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:layout_marginEnd="50dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Select preset icon"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-                <ImageView
-                    android:id="@+id/button_icon"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/button_icon1"
-                    android:scaleType="fitCenter" />
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/right_arrow"
-                    android:tint="@color/gray" />
-            </LinearLayout>
+                    android:orientation="horizontal">
+                    <View
+                        android:id="@+id/button_icon_select"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
+                    <View
+                        android:id="@+id/button_icon_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
+                </LinearLayout>
+            </FrameLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginStart="60dp"
                 android:background="@color/gray" />
-            <LinearLayout
-                android:id="@+id/button_image_layout"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg"
-                android:foreground="?android:attr/selectableItemBackground">
-                <FrameLayout
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent">
+                android:layout_height="@dimen/topBarHeight">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/radio_button_image"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/radio_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="50dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Select preset icon"/>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
                     <ImageView
-                        android:id="@+id/radio_button_image"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/radio_unselected"
-                        android:scaleType="fitXY"/>
-                </FrameLayout>
-                <TextView
-                    android:layout_width="wrap_content"
+                        android:id="@+id/button_image"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/app_icon"
+                        android:scaleType="fitCenter" />
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/right_arrow"
+                        android:tint="@color/gray" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:layout_marginEnd="50dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Select preset icon"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-                <ImageView
-                    android:id="@+id/button_image"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/app_icon"
-                    android:scaleType="fitCenter" />
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/right_arrow"
-                    android:tint="@color/gray" />
-            </LinearLayout>
+                    android:orientation="horizontal">
+                    <View
+                        android:id="@+id/button_image_select"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
+                    <View
+                        android:id="@+id/button_image_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
+                </LinearLayout>
+            </FrameLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginStart="60dp"
                 android:background="@color/gray" />
-            <LinearLayout
-                android:id="@+id/button_text_layout"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg"
-                android:foreground="?android:attr/selectableItemBackground">
-                <FrameLayout
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent">
+                android:layout_height="@dimen/topBarHeight">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/radio_button_text"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/radio_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/button_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="Use name"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|end"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="High Beam"/>
                     <ImageView
-                        android:id="@+id/radio_button_text"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/radio_unselected"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/right_arrow"
+                        android:tint="@color/gray"
                         android:scaleType="fitXY"/>
-                </FrameLayout>
-                <TextView
-                    android:id="@+id/button_text"
-                    android:layout_width="wrap_content"
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="Use name"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|end"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="High Beam"/>
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/right_arrow"
-                    android:tint="@color/gray"
-                    android:scaleType="fitXY"/>
-            </LinearLayout>
+                    android:orientation="horizontal">
+                    <View
+                        android:id="@+id/button_text_select"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
+                    <View
+                        android:id="@+id/button_text_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
+                </LinearLayout>
+            </FrameLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginStart="60dp"
                 android:background="@color/gray" />
-            <LinearLayout
-                android:id="@+id/button_na_layout"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/bottomTabsHeight"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg"
-                android:foreground="?android:attr/selectableItemBackground">
-                <FrameLayout
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:id="@+id/radio_button_na"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/radio_unselected"
-                        android:scaleType="fitXY"/>
-                </FrameLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="N/A"/>
-            </LinearLayout>
+                android:layout_height="@dimen/topBarHeight">
+                <LinearLayout
+                    android:id="@+id/button_na_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottomTabsHeight"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg"
+                    android:foreground="?android:attr/selectableItemBackground">
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/radio_button_na"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/radio_unselected"
+                            android:scaleType="fitXY"/>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        android:textSize="16sp"
+                        android:text="N/A"/>
+                </LinearLayout>
+            </FrameLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.xkglow.xkcommand;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import com.xkglow.xkcommand.View.SwitchView;
 public class EditButtonActivity extends Activity {
     ButtonData buttonData;
     TextView noChannelSelectedTextView;
-    LinearLayout radioButtonSelectIcon, radioButtonSelectImage, radioButtonSelectText, radioButtonSelectNA, channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8;
+    LinearLayout channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8;
     ImageView radioButtonSelectIconImage, radioButtonSelectImageImage, radioButtonSelectTextImage, radioButtonSelectNAImage, channelImage1, channelImage2, channelImage3, channelImage4, channelImage5, channelImage6, channelImage7, channelImage8;
     LinearLayout channelLayout, actionLayout;
     SwitchView syncSwitch, momentarySwitch;
@@ -39,13 +40,9 @@ public class EditButtonActivity extends Activity {
             }
         });
 
-        radioButtonSelectIcon = findViewById(R.id.button_icon_layout);
         radioButtonSelectIconImage = findViewById(R.id.radio_button_icon);
-        radioButtonSelectImage = findViewById(R.id.button_image_layout);
         radioButtonSelectImageImage = findViewById(R.id.radio_button_image);
-        radioButtonSelectText = findViewById(R.id.button_text_layout);
         radioButtonSelectTextImage = findViewById(R.id.radio_button_text);
-        radioButtonSelectNA = findViewById(R.id.button_na_layout);
         radioButtonSelectNAImage = findViewById(R.id.radio_button_na);
         momentarySwitch = findViewById(R.id.switch_momentary);
         syncSwitch = findViewById(R.id.switch_sync);
@@ -99,7 +96,8 @@ public class EditButtonActivity extends Activity {
             }
         });
 
-        radioButtonSelectIcon.setOnClickListener(new View.OnClickListener() {
+        View radioButtonIconSelect = findViewById(R.id.button_icon_select);
+        radioButtonIconSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buttonData.action = 0;
@@ -107,7 +105,8 @@ public class EditButtonActivity extends Activity {
             }
         });
 
-        radioButtonSelectImage.setOnClickListener(new View.OnClickListener() {
+        View radioButtonImageSelect = findViewById(R.id.button_image_select);
+        radioButtonImageSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buttonData.action = 1;
@@ -115,7 +114,8 @@ public class EditButtonActivity extends Activity {
             }
         });
 
-        radioButtonSelectText.setOnClickListener(new View.OnClickListener() {
+        View radioButtonTextSelect = findViewById(R.id.button_text_select);
+        radioButtonTextSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buttonData.action = 2;
@@ -123,11 +123,42 @@ public class EditButtonActivity extends Activity {
             }
         });
 
-        radioButtonSelectNA.setOnClickListener(new View.OnClickListener() {
+        View radioButtonNASelect = findViewById(R.id.button_na_select);
+        radioButtonNASelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buttonData.action = 3;
                 setButtons();
+            }
+        });
+
+        View radioButtonIconEdit = findViewById(R.id.button_icon_edit);
+        radioButtonIconEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditButtonActivity.this, EditButtonIconActivity.class);
+                intent.putExtra("button", buttonData);
+                startActivity(intent);
+            }
+        });
+
+        View radioButtonImageEdit = findViewById(R.id.button_image_edit);
+        radioButtonImageEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditButtonActivity.this, EditButtonImageActivity.class);
+                intent.putExtra("button", buttonData);
+                startActivity(intent);
+            }
+        });
+
+        View radioButtonTextEdit = findViewById(R.id.button_text_edit);
+        radioButtonTextEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditButtonActivity.this, EditNameActivity.class);
+                intent.putExtra("button", buttonData);
+                startActivity(intent);
             }
         });
 
