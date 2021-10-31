@@ -5,6 +5,7 @@ public class AppGlobal {
     private static boolean hasDim;
     private static ButtonData[] buttons;
     public static int loaderId;
+    private static SystemData systemData;
 
     public static void init() {
         sensors = new SensorData[3];
@@ -22,6 +23,8 @@ public class AppGlobal {
         buttons[5] = new ButtonData(6);
         buttons[6] = new ButtonData(7);
         buttons[7] = new ButtonData(8);
+
+        systemData = new SystemData();
 
         loaderId = 1;
     }
@@ -73,5 +76,17 @@ public class AppGlobal {
                 buttonData1.momentary = buttonData.momentary;
             }
         }
+    }
+
+    public static SystemData getSystemData() {
+        return systemData;
+    }
+
+    public static void setButtonColor(int color) {
+        systemData.buttonColor = color;
+    }
+
+    public static void setWarningButtonColor(int color) {
+        systemData.buttonWarningColor = color;
     }
 }

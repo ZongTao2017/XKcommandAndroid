@@ -26,6 +26,9 @@
         <activity android:name=".EditButtonIconActivity" />
         <activity android:name=".EditButtonImageActivity" />
         <activity android:name=".CameraActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".SelectChannelActivity" />
+        <activity android:name=".EditSystemActivity" />
+        <activity android:name=".EditColorActivity" />
     </application>
 
 </manifest>

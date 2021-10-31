@@ -30,6 +30,20 @@ public class CustomizeFragment extends Fragment {
                 startActivity(new Intent(getActivity(), SelectSensorActivity.class));
             }
         });
+        FrameLayout channel = view.findViewById(R.id.channel);
+        channel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SelectChannelActivity.class));
+            }
+        });
+        FrameLayout system = view.findViewById(R.id.system);
+        system.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), EditSystemActivity.class));
+            }
+        });
         return view;
     }
 }
