@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.xkglow.xkcommand.EditButtonActivity;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
@@ -20,10 +21,10 @@ import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.R;
 
 public class ControlButton extends FrameLayout {
-    private int id;
-    private ImageView imagePressed;
-    private ImageView imageUnpressed;
-    private ImageView imageIllumination;
+    private Context context;
+    private ButtonData buttonData;
+    private ImageView imagePressed, imageUnpressed, imageIllumination;
+    private ImageView icon, image;
     private TextView textView;
     private boolean released;
     private boolean pressed;
@@ -33,50 +34,51 @@ public class ControlButton extends FrameLayout {
     public ControlButton(@NonNull Context context) {
         super(context);
 
+        this.context = context;
+        inflate(context, R.layout.button_view, this);
+
         released = false;
         pressed = false;
         powerOn = true;
         editButton = false;
 
-        FrameLayout.LayoutParams imageLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        imagePressed = new ImageView(context);
-        imageUnpressed = new ImageView(context);
-        imageIllumination = new ImageView(context);
-        textView = new TextView(context);
+        imagePressed = findViewById(R.id.background_image_pressed);
+        imageUnpressed = findViewById(R.id.background_image_unpressed);
+        imageIllumination = findViewById(R.id.illumination_image);
+        textView = findViewById(R.id.text);
 
-        imageUnpressed.setImageResource(R.drawable.button_unpressed);
-        imageUnpressed.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageUnpressed.setLayoutParams(imageLayoutParams);
-        addView(imageUnpressed);
-
-        imagePressed.setImageResource(R.drawable.button_pressed);
-        imagePressed.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imagePressed.setLayoutParams(imageLayoutParams);
-        addView(imagePressed);
-        imagePressed.setVisibility(GONE);
-
-        imageIllumination.setImageResource(R.drawable.button_illumination);
-        imageIllumination.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageIllumination.setLayoutParams(imageLayoutParams);
-        addView(imageIllumination);
-        imageIllumination.setVisibility(GONE);
-
-        FrameLayout.LayoutParams textLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        textLayoutParams.gravity = Gravity.CENTER;
-        textView.setLayoutParams(textLayoutParams);
-        textView.setTextColor(0xffffffff);
-        textView.setTextSize(Helper.dpToPx(context, 10));
-        textView.setGravity(Gravity.CENTER);
-        addView(textView);
+        icon = findViewById(R.id.foreground_icon);
+        image = findViewById(R.id.foreground_image);
+        image.setClipToOutline(true);
     }
 
-    public void setButtonId(int id) {
-        this.id = id;
-        textView.setText(id + "");
+    public void setIconSize(int iconSize) {
+        FrameLayout foregroundLayout = findViewById(R.id.foreground_layout);
+        FrameLayout.LayoutParams layoutParams = (LayoutParams) foregroundLayout.getLayoutParams();
+        layoutParams.width = iconSize;
+        layoutParams.height = iconSize;
+        foregroundLayout.setLayoutParams(layoutParams);
     }
 
-    public void setReleased(boolean released) {
-        this.released = released;
+    public void setButtonData(ButtonData buttonData) {
+        textView.setVisibility(GONE);
+        icon.setVisibility(GONE);
+        image.setVisibility(GONE);
+        this.buttonData = buttonData;
+        this.released = buttonData.momentary;
+        if (buttonData.type == 0) {
+            textView.setVisibility(VISIBLE);
+            textView.setText(buttonData.id + "");
+        } else if (buttonData.type == 1) {
+            textView.setVisibility(VISIBLE);
+            textView.setText(buttonData.text);
+        } else if (buttonData.type == 2) {
+            icon.setVisibility(VISIBLE);
+            icon.setImageResource(buttonData.iconResourceId);
+        } else {
+            image.setVisibility(VISIBLE);
+            Glide.with(context).load(buttonData.imagePath).into(image);
+        }
     }
 
     public void setPowerOn(boolean powerOn) {
@@ -95,7 +97,6 @@ public class ControlButton extends FrameLayout {
         if (action == MotionEvent.ACTION_DOWN) {
             if (editButton) {
                 Intent intent = new Intent(getContext(), EditButtonActivity.class);
-                ButtonData buttonData = AppGlobal.getButton(id);
                 intent.putExtra("button", buttonData);
                 getContext().startActivity(intent);
                 return false;

@@ -1,5 +1,7 @@
 package com.xkglow.xkcommand.Helper;
 
+import com.xkglow.xkcommand.R;
+
 public class AppGlobal {
     private static SensorData[] sensors;
     private static boolean hasDim;
@@ -27,6 +29,28 @@ public class AppGlobal {
         systemData = new SystemData();
 
         loaderId = 1;
+    }
+
+    public static int getIconResourceId(int index) {
+        switch (index) {
+            case 0:
+                return R.drawable.button_icon1;
+            case 1:
+                return R.drawable.button_icon2;
+            case 2:
+                return R.drawable.button_icon3;
+            case 3:
+                return R.drawable.button_icon4;
+            case 4:
+                return R.drawable.button_icon5;
+            case 5:
+                return R.drawable.button_icon6;
+            case 6:
+                return R.drawable.button_icon7;
+            case 7:
+                return R.drawable.button_icon8;
+        }
+        return R.drawable.button_icon1;
     }
 
     public static void setSensor(SensorData sensorData) {
@@ -70,10 +94,13 @@ public class AppGlobal {
     public static void setButton(ButtonData buttonData) {
         for (ButtonData buttonData1 : buttons) {
             if (buttonData.id == buttonData1.id) {
-                buttonData1.action = buttonData.action;
+                buttonData1.type = buttonData.type;
                 buttonData1.channels = buttonData.channels;
                 buttonData1.sync = buttonData.sync;
                 buttonData1.momentary = buttonData.momentary;
+                buttonData1.iconResourceId = buttonData.iconResourceId;
+                buttonData1.text = buttonData.text;
+                buttonData1.imagePath = buttonData.imagePath;
             }
         }
     }
@@ -88,5 +115,9 @@ public class AppGlobal {
 
     public static void setWarningButtonColor(int color) {
         systemData.buttonWarningColor = color;
+    }
+
+    public static DeviceData getCurrentPairingDevice() {
+        return null;
     }
 }

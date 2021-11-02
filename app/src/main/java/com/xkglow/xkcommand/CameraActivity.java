@@ -28,7 +28,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.xkglow.xkcommand.Helper.AppGlobal;
+import com.xkglow.xkcommand.Helper.ButtonData;
 import com.xkglow.xkcommand.Helper.Helper;
+import com.xkglow.xkcommand.Helper.MessageEvent;
+import com.xkglow.xkcommand.Helper.PhotoData;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,6 +52,7 @@ public class CameraActivity extends Activity {
     private int mCameraId;
     Camera.Size previewSize, pictureSize;
     int currentRotation;
+    ButtonData buttonData;
 
     public static final int REQUEST_CAMERA = 120;
 
@@ -53,7 +60,7 @@ public class CameraActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-
+        buttonData = (ButtonData) getIntent().getSerializableExtra("button");
         mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
         FrameLayout back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -309,7 +316,9 @@ public class CameraActivity extends Activity {
             out.flush();
             out.close();
             String path = image.getAbsolutePath();
-
+            buttonData.setImagePath(path);
+            AppGlobal.setButton(buttonData);
+            EventBus.getDefault().postSticky(new MessageEvent(MessageEvent.MessageEventType.SET_CAMERA_PHOTO));
         } catch (IOException e) {
             e.printStackTrace();
         }

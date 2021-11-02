@@ -19,18 +19,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.xkglow.xkcommand.Helper.AppGlobal;
+import com.xkglow.xkcommand.Helper.ButtonData;
 import com.xkglow.xkcommand.View.ControlButton;
 
+import java.util.List;
+
 public class ControlFragment extends Fragment {
+    FrameLayout frameLayout;
     private boolean powerOn;
+    ControlButton button1, button2, button3, button4, button5, button6, button7, button8;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control, container, false);
         powerOn = true;
+        frameLayout = view.findViewById(R.id.frame_layout);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         final int padding = dpToPx(getContext(), 20);
-        final FrameLayout frameLayout = view.findViewById(R.id.frame_layout);
         frameLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -51,30 +63,37 @@ public class ControlFragment extends Fragment {
                 int realIconSize = (int) (iconSize * ICON_RATIO);
                 int resize = (iconSize - realIconSize) / 2;
 
-                ControlButton button1 = new ControlButton(getContext());
-                button1.setReleased(false);
-                button1.setButtonId(1);
-                ControlButton button2 = new ControlButton(getContext());
-                button2.setReleased(false);
-                button2.setButtonId(2);
-                ControlButton button3 = new ControlButton(getContext());
-                button3.setReleased(false);
-                button3.setButtonId(3);
-                ControlButton button4 = new ControlButton(getContext());
-                button4.setReleased(false);
-                button4.setButtonId(4);
-                ControlButton button5 = new ControlButton(getContext());
-                button5.setReleased(true);
-                button5.setButtonId(5);
-                ControlButton button6 = new ControlButton(getContext());
-                button6.setReleased(true);
-                button6.setButtonId(6);
-                ControlButton button7 = new ControlButton(getContext());
-                button7.setReleased(true);
-                button7.setButtonId(7);
-                ControlButton button8 = new ControlButton(getContext());
-                button8.setReleased(true);
-                button8.setButtonId(8);
+                button1 = new ControlButton(getContext());
+                button1.setIconSize(iconSize);
+                button1.setButtonData(AppGlobal.getButton(1));
+
+                button2 = new ControlButton(getContext());
+                button2.setIconSize(iconSize);
+                button2.setButtonData(AppGlobal.getButton(2));
+
+                button3 = new ControlButton(getContext());
+                button3.setIconSize(iconSize);
+                button3.setButtonData(AppGlobal.getButton(3));
+
+                button4 = new ControlButton(getContext());
+                button4.setIconSize(iconSize);
+                button4.setButtonData(AppGlobal.getButton(4));
+
+                button5 = new ControlButton(getContext());
+                button5.setIconSize(iconSize);
+                button5.setButtonData(AppGlobal.getButton(5));
+
+                button6 = new ControlButton(getContext());
+                button6.setIconSize(iconSize);
+                button6.setButtonData(AppGlobal.getButton(6));
+
+                button7 = new ControlButton(getContext());
+                button7.setIconSize(iconSize);
+                button7.setButtonData(AppGlobal.getButton(7));
+
+                button8 = new ControlButton(getContext());
+                button8.setIconSize(iconSize);
+                button8.setButtonData(AppGlobal.getButton(8));
 
                 FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(realIconSize, realIconSize);
                 layoutParams1.leftMargin = paddingH + resize;
@@ -220,8 +239,35 @@ public class ControlFragment extends Fragment {
                 });
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        return view;
+        if (button1 != null) {
+            button1.setButtonData(AppGlobal.getButton(1));
+        }
+        if (button2 != null) {
+            button2.setButtonData(AppGlobal.getButton(2));
+        }
+        if (button3 != null) {
+            button3.setButtonData(AppGlobal.getButton(3));
+        }
+        if (button4 != null) {
+            button4.setButtonData(AppGlobal.getButton(4));
+        }
+        if (button5 != null) {
+            button5.setButtonData(AppGlobal.getButton(5));
+        }
+        if (button6 != null) {
+            button6.setButtonData(AppGlobal.getButton(6));
+        }
+        if (button7 != null) {
+            button7.setButtonData(AppGlobal.getButton(7));
+        }
+        if (button8 != null) {
+            button8.setButtonData(AppGlobal.getButton(8));
+        }
     }
 }

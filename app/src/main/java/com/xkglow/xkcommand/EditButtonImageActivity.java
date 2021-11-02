@@ -18,11 +18,16 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
 import com.xkglow.xkcommand.Helper.Helper;
+import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.Helper.PhotoData;
 import com.xkglow.xkcommand.Helper.PhotoGalleryHelper;
 import com.xkglow.xkcommand.Helper.RecyclerViewAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,6 +49,7 @@ public class EditButtonImageActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_edit_button_icon);
 
         buttonData = (ButtonData) getIntent().getSerializableExtra("button");
@@ -91,7 +97,18 @@ public class EditButtonImageActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 
+    @Subscribe(sticky = true)
+    public void onEvent(MessageEvent event) {
+        if (event.type == MessageEvent.MessageEventType.SET_CAMERA_PHOTO) {
+            finish();
+        }
+    }
 
     private void startPhotoLoader() {
         new PhotoGalleryHelper().startPhotoLoader(this, new PhotoGalleryHelper.PhotoGalleryLoaderCallback() {
@@ -162,7 +179,8 @@ public class EditButtonImageActivity extends FragmentActivity {
             out.flush();
             out.close();
             String path = image.getAbsolutePath();
-
+            buttonData.setImagePath(path);
+            AppGlobal.setButton(buttonData);
         } catch (IOException e) {
             e.printStackTrace();
         }

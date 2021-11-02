@@ -52,10 +52,6 @@ public class ActionView extends LinearLayout {
                     sensorData.action = 0;
                     AppGlobal.setSensor(sensorData);
                 }
-                if (buttonData != null) {
-                    buttonData.action = 0;
-                    AppGlobal.setButton(buttonData);
-                }
             }
         });
         radioButton2.setOnClickListener(new OnClickListener() {

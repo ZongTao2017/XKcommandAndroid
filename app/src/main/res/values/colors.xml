@@ -21,4 +21,13 @@
     <color name="switch_green">#30c459</color>
     <color name="switch_gray">#94979A</color>
     <color name="switch_light_gray">#C4C4C4</color>
+
+    <color name="blue_1">#0073bc</color>
+    <color name="blue_2">#005180</color>
+    <color name="blue_3">#1d4462</color>
+    <color name="blue_4">#1d374a</color>
+    <color name="gray_1">#3b3b3b</color>
+    <color name="gray_2">#515151</color>
+    <color name="text_color_gray">#aaaaaa</color>
+    <color name="bg_color_gray">#252525</color>
 </resources>

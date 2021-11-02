@@ -14,6 +14,6 @@ public class MessageEvent {
     }
 
     public enum MessageEventType {
-        SET_STATUS_BAR
+        SET_CAMERA_PHOTO
     }
 }

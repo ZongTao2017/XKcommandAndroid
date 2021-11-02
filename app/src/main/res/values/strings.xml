@@ -7,5 +7,7 @@
     <string name="channel_title">Output Channel</string>
     <string name="channel_detail">Channel name &amp; max output limit</string>
     <string name="system_title">System</string>
-    <string name="system_detail">XKNewApp</string>
+    <string name="system_detail">Controller setup</string>
+    <string name="touch_smart_phone">Touch the smartphone onto the controller and hold for 3 seconds.</string>
+    <string name="device_connected">Congratulations!\nThis controller has been paired with your device.</string>
 </resources>

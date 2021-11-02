@@ -91,7 +91,6 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/button_icon1"
                         android:scaleType="fitCenter" />
                     <ImageView
                         android:layout_width="15dp"
@@ -163,7 +162,6 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/app_icon"
                         android:scaleType="fitCenter" />
                     <ImageView
                         android:layout_width="15dp"
@@ -217,7 +215,6 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
-                        android:id="@+id/button_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
@@ -228,6 +225,7 @@
                         android:textSize="16sp"
                         android:text="Use name"/>
                     <TextView
+                        android:id="@+id/button_text"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
 import com.xkglow.xkcommand.Helper.Helper;
@@ -22,9 +23,13 @@ public class EditButtonActivity extends Activity {
     ButtonData buttonData;
     TextView noChannelSelectedTextView;
     LinearLayout channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8;
-    ImageView radioButtonSelectIconImage, radioButtonSelectImageImage, radioButtonSelectTextImage, radioButtonSelectNAImage, channelImage1, channelImage2, channelImage3, channelImage4, channelImage5, channelImage6, channelImage7, channelImage8;
+    ImageView radioButtonSelectIconImage, radioButtonSelectImageImage, radioButtonSelectTextImage, radioButtonSelectNAImage;
+    ImageView channelImage1, channelImage2, channelImage3, channelImage4, channelImage5, channelImage6, channelImage7, channelImage8;
     LinearLayout channelLayout, actionLayout;
     SwitchView syncSwitch, momentarySwitch;
+
+    ImageView buttonIcon, buttonImage;
+    TextView buttonText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +71,12 @@ public class EditButtonActivity extends Activity {
         actionLayout = findViewById(R.id.action_layout);
         noChannelSelectedTextView = findViewById(R.id.no_channel_selected);
 
+        buttonIcon = findViewById(R.id.button_icon);
+        buttonImage = findViewById(R.id.button_image);
+        buttonText = findViewById(R.id.button_text);
+
+        setButtons();
+
         syncSwitch.setOnSwitchListener(new SwitchView.OnSwitchListener() {
             @Override
             public void onSwitchOn(boolean showMessage) {
@@ -100,7 +111,8 @@ public class EditButtonActivity extends Activity {
         radioButtonIconSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.action = 0;
+                buttonData.type = 2;
+                AppGlobal.setButton(buttonData);
                 setButtons();
             }
         });
@@ -109,7 +121,8 @@ public class EditButtonActivity extends Activity {
         radioButtonImageSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.action = 1;
+                buttonData.type = 3;
+                AppGlobal.setButton(buttonData);
                 setButtons();
             }
         });
@@ -118,7 +131,8 @@ public class EditButtonActivity extends Activity {
         radioButtonTextSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.action = 2;
+                buttonData.type = 1;
+                AppGlobal.setButton(buttonData);
                 setButtons();
             }
         });
@@ -127,7 +141,8 @@ public class EditButtonActivity extends Activity {
         radioButtonNASelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.action = 3;
+                buttonData.type = 0;
+                AppGlobal.setButton(buttonData);
                 setButtons();
             }
         });
@@ -250,6 +265,14 @@ public class EditButtonActivity extends Activity {
                 setSyncSwitch();
             }
         });
+        buttonData = AppGlobal.getButton(buttonData.id);
+        if (buttonData.iconResourceId != 0) {
+            buttonIcon.setImageResource(buttonData.iconResourceId);
+        }
+        if (buttonData.imagePath != null) {
+            Glide.with(EditButtonActivity.this).load(buttonData.imagePath).into(buttonImage);
+        }
+        buttonText.setText(buttonData.text);
     }
 
     private void setButtons() {
@@ -257,18 +280,18 @@ public class EditButtonActivity extends Activity {
         radioButtonSelectImageImage.setImageResource(R.drawable.radio_unselected);
         radioButtonSelectTextImage.setImageResource(R.drawable.radio_unselected);
         radioButtonSelectNAImage.setImageResource(R.drawable.radio_unselected);
-        switch (buttonData.action) {
+        switch (buttonData.type) {
             case 0:
-                radioButtonSelectIconImage.setImageResource(R.drawable.radio_selected);
+                radioButtonSelectNAImage.setImageResource(R.drawable.radio_selected);
                 break;
             case 1:
-                radioButtonSelectImageImage.setImageResource(R.drawable.radio_selected);
-                break;
-            case 2:
                 radioButtonSelectTextImage.setImageResource(R.drawable.radio_selected);
                 break;
+            case 2:
+                radioButtonSelectIconImage.setImageResource(R.drawable.radio_selected);
+                break;
             case 3:
-                radioButtonSelectNAImage.setImageResource(R.drawable.radio_selected);
+                radioButtonSelectImageImage.setImageResource(R.drawable.radio_selected);
                 break;
         }
     }

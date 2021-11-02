@@ -29,6 +29,7 @@
         <activity android:name=".SelectChannelActivity" />
         <activity android:name=".EditSystemActivity" />
         <activity android:name=".EditColorActivity" />
+        <activity android:name=".DevicePairActivity" />
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
 import com.xkglow.xkcommand.Helper.PhotoData;
 import com.xkglow.xkcommand.Helper.RecyclerViewAdapter;
@@ -20,6 +21,7 @@ public class EditButtonIconActivity extends Activity {
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter;
     ButtonData buttonData;
+    int resourceId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,16 +38,21 @@ public class EditButtonIconActivity extends Activity {
             }
         });
 
+        FrameLayout done = findViewById(R.id.done);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonData.setIconResourceId(resourceId);
+                AppGlobal.setButton(buttonData);
+                finish();
+            }
+        });
+
         recyclerView = findViewById(R.id.recycler_view);
         ArrayList<PhotoData> photos = new ArrayList<>();
-        photos.add(new PhotoData(R.drawable.button_icon1));
-        photos.add(new PhotoData(R.drawable.button_icon2));
-        photos.add(new PhotoData(R.drawable.button_icon3));
-        photos.add(new PhotoData(R.drawable.button_icon4));
-        photos.add(new PhotoData(R.drawable.button_icon5));
-        photos.add(new PhotoData(R.drawable.button_icon6));
-        photos.add(new PhotoData(R.drawable.button_icon7));
-        photos.add(new PhotoData(R.drawable.button_icon8));
+        for (int i = 0; i < 8; i++) {
+            photos.add(new PhotoData(AppGlobal.getIconResourceId(i)));
+        }
         boolean horizontal = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         int number = 4;
         if (horizontal) {
@@ -57,7 +64,7 @@ public class EditButtonIconActivity extends Activity {
         adapter.setItemClickLister(new RecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                resourceId = AppGlobal.getIconResourceId(position);
             }
 
             @Override
