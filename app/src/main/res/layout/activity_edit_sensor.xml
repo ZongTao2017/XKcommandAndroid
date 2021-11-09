@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -53,7 +54,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginStart="20dp"
-                    android:layout_marginEnd="50dp"
                     android:textColor="@color/white"
                     android:lines="1"
                     android:ellipsize="end"
@@ -119,14 +119,6 @@
                     android:ellipsize="end"
                     android:textSize="16sp"
                     android:text="Dim button back light at night"/>
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/info"
-                    android:tint="@color/gray"
-                    android:scaleType="fitXY"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -162,15 +154,27 @@
                     android:ellipsize="end"
                     android:textSize="16sp"
                     android:text="Trigger output action"/>
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/info"
-                    android:tint="@color/gray"
-                    android:scaleType="fitXY"/>
             </LinearLayout>
+            <TextView
+                android:id="@+id/sensor_function_dim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/gray"
+                android:textSize="12sp"
+                android:text="Connect this wire with vehicle running light 12v. When it’s triggered, the back light of the physical control panel will be dimmed. Only one wire can be used for this function."/>
+            <TextView
+                android:id="@+id/sensor_function_action"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/gray"
+                android:textSize="12sp"
+                android:text="When triggered, the linked output channels will run assigned actions."/>
             <LinearLayout
                 android:id="@+id/button_back_light"
                 android:layout_width="match_parent"
@@ -250,6 +254,41 @@
                     android:textSize="12sp"
                     android:text="Only one sensor can be used for button back light dimming function."/>
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:text="SYNC ALL CHANNELS" />
+            <LinearLayout
+                android:id="@+id/sync_all_channels_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/topBarHeight"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:background="@color/tab_bg"
+                android:foreground="?android:attr/selectableItemBackground">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/white"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:text="Same action for all channels"/>
+                <com.xkglow.xkcommand.View.SwitchView
+                    android:id="@+id/switch_sync"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="20dp"
+                    custom:switch_type="1" />
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/channel_layout"
                 android:layout_width="match_parent"
@@ -283,6 +322,7 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
+                        android:id="@+id/channel_text_1"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -318,6 +358,7 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
+                        android:id="@+id/channel_text_2"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -353,6 +394,7 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
+                        android:id="@+id/channel_text_3"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -388,6 +430,7 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
+                        android:id="@+id/channel_text_4"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -423,6 +466,7 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
+                        android:id="@+id/channel_text_5"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -458,6 +502,7 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
+                        android:id="@+id/channel_text_6"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -493,6 +538,7 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
+                        android:id="@+id/channel_text_7"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -528,6 +574,7 @@
                             android:scaleType="fitXY"/>
                     </FrameLayout>
                     <TextView
+                        android:id="@+id/channel_text_8"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

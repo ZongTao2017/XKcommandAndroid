@@ -21,7 +21,6 @@
                 android:tint="@color/white"/>
         </FrameLayout>
         <TextView
-            android:id="@+id/channel_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -43,6 +42,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
+                android:id="@+id/controller_name_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
                 android:orientation="horizontal"
@@ -53,14 +53,13 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginStart="20dp"
-                    android:layout_marginEnd="50dp"
                     android:textColor="@color/white"
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
                     android:text="Controller Name"/>
                 <TextView
-                    android:id="@+id/channel_name"
+                    android:id="@+id/controller_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -70,8 +69,7 @@
                     android:textColor="@color/gray"
                     android:lines="1"
                     android:ellipsize="end"
-                    android:textSize="16sp"
-                    android:text="XKGLOW_1111"/>
+                    android:textSize="16sp"/>
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
@@ -171,70 +169,77 @@
                     custom:switch_type="1" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/bluetooth_auto_off_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/topBarHeight"
-                android:layout_marginTop="1px"
-                android:orientation="horizontal"
-                android:background="@color/tab_bg">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:text="Turn Off Bluetooth After"/>
-                <FrameLayout
-                    android:id="@+id/minus_auto_turn_off"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:foreground="?android:attr/selectableItemBackground">
-                    <ImageView
-                        android:id="@+id/minus_image_2"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center"
-                        android:tint="@color/blue"
-                        android:src="@drawable/minus"/>
-                </FrameLayout>
-                <TextView
-                    android:id="@+id/minutes_auto_turn_off"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:text="120min"/>
-                <FrameLayout
-                    android:id="@+id/plus_auto_turn_off"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:foreground="?android:attr/selectableItemBackground">
-                    <ImageView
-                        android:id="@+id/plus_image_2"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center"
-                        android:src="@drawable/plus"
-                        android:tint="@color/blue" />
-                </FrameLayout>
-            </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="20dp"
-                android:textSize="12sp"
-                android:textColor="@color/gray"
-                android:text="If all channels are off and the controller is not connected to a device via bluetooth, after the set time value, the bluetooth will be cut off to conserve power consumption. To revoke the system, press any control panel button." />
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/topBarHeight"
+                    android:layout_marginTop="1px"
+                    android:orientation="horizontal"
+                    android:background="@color/tab_bg">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:text="Turn Off Bluetooth After"/>
+                    <FrameLayout
+                        android:id="@+id/minus_auto_turn_off"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center_vertical"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <ImageView
+                            android:id="@+id/minus_image_2"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:scaleType="fitXY"
+                            android:layout_gravity="center"
+                            android:tint="@color/blue"
+                            android:src="@drawable/minus"/>
+                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/minutes"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:text="120min"/>
+                    <FrameLayout
+                        android:id="@+id/plus_auto_turn_off"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <ImageView
+                            android:id="@+id/plus_image_2"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:scaleType="fitXY"
+                            android:layout_gravity="center"
+                            android:src="@drawable/plus"
+                            android:tint="@color/blue" />
+                    </FrameLayout>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="20dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/gray"
+                    android:text="If all channels are off and the controller is not connected to a device via bluetooth, after the set time value, the bluetooth will be cut off to conserve power consumption. To revoke the system, press any control panel button." />
+            </LinearLayout>
             <LinearLayout
+                android:id="@+id/button_color_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
                 android:orientation="horizontal"
@@ -256,7 +261,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"/>
                 <FrameLayout
-                    android:id="@+id/button_color_layout"
                     android:layout_width="@dimen/topBarHeight"
                     android:layout_height="@dimen/topBarHeight">
                     <View
@@ -283,6 +287,7 @@
                 android:textColor="@color/gray"
                 android:text="Button backlight LED color when it is on." />
             <LinearLayout
+                android:id="@+id/button_warning_color_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
                 android:orientation="horizontal"
@@ -298,13 +303,12 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
-                    android:text="Button Color"/>
+                    android:text="Button Warning Color"/>
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"/>
                 <FrameLayout
-                    android:id="@+id/button_warning_color_layout"
                     android:layout_width="@dimen/topBarHeight"
                     android:layout_height="@dimen/topBarHeight">
                     <View

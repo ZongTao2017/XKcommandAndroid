@@ -14,7 +14,7 @@
 
     <color name="tab_bg">#313131</color>
     <color name="grayTextColor">#969696</color>
-    <color name="gray">#5b5b5b</color>
+    <color name="gray">#99ebebf5</color>
     <color name="blue">#009be3</color>
     <color name="red">#ff0000</color>
 
@@ -28,6 +28,5 @@
     <color name="blue_4">#1d374a</color>
     <color name="gray_1">#3b3b3b</color>
     <color name="gray_2">#515151</color>
-    <color name="text_color_gray">#aaaaaa</color>
     <color name="bg_color_gray">#252525</color>
 </resources>

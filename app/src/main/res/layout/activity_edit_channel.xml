@@ -42,24 +42,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/channel_1"
+                android:id="@+id/channel_name_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/topBarHeight"
                 android:orientation="horizontal"
                 android:layout_marginTop="30dp"
                 android:background="@color/tab_bg">
                 <TextView
-                    android:id="@+id/channel_name_1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_marginStart="20dp"
-                    android:layout_marginEnd="50dp"
                     android:textColor="@color/white"
-                    android:lines="1"
-                    android:ellipsize="end"
                     android:textSize="16sp"
-                    android:text="Channel 1"/>
+                    android:text="Channel Name"/>
                 <TextView
                     android:id="@+id/channel_name"
                     android:layout_width="0dp"
@@ -72,6 +68,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 1"/>
                 <ImageView
                     android:layout_width="15dp"
@@ -122,13 +119,13 @@
                         android:src="@drawable/minus"/>
                 </FrameLayout>
                 <TextView
-                    android:id="@+id/brightness"
+                    android:id="@+id/current"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="16sp"
-                    android:text="100%"/>
+                    android:text="9A"/>
                 <FrameLayout
                     android:id="@+id/plus"
                     android:layout_width="36dp"
@@ -156,5 +153,4 @@
                 android:text="Input a value close to the max operation current of the load on this channel. Once reaching this value, the power of the this channel will be immediately cut off." />
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

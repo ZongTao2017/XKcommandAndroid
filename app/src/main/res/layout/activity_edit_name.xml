@@ -20,14 +20,14 @@
                 android:tint="@color/white"/>
         </FrameLayout>
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="16sp"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            android:text="Sensor Name 1"/>
+            android:textStyle="bold"/>
     </FrameLayout>
     <EditText
         android:id="@+id/edit_name"
@@ -38,6 +38,9 @@
         android:background="@color/tab_bg"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:textColorHint="@color/grayTextColor">
+        android:textColorHint="@color/grayTextColor"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1">
     </EditText>
 </LinearLayout>

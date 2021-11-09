@@ -3,22 +3,24 @@ package com.xkglow.xkcommand.View;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.view.Gravity;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
 import com.xkglow.xkcommand.EditButtonActivity;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
-import com.xkglow.xkcommand.Helper.Helper;
+import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class ControlButton extends FrameLayout {
     private Context context;
@@ -27,9 +29,8 @@ public class ControlButton extends FrameLayout {
     private ImageView icon, image;
     private TextView textView;
     private boolean released;
-    private boolean pressed;
-    private boolean powerOn;
     private boolean editButton;
+    private boolean enabled;
 
     public ControlButton(@NonNull Context context) {
         super(context);
@@ -38,14 +39,15 @@ public class ControlButton extends FrameLayout {
         inflate(context, R.layout.button_view, this);
 
         released = false;
-        pressed = false;
-        powerOn = true;
         editButton = false;
 
         imagePressed = findViewById(R.id.background_image_pressed);
         imageUnpressed = findViewById(R.id.background_image_unpressed);
         imageIllumination = findViewById(R.id.illumination_image);
+
         textView = findViewById(R.id.text);
+        Typeface face = ResourcesCompat.getFont(context, R.font.impact);;
+        textView.setTypeface(face);
 
         icon = findViewById(R.id.foreground_icon);
         image = findViewById(R.id.foreground_image);
@@ -58,6 +60,16 @@ public class ControlButton extends FrameLayout {
         layoutParams.width = iconSize;
         layoutParams.height = iconSize;
         foregroundLayout.setLayoutParams(layoutParams);
+
+        FrameLayout.LayoutParams layoutParams1 = (LayoutParams) icon.getLayoutParams();
+        layoutParams1.width = (int) (iconSize * 0.6);
+        layoutParams1.height = (int) (iconSize * 0.6);
+        icon.setLayoutParams(layoutParams1);
+
+        FrameLayout.LayoutParams layoutParams2 = (LayoutParams) image.getLayoutParams();
+        layoutParams2.width = (int) (iconSize * 0.75);
+        layoutParams2.height = (int) (iconSize * 0.75);
+        image.setLayoutParams(layoutParams2);
     }
 
     public void setButtonData(ButtonData buttonData) {
@@ -67,11 +79,14 @@ public class ControlButton extends FrameLayout {
         this.buttonData = buttonData;
         this.released = buttonData.momentary;
         if (buttonData.type == 0) {
-            textView.setVisibility(VISIBLE);
-            textView.setText(buttonData.id + "");
+
         } else if (buttonData.type == 1) {
             textView.setVisibility(VISIBLE);
-            textView.setText(buttonData.text);
+            if (buttonData.text == null) {
+                textView.setText("Button " + buttonData.id);
+            } else {
+                textView.setText(buttonData.text);
+            }
         } else if (buttonData.type == 2) {
             icon.setVisibility(VISIBLE);
             icon.setImageResource(buttonData.iconResourceId);
@@ -79,11 +94,20 @@ public class ControlButton extends FrameLayout {
             image.setVisibility(VISIBLE);
             Glide.with(context).load(buttonData.imagePath).into(image);
         }
+        if (buttonData.isPressed && !editButton) {
+            imageUnpressed.setVisibility(View.GONE);
+            imagePressed.setVisibility(View.VISIBLE);
+            imageIllumination.setVisibility(View.VISIBLE);
+            imageIllumination.setColorFilter(AppGlobal.getSystemData().buttonColor);
+        } else {
+            imageUnpressed.setVisibility(View.VISIBLE);
+            imagePressed.setVisibility(View.GONE);
+            imageIllumination.setVisibility(View.GONE);
+        }
     }
 
-    public void setPowerOn(boolean powerOn) {
-        this.powerOn = powerOn;
-        this.pressed = false;
+    public void turnOff() {
+        buttonData.isPressed = false;
         imageUnpressed.setVisibility(View.VISIBLE);
         imagePressed.setVisibility(View.GONE);
         imageIllumination.setVisibility(View.GONE);
@@ -92,7 +116,6 @@ public class ControlButton extends FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!powerOn) return false;
         int action = event.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
             if (editButton) {
@@ -104,20 +127,28 @@ public class ControlButton extends FrameLayout {
             imageUnpressed.setVisibility(View.GONE);
             imagePressed.setVisibility(View.VISIBLE);
             if (released) {
+                buttonData.isPressed = true;
                 imageIllumination.setVisibility(View.VISIBLE);
+                imageIllumination.setColorFilter(AppGlobal.getSystemData().buttonColor);
             } else {
-                if (!pressed) {
+                if (!buttonData.isPressed) {
+                    buttonData.isPressed = true;
                     imageIllumination.setVisibility(View.VISIBLE);
+                    imageIllumination.setColorFilter(AppGlobal.getSystemData().buttonColor);
                 } else {
+                    buttonData.isPressed = false;
                     imageIllumination.setVisibility(View.GONE);
                 }
-                pressed = !pressed;
             }
+            AppGlobal.setButton(buttonData);
+            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF));
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             imageUnpressed.setVisibility(View.VISIBLE);
             imagePressed.setVisibility(View.GONE);
             if (released) {
+                buttonData.isPressed = false;
                 imageIllumination.setVisibility(View.GONE);
+                AppGlobal.setButton(buttonData);
             }
         }
         return true;

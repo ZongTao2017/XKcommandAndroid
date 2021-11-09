@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <application
+        android:name=".XKcommandApplication"
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
@@ -30,6 +31,7 @@
         <activity android:name=".EditSystemActivity" />
         <activity android:name=".EditColorActivity" />
         <activity android:name=".DevicePairActivity" />
+        <activity android:name=".EditChannelActivity" />
     </application>
 
 </manifest>

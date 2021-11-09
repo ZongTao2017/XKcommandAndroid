@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,8 +64,6 @@ public class EditButtonImageActivity extends FragmentActivity {
         });
 
         recyclerView = findViewById(R.id.recycler_view);
-        ArrayList<PhotoData> photos = new ArrayList<>();
-
         recyclerView.setLayoutManager(new GridLayoutManager(EditButtonImageActivity.this, 4, RecyclerView.VERTICAL, false));
 
         FrameLayout done = findViewById(R.id.done);
@@ -78,6 +77,9 @@ public class EditButtonImageActivity extends FragmentActivity {
                 }
             }
         });
+
+        TextView title = findViewById(R.id.title);
+        title.setText("Take/Select Photo");
     }
 
     @Override
@@ -114,23 +116,29 @@ public class EditButtonImageActivity extends FragmentActivity {
         new PhotoGalleryHelper().startPhotoLoader(this, new PhotoGalleryHelper.PhotoGalleryLoaderCallback() {
             @Override
             public void photoGalleryLoaderDone(List<PhotoData> photos) {
-                photoList = photos;
-                photoPosition = -1;
-                adapter = new RecyclerViewAdapter(EditButtonImageActivity.this, 1, photos, 4);
-                recyclerView.setAdapter(adapter);
-                adapter.setItemClickLister(new RecyclerViewAdapter.ItemClickListener() {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void onItemClick(int position) {
-                        photoPosition = position;
-                    }
+                    public void run() {
+                        photoList = photos;
+                        photoPosition = -1;
+                        adapter = new RecyclerViewAdapter(EditButtonImageActivity.this, 1, photos, 4);
+                        recyclerView.setAdapter(adapter);
+                        adapter.setItemClickLister(new RecyclerViewAdapter.ItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                photoPosition = position;
+                            }
 
-                    @Override
-                    public void onCameraClick() {
-                        Intent intent = new Intent(EditButtonImageActivity.this, CameraActivity.class);
-                        intent.putExtra("button", buttonData);
-                        startActivity(intent);
+                            @Override
+                            public void onCameraClick() {
+                                Intent intent = new Intent(EditButtonImageActivity.this, CameraActivity.class);
+                                intent.putExtra("button", buttonData);
+                                startActivity(intent);
+                            }
+                        });
                     }
                 });
+
             }
         });
     }
@@ -178,8 +186,8 @@ public class EditButtonImageActivity extends FragmentActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
-            String path = image.getAbsolutePath();
-            buttonData.setImagePath(path);
+            buttonData.imagePath = image.getAbsolutePath();
+            buttonData.type = 3;
             AppGlobal.setButton(buttonData);
         } catch (IOException e) {
             e.printStackTrace();

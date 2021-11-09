@@ -1,6 +1,8 @@
 package com.xkglow.xkcommand.Helper;
 
-public class PhotoData {
+import java.io.Serializable;
+
+public class PhotoData implements Serializable {
     public int resourceId;
     public long id;
     public String path;

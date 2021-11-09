@@ -31,14 +31,15 @@
             android:text="Button Color"/>
         <FrameLayout
             android:id="@+id/done"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_gravity="end">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="end|center_vertical"
+                android:layout_gravity="end"
                 android:layout_marginEnd="12.5dp"
+                android:gravity="center_vertical"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
                 android:text="Done" />
@@ -47,5 +48,13 @@
     <com.xkglow.xkcommand.View.EditColorView
         android:id="@+id/edit_color_view"
         android:layout_width="match_parent"
-        android:layout_height="260dp" />
+        android:layout_height="240dp" />
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:textSize="12sp"
+        android:textColor="@color/gray"/>
 </LinearLayout>

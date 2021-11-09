@@ -42,7 +42,8 @@ public class EditButtonIconActivity extends Activity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.setIconResourceId(resourceId);
+                buttonData.type = 2;
+                buttonData.iconResourceId = resourceId;
                 AppGlobal.setButton(buttonData);
                 finish();
             }

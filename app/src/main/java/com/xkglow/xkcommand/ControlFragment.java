@@ -3,6 +3,7 @@ package com.xkglow.xkcommand;
 import static com.xkglow.xkcommand.Helper.Helper.ICON_RATIO;
 import static com.xkglow.xkcommand.Helper.Helper.ICON_SIZE;
 import static com.xkglow.xkcommand.Helper.Helper.PADDING;
+import static com.xkglow.xkcommand.Helper.Helper.STATUS_RATIO;
 import static com.xkglow.xkcommand.Helper.Helper.dpToPx;
 
 import android.content.res.Configuration;
@@ -14,27 +15,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
-import com.xkglow.xkcommand.Helper.ButtonData;
+import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.View.ControlButton;
 
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class ControlFragment extends Fragment {
     FrameLayout frameLayout;
-    private boolean powerOn;
     ControlButton button1, button2, button3, button4, button5, button6, button7, button8;
+    ImageView powerBgImageView, powerBgImageView2, powerImageView;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control, container, false);
-        powerOn = true;
         frameLayout = view.findViewById(R.id.frame_layout);
         return view;
     }
@@ -43,6 +57,7 @@ public class ControlFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final int padding = dpToPx(getContext(), 20);
+
         frameLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -187,7 +202,7 @@ public class ControlFragment extends Fragment {
                 power.setLayoutParams(powerLayoutParams);
                 frameLayout.addView(power);
 
-                final ImageView powerBgImageView = new ImageView(getContext());
+                powerBgImageView = new ImageView(getContext());
                 powerBgImageView.setLayoutParams(new FrameLayout.LayoutParams(size, size));
                 powerBgImageView.setImageResource(R.drawable.power_base_unpressed);
                 powerBgImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -196,49 +211,91 @@ public class ControlFragment extends Fragment {
                 FrameLayout.LayoutParams powerImageLayoutParams = new FrameLayout.LayoutParams(size / 2, size / 2);
                 powerImageLayoutParams.gravity = Gravity.CENTER;
 
-                final ImageView powerBgImageView2 = new ImageView(getContext());
+                powerBgImageView2 = new ImageView(getContext());
                 powerBgImageView2.setLayoutParams(powerImageLayoutParams);
                 powerBgImageView2.setImageResource(R.drawable.power_base_pressed);
                 powerBgImageView2.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 power.addView(powerBgImageView2);
                 powerBgImageView2.setVisibility(View.GONE);
 
-                final ImageView powerImageView = new ImageView(getContext());
+                powerImageView = new ImageView(getContext());
                 powerImageView.setLayoutParams(powerImageLayoutParams);
                 powerImageView.setImageResource(R.drawable.power);
                 powerImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 powerImageView.setColorFilter(0xffffffff);
                 power.addView(powerImageView);
 
+                if (AppGlobal.isPowerOn()) {
+                    powerBgImageView.setVisibility(View.VISIBLE);
+                    powerBgImageView2.setVisibility(View.GONE);
+                    powerImageView.setAlpha(1f);
+                } else {
+                    powerBgImageView.setVisibility(View.GONE);
+                    powerBgImageView2.setVisibility(View.VISIBLE);
+                    powerImageView.setAlpha(0.2f);
+                }
+
                 power.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         int action = event.getActionMasked();
                         if (action == MotionEvent.ACTION_DOWN) {
-                            if (powerOn) {
+                            if (AppGlobal.isPowerOn()) {
                                 powerBgImageView.setVisibility(View.GONE);
                                 powerBgImageView2.setVisibility(View.VISIBLE);
-                                powerImageView.setColorFilter(0xffff0000);
-                            } else {
-                                powerBgImageView.setVisibility(View.VISIBLE);
-                                powerBgImageView2.setVisibility(View.GONE);
-                                powerImageView.setColorFilter(0xffffffff);
+                                powerImageView.setAlpha(0.2f);
+                                AppGlobal.setPowerOn(false);
+                                button1.turnOff();
+                                button2.turnOff();
+                                button3.turnOff();
+                                button4.turnOff();
+                                button5.turnOff();
+                                button6.turnOff();
+                                button7.turnOff();
+                                button8.turnOff();
+                                return true;
                             }
-                            powerOn = !powerOn;
-                            button1.setPowerOn(powerOn);
-                            button2.setPowerOn(powerOn);
-                            button3.setPowerOn(powerOn);
-                            button4.setPowerOn(powerOn);
-                            button5.setPowerOn(powerOn);
-                            button6.setPowerOn(powerOn);
-                            button7.setPowerOn(powerOn);
-                            button8.setPowerOn(powerOn);
                         }
-                        return true;
+                        return false;
                     }
                 });
+
+
+                ImageView image = view.findViewById(R.id.status_bar);
+                FrameLayout.LayoutParams layoutParams9 = (FrameLayout.LayoutParams) image.getLayoutParams();
+                layoutParams9.width = (int) ((iconSize * 2 + paddingH) * STATUS_RATIO);
+
+                LinearLayout statusLayout = view.findViewById(R.id.status_layout);
+                FrameLayout.LayoutParams layoutParams10 = (FrameLayout.LayoutParams) statusLayout.getLayoutParams();
+                layoutParams10.width = (int) ((iconSize * 2 + paddingH) * STATUS_RATIO);
+
+                if (horizontal) {
+                    paddingV = height * PADDING / (PADDING * 3 + ICON_SIZE * 2);
+                    iconSize = height * ICON_SIZE / (PADDING * 3 + ICON_SIZE * 2);
+                    paddingH = (width - iconSize * 4) / 4;
+                    layoutParams9.height = (int) ((iconSize * 2 + paddingV) * STATUS_RATIO);
+                    layoutParams10.height = (int) ((iconSize * 2 + paddingV) * STATUS_RATIO);
+                }
+
+                image.setLayoutParams(layoutParams9);
+                statusLayout.setLayoutParams(layoutParams10);
             }
         });
+    }
+
+    @Subscribe(sticky = true)
+    public void onEvent(MessageEvent event) {
+        if (event.type == MessageEvent.MessageEventType.TURN_ON_OFF) {
+            if (AppGlobal.isPowerOn()) {
+                powerBgImageView.setVisibility(View.VISIBLE);
+                powerBgImageView2.setVisibility(View.GONE);
+                powerImageView.setAlpha(1f);
+            } else {
+                powerBgImageView.setVisibility(View.GONE);
+                powerBgImageView2.setVisibility(View.VISIBLE);
+                powerImageView.setAlpha(0.2f);
+            }
+        }
     }
 
     @Override

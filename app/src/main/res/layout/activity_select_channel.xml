@@ -59,6 +59,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 1"/>
                 <View
                     android:layout_width="0dp"
@@ -94,6 +95,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 2"/>
                 <View
                     android:layout_width="0dp"
@@ -129,6 +131,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 3"/>
                 <View
                     android:layout_width="0dp"
@@ -164,6 +167,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 4"/>
                 <View
                     android:layout_width="0dp"
@@ -199,6 +203,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 5"/>
                 <View
                     android:layout_width="0dp"
@@ -234,6 +239,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 6"/>
                 <View
                     android:layout_width="0dp"
@@ -269,6 +275,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 7"/>
                 <View
                     android:layout_width="0dp"
@@ -304,6 +311,7 @@
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
+                    android:maxLength="20"
                     android:text="Channel Name 8"/>
                 <View
                     android:layout_width="0dp"
@@ -317,6 +325,15 @@
                     android:src="@drawable/right_arrow"
                     android:tint="@color/gray" />
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/gray"
+                android:textSize="12sp"
+                android:text="Setup the name and max current limit for each channel"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

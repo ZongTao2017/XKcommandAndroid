@@ -23,13 +23,13 @@
             android:id="@+id/foreground_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
+            android:layout_gravity="center"
             android:scaleType="fitCenter"/>
         <ImageView
             android:id="@+id/foreground_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
+            android:layout_gravity="center"
             android:scaleType="fitCenter"
             android:background="@drawable/round_corner"/>
     </FrameLayout>
@@ -46,11 +46,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:maxLines="3"
-        android:ellipsize="end"/>
+        android:maxLength="20"/>
 
 </FrameLayout>

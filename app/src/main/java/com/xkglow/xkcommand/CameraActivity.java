@@ -315,8 +315,8 @@ public class CameraActivity extends Activity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
-            String path = image.getAbsolutePath();
-            buttonData.setImagePath(path);
+            buttonData.type = 3;
+            buttonData.imagePath = image.getAbsolutePath();
             AppGlobal.setButton(buttonData);
             EventBus.getDefault().postSticky(new MessageEvent(MessageEvent.MessageEventType.SET_CAMERA_PHOTO));
         } catch (IOException e) {

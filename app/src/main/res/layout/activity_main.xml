@@ -27,7 +27,21 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:src="@drawable/xkglow_logo" />
+        <TextView
+            android:id="@+id/controller_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="90dp"
+            android:layout_marginEnd="90dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:lines="1"
+            android:ellipsize="end"
+            android:visibility="gone"/>
         <FrameLayout
+            android:id="@+id/signal"
             android:layout_width="90dp"
             android:layout_height="match_parent"
             android:layout_gravity="end">
@@ -68,17 +82,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/statusBarHeight">
-                        <ImageView
-                            android:id="@+id/status_bar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/system_status_base"
-                            android:layout_gravity="center"/>
-                    </FrameLayout>
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/multiDotsHeight">

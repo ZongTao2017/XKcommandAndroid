@@ -20,6 +20,7 @@ public class ActionView extends LinearLayout {
     private LinearLayout radioButton1, radioButton2, radioButton3, radioButton4;
     private ImageView radioButtonImage1, radioButtonImage2, radioButtonImage3, radioButtonImage4;
     private TextView actionNameTextView;
+    private int channelId;
 
     public ActionView(Context context) {
         super(context);
@@ -47,46 +48,70 @@ public class ActionView extends LinearLayout {
         radioButton1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                setRadioImages();
                 if (sensorData != null) {
-                    sensorData.action = 0;
+                    sensorData.actions[channelId] = 0;
                     AppGlobal.setSensor(sensorData);
                 }
+                if (buttonData != null) {
+                    buttonData.actions[channelId] = 0;
+                    AppGlobal.setButton(buttonData);
+                }
+                setRadioImages();
             }
         });
         radioButton2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                sensorData.action = 1;
+                if (sensorData != null) {
+                    sensorData.actions[channelId] = 1;
+                    AppGlobal.setSensor(sensorData);
+                }
+                if (buttonData != null) {
+                    buttonData.actions[channelId] = 1;
+                    AppGlobal.setButton(buttonData);
+                }
                 setRadioImages();
-                AppGlobal.setSensor(sensorData);
             }
         });
         radioButton3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                sensorData.action = 2;
+                if (sensorData != null) {
+                    sensorData.actions[channelId] = 2;
+                    AppGlobal.setSensor(sensorData);
+                }
+                if (buttonData != null) {
+                    buttonData.actions[channelId] = 1;
+                    AppGlobal.setButton(buttonData);
+                }
                 setRadioImages();
-                AppGlobal.setSensor(sensorData);
             }
         });
         radioButton4.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                sensorData.action = 3;
+                if (sensorData != null) {
+                    sensorData.actions[channelId] = 3;
+                    AppGlobal.setSensor(sensorData);
+                }
+                if (buttonData != null) {
+                    buttonData.actions[channelId] = 3;
+                    AppGlobal.setButton(buttonData);
+                }
                 setRadioImages();
-                AppGlobal.setSensor(sensorData);
             }
         });
     }
 
-    public void setSensorData(SensorData sensorData) {
+    public void setSensorData(SensorData sensorData, int channelId) {
         this.sensorData = sensorData;
+        this.channelId = channelId;
         setRadioImages();
     }
 
-    public void setButtonData(ButtonData buttonData) {
+    public void setButtonData(ButtonData buttonData, int channelId) {
         this.buttonData = buttonData;
+        this.channelId = channelId;
         setRadioImages();
     }
 
@@ -99,19 +124,37 @@ public class ActionView extends LinearLayout {
         radioButtonImage2.setImageResource(R.drawable.radio_unselected);
         radioButtonImage3.setImageResource(R.drawable.radio_unselected);
         radioButtonImage4.setImageResource(R.drawable.radio_unselected);
-        switch (sensorData.action) {
-            case 0:
-                radioButtonImage1.setImageResource(R.drawable.radio_selected);
-                break;
-            case 1:
-                radioButtonImage2.setImageResource(R.drawable.radio_selected);
-                break;
-            case 2:
-                radioButtonImage3.setImageResource(R.drawable.radio_selected);
-                break;
-            case 3:
-                radioButtonImage4.setImageResource(R.drawable.radio_selected);
-                break;
+        if (sensorData != null) {
+            switch (sensorData.actions[channelId]) {
+                case 0:
+                    radioButtonImage1.setImageResource(R.drawable.radio_selected);
+                    break;
+                case 1:
+                    radioButtonImage2.setImageResource(R.drawable.radio_selected);
+                    break;
+                case 2:
+                    radioButtonImage3.setImageResource(R.drawable.radio_selected);
+                    break;
+                case 3:
+                    radioButtonImage4.setImageResource(R.drawable.radio_selected);
+                    break;
+            }
+        }
+        if (buttonData != null) {
+            switch (buttonData.actions[channelId]) {
+                case 0:
+                    radioButtonImage1.setImageResource(R.drawable.radio_selected);
+                    break;
+                case 1:
+                    radioButtonImage2.setImageResource(R.drawable.radio_selected);
+                    break;
+                case 2:
+                    radioButtonImage3.setImageResource(R.drawable.radio_selected);
+                    break;
+                case 3:
+                    radioButtonImage4.setImageResource(R.drawable.radio_selected);
+                    break;
+            }
         }
     }
 }

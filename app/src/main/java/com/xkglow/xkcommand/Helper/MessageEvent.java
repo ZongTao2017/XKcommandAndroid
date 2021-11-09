@@ -14,6 +14,10 @@ public class MessageEvent {
     }
 
     public enum MessageEventType {
-        SET_CAMERA_PHOTO
+        SET_CAMERA_PHOTO,
+        TURN_ON_OFF,
+        SELECT_ICON,
+        SELECT_IMAGE,
+        SELECT_TEXT
     }
 }

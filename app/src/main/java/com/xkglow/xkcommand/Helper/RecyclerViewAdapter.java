@@ -44,11 +44,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        PhotoData photoData = photos.get(position);
+
         int size = Helper.getScreenWidth(context) / itemNumberInRow;
         holder.rootLayout.setLayoutParams(new ViewGroup.LayoutParams(size, size));
 
         if (type == 0) {
+            PhotoData photoData = photos.get(position);
             holder.imageView.setVisibility(View.VISIBLE);
             holder.imageView.setImageResource(photoData.resourceId);
             holder.imageViewFull.setVisibility(View.GONE);
@@ -59,16 +60,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.imageViewFull.setVisibility(View.GONE);
                 holder.imageViewCamera.setVisibility(View.VISIBLE);
             } else {
+                PhotoData photoData = photos.get(position - 1);
                 holder.imageView.setVisibility(View.GONE);
                 holder.imageViewFull.setVisibility(View.VISIBLE);
                 Glide.with(context).load(photoData.path).into(holder.imageViewFull);
                 holder.imageViewCamera.setVisibility(View.GONE);
             }
         }
-        if (position == select) {
-            holder.rootLayout.setForeground(AppCompatResources.getDrawable(context, R.drawable.rect_border));
-        } else {
-            holder.rootLayout.setForeground(null);
+        if (type == 0) {
+            if (position == select) {
+                holder.rootLayout.setForeground(AppCompatResources.getDrawable(context, R.drawable.rect_border));
+            } else {
+                holder.rootLayout.setForeground(null);
+            }
+        }
+        if (type == 1) {
+            if (position - 1 == select && position != 0) {
+                holder.rootLayout.setForeground(AppCompatResources.getDrawable(context, R.drawable.rect_border));
+            } else {
+                holder.rootLayout.setForeground(null);
+            }
         }
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +90,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 } else {
                     if (itemClickListener != null) {
-                        itemClickListener.onItemClick(position);
-                        select = position;
+                        if (type == 0) {
+                            itemClickListener.onItemClick(position);
+                            select = position;
+                        }
+                        if (type == 1) {
+                            itemClickListener.onItemClick(position - 1);
+                            select = position - 1;
+                        }
                         notifyDataSetChanged();
                     }
                 }

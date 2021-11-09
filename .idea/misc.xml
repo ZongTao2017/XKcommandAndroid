@@ -8,6 +8,7 @@
         <entry key="../xkcommand/app/src/main/res/drawable/round_corner.xml" value="0.22" />
         <entry key="../xkcommand/app/src/main/res/layout-land/activity_device_pair.xml" value="0.23897707231040563" />
         <entry key="../xkcommand/app/src/main/res/layout-land/activity_main.xml" value="0.23897707231040563" />
+        <entry key="../xkcommand/app/src/main/res/layout-land/fragment_control.xml" value="0.23897707231040563" />
         <entry key="../xkcommand/app/src/main/res/layout-land/unpaired_device_view.xml" value="0.23897707231040563" />
         <entry key="../xkcommand/app/src/main/res/layout/action_layout.xml" value="0.2164855072463768" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_camera.xml" value="0.2164855072463768" />
@@ -22,10 +23,11 @@
         <entry key="../xkcommand/app/src/main/res/layout/activity_main.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_select_button.xml" value="0.25" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_select_channel.xml" value="0.2164855072463768" />
-        <entry key="../xkcommand/app/src/main/res/layout/activity_select_sensor.xml" value="0.1" />
+        <entry key="../xkcommand/app/src/main/res/layout/activity_select_sensor.xml" value="0.22714681440443213" />
         <entry key="../xkcommand/app/src/main/res/layout/button_view.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/device_list.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/device_view.xml" value="0.375" />
+        <entry key="../xkcommand/app/src/main/res/layout/fragment_control.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/fragment_customize.xml" value="0.2164855072463768" />
         <entry key="../xkcommand/app/src/main/res/layout/recycler_view_item.xml" value="0.2318840579710145" />
         <entry key="../xkcommand/app/src/main/res/layout/unpaired_device_view.xml" value="0.375" />

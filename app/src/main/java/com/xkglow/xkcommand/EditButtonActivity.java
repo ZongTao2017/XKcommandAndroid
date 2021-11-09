@@ -16,8 +16,12 @@ import com.bumptech.glide.Glide;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
 import com.xkglow.xkcommand.Helper.Helper;
+import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.View.ActionView;
 import com.xkglow.xkcommand.View.SwitchView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class EditButtonActivity extends Activity {
     ButtonData buttonData;
@@ -44,6 +48,9 @@ public class EditButtonActivity extends Activity {
                 finish();
             }
         });
+
+        TextView buttonId = findViewById(R.id.button_id);
+        buttonId.setText("Button " + buttonData.id);
 
         radioButtonSelectIconImage = findViewById(R.id.radio_button_icon);
         radioButtonSelectImageImage = findViewById(R.id.radio_button_image);
@@ -74,8 +81,6 @@ public class EditButtonActivity extends Activity {
         buttonIcon = findViewById(R.id.button_icon);
         buttonImage = findViewById(R.id.button_image);
         buttonText = findViewById(R.id.button_text);
-
-        setButtons();
 
         syncSwitch.setOnSwitchListener(new SwitchView.OnSwitchListener() {
             @Override
@@ -111,8 +116,14 @@ public class EditButtonActivity extends Activity {
         radioButtonIconSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.type = 2;
-                AppGlobal.setButton(buttonData);
+                if (buttonData.iconResourceId == 0) {
+                    Intent intent = new Intent(EditButtonActivity.this, EditButtonIconActivity.class);
+                    intent.putExtra("button", buttonData);
+                    startActivity(intent);
+                } else {
+                    buttonData.type = 2;
+                    AppGlobal.setButton(buttonData);
+                }
                 setButtons();
             }
         });
@@ -121,8 +132,14 @@ public class EditButtonActivity extends Activity {
         radioButtonImageSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.type = 3;
-                AppGlobal.setButton(buttonData);
+                if (buttonData.imagePath == null) {
+                    Intent intent = new Intent(EditButtonActivity.this, EditButtonImageActivity.class);
+                    intent.putExtra("button", buttonData);
+                    startActivity(intent);
+                } else {
+                    buttonData.type = 3;
+                    AppGlobal.setButton(buttonData);
+                }
                 setButtons();
             }
         });
@@ -131,8 +148,14 @@ public class EditButtonActivity extends Activity {
         radioButtonTextSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.type = 1;
-                AppGlobal.setButton(buttonData);
+                if (buttonData.text == null) {
+                    Intent intent = new Intent(EditButtonActivity.this, EditNameActivity.class);
+                    intent.putExtra("button", buttonData);
+                    startActivity(intent);
+                } else {
+                    buttonData.type = 1;
+                    AppGlobal.setButton(buttonData);
+                }
                 setButtons();
             }
         });
@@ -248,6 +271,8 @@ public class EditButtonActivity extends Activity {
                 setChannels();
             }
         });
+
+        setChannelNames();
     }
 
     @Override
@@ -273,6 +298,7 @@ public class EditButtonActivity extends Activity {
             Glide.with(EditButtonActivity.this).load(buttonData.imagePath).into(buttonImage);
         }
         buttonText.setText(buttonData.text);
+        setButtons();
     }
 
     private void setButtons() {
@@ -296,19 +322,38 @@ public class EditButtonActivity extends Activity {
         }
     }
 
+    private void setChannelNames() {
+        TextView channelName1 = findViewById(R.id.channel_text_1);
+        channelName1.setText(AppGlobal.getChannel(1).name);
+        TextView channelName2 = findViewById(R.id.channel_text_2);
+        channelName2.setText(AppGlobal.getChannel(2).name);
+        TextView channelName3 = findViewById(R.id.channel_text_3);
+        channelName3.setText(AppGlobal.getChannel(3).name);
+        TextView channelName4 = findViewById(R.id.channel_text_4);
+        channelName4.setText(AppGlobal.getChannel(4).name);
+        TextView channelName5 = findViewById(R.id.channel_text_5);
+        channelName5.setText(AppGlobal.getChannel(5).name);
+        TextView channelName6 = findViewById(R.id.channel_text_6);
+        channelName6.setText(AppGlobal.getChannel(6).name);
+        TextView channelName7 = findViewById(R.id.channel_text_7);
+        channelName7.setText(AppGlobal.getChannel(7).name);
+        TextView channelName8 = findViewById(R.id.channel_text_8);
+        channelName8.setText(AppGlobal.getChannel(8).name);
+    }
+
     private void setMomentarySwitch() {
         if (buttonData.momentary) {
-            momentarySwitch.switchOn(true, false);
+            momentarySwitch.switchOn(false, false);
         } else {
-            momentarySwitch.switchOff(true, false);
+            momentarySwitch.switchOff(false, false);
         }
     }
 
     private void setSyncSwitch() {
         if (buttonData.sync) {
-            syncSwitch.switchOn(true, false);
+            syncSwitch.switchOn(false, false);
         } else {
-            syncSwitch.switchOff(true, false);
+            syncSwitch.switchOff(false, false);
         }
         setChannels();
     }
@@ -325,6 +370,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - CHANNEL 1");
+                actionView.setButtonData(buttonData, 0);
                 actionLayout.addView(actionView);
             }
         }
@@ -337,6 +383,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - CHANNEL 2");
+                actionView.setButtonData(buttonData, 1);
                 actionLayout.addView(actionView);
             }
         }
@@ -349,6 +396,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - CHANNEL 3");
+                actionView.setButtonData(buttonData, 2);
                 actionLayout.addView(actionView);
             }
         }
@@ -361,6 +409,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - CHANNEL 4");
+                actionView.setButtonData(buttonData, 3);
                 actionLayout.addView(actionView);
             }
         }
@@ -373,6 +422,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - CHANNEL 5");
+                actionView.setButtonData(buttonData, 4);
                 actionLayout.addView(actionView);
             }
         }
@@ -385,6 +435,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - CHANNEL 6");
+                actionView.setButtonData(buttonData, 5);
                 actionLayout.addView(actionView);
             }
         }
@@ -397,6 +448,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - CHANNEL 7");
+                actionView.setButtonData(buttonData, 6);
                 actionLayout.addView(actionView);
             }
         }
@@ -409,6 +461,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - CHANNEL 8");
+                actionView.setButtonData(buttonData, 7);
                 actionLayout.addView(actionView);
             }
         }
@@ -421,6 +474,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - ALL CHANNELS");
+                actionView.setButtonData(buttonData, 0);
                 actionLayout.addView(actionView);
             }
         } else {

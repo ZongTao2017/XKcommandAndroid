@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -47,6 +48,14 @@ public class EditColorActivity extends Activity {
         }
         if (type.equals("button_warning_color")) {
             editColorView.setColor(AppGlobal.getSystemData().buttonWarningColor);
+        }
+
+        TextView description = findViewById(R.id.description);
+        if (type.equals("button_color")) {
+            description.setText("Button backlight LED color when it is on.");
+        }
+        if (type.equals("button_warning_color")) {
+            description.setText("Button backlight LED color when certain channel it links to is cut off due to exceeding set safety current.");
         }
     }
 }

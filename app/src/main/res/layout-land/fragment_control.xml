@@ -2,52 +2,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@color/backgroundColor">
     <FrameLayout
         android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="40dp" />
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/statusBarHeight"
-        android:layout_marginBottom="10dp">
+        android:layout_width="@dimen/statusBarWidth"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="60dp">
         <ImageView
             android:id="@+id/status_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/system_status_base"
+            android:src="@drawable/system_status_base_vertical"
             android:layout_gravity="center"/>
         <LinearLayout
             android:id="@+id/status_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="3dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_gravity="center">
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:textSize="14sp"
                 android:textColor="@color/gray"
                 android:text="13.4V" />
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textSize="14sp"
                 android:textColor="@color/gray"
                 android:text="23.2A" />
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:textSize="14sp"
                 android:textColor="@color/red"

@@ -29,7 +29,7 @@ public class EditColorView extends BaseViewGroup {
 
     int color;
     float px, py;
-    float gradientHeight, paletteHeight;
+    float gradientHeight;
     int angleHeight;
     int angleGap;
     int markerRad;
@@ -63,12 +63,11 @@ public class EditColorView extends BaseViewGroup {
 
     private void initDimensions() {
         px = Helper.getScreenWidth(getContext());
-        py = Helper.dpToPx(getContext(), 260);
-        paletteHeight = Helper.dpToPx(getContext(), 48);
+        py = Helper.dpToPx(getContext(), 240);
         angleHeight = angleGap = Helper.dpToPx(getContext(), 12);
         markerRad = Helper.dpToPx(getContext(), 26);
         markerStroke = Helper.dpToPx(getContext(), 6);
-        gradientHeight = py - paletteHeight;
+        gradientHeight = py;
     }
 
     private void setColorPalette(ColorPalette palette) {
