@@ -117,7 +117,7 @@ public class SelectChannelActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        ChannelData[] channels = AppGlobal.getChannels();
+        ChannelData[] channels = AppGlobal.getCurrentDevice().getChannels();
         channelName1.setText(channels[0].name);
         channelName2.setText(channels[1].name);
         channelName3.setText(channels[2].name);

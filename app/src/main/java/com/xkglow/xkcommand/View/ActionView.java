@@ -50,11 +50,11 @@ public class ActionView extends LinearLayout {
             public void onClick(View v) {
                 if (sensorData != null) {
                     sensorData.actions[channelId] = 0;
-                    AppGlobal.setSensor(sensorData);
+                    AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 if (buttonData != null) {
                     buttonData.actions[channelId] = 0;
-                    AppGlobal.setButton(buttonData);
+                    AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setRadioImages();
             }
@@ -64,11 +64,11 @@ public class ActionView extends LinearLayout {
             public void onClick(View v) {
                 if (sensorData != null) {
                     sensorData.actions[channelId] = 1;
-                    AppGlobal.setSensor(sensorData);
+                    AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 if (buttonData != null) {
                     buttonData.actions[channelId] = 1;
-                    AppGlobal.setButton(buttonData);
+                    AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setRadioImages();
             }
@@ -78,11 +78,11 @@ public class ActionView extends LinearLayout {
             public void onClick(View v) {
                 if (sensorData != null) {
                     sensorData.actions[channelId] = 2;
-                    AppGlobal.setSensor(sensorData);
+                    AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 if (buttonData != null) {
-                    buttonData.actions[channelId] = 1;
-                    AppGlobal.setButton(buttonData);
+                    buttonData.actions[channelId] = 2;
+                    AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setRadioImages();
             }
@@ -92,11 +92,11 @@ public class ActionView extends LinearLayout {
             public void onClick(View v) {
                 if (sensorData != null) {
                     sensorData.actions[channelId] = 3;
-                    AppGlobal.setSensor(sensorData);
+                    AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 if (buttonData != null) {
                     buttonData.actions[channelId] = 3;
-                    AppGlobal.setButton(buttonData);
+                    AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setRadioImages();
             }

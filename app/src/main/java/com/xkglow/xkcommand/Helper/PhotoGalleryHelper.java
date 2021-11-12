@@ -44,8 +44,8 @@ public class PhotoGalleryHelper implements LoaderManager.LoaderCallbacks<Cursor>
         String orientation = MediaStore.Images.Media.ORIENTATION;// "orientation"
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;// getContentUri("external")
         String[] columns = {photo_id, path, mime_type, photo_date, orientation, photo_width, photo_height};
-        return new CursorLoader(this.context, uri, columns, null, null,
-                photo_date + " DESC");
+//        return new CursorLoader(this.context, uri, columns, null, null, photo_date + " DESC");
+        return new CursorLoader(this.context, uri, columns, null, null, null);
     }
 
     @Override

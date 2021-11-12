@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.Subscribe;
 public class EditButtonActivity extends Activity {
     ButtonData buttonData;
     TextView noChannelSelectedTextView;
-    LinearLayout channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8;
+    LinearLayout channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8, syncAll;
     ImageView radioButtonSelectIconImage, radioButtonSelectImageImage, radioButtonSelectTextImage, radioButtonSelectNAImage;
     ImageView channelImage1, channelImage2, channelImage3, channelImage4, channelImage5, channelImage6, channelImage7, channelImage8;
     LinearLayout channelLayout, actionLayout;
@@ -77,6 +77,7 @@ public class EditButtonActivity extends Activity {
         channelLayout = findViewById(R.id.channel_layout);
         actionLayout = findViewById(R.id.action_layout);
         noChannelSelectedTextView = findViewById(R.id.no_channel_selected);
+        syncAll = findViewById(R.id.sync_all_channels_layout);
 
         buttonIcon = findViewById(R.id.button_icon);
         buttonImage = findViewById(R.id.button_image);
@@ -86,14 +87,14 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onSwitchOn(boolean showMessage) {
                 buttonData.sync = true;
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
 
             @Override
             public void onSwitchOff(boolean showMessage) {
                 buttonData.sync = false;
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -102,13 +103,13 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onSwitchOn(boolean showMessage) {
                 buttonData.momentary = true;
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
             }
 
             @Override
             public void onSwitchOff(boolean showMessage) {
                 buttonData.momentary = false;
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
             }
         });
 
@@ -122,7 +123,7 @@ public class EditButtonActivity extends Activity {
                     startActivity(intent);
                 } else {
                     buttonData.type = 2;
-                    AppGlobal.setButton(buttonData);
+                    AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setButtons();
             }
@@ -138,7 +139,7 @@ public class EditButtonActivity extends Activity {
                     startActivity(intent);
                 } else {
                     buttonData.type = 3;
-                    AppGlobal.setButton(buttonData);
+                    AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setButtons();
             }
@@ -154,7 +155,7 @@ public class EditButtonActivity extends Activity {
                     startActivity(intent);
                 } else {
                     buttonData.type = 1;
-                    AppGlobal.setButton(buttonData);
+                    AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setButtons();
             }
@@ -165,7 +166,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.type = 0;
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setButtons();
             }
         });
@@ -204,7 +205,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.channels[0] = !buttonData.channels[0];
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -213,7 +214,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.channels[1] = !buttonData.channels[1];
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -222,7 +223,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.channels[2] = !buttonData.channels[2];
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -231,7 +232,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.channels[3] = !buttonData.channels[3];
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -240,7 +241,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.channels[5] = !buttonData.channels[5];
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -249,7 +250,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.channels[5] = !buttonData.channels[5];
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -258,7 +259,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.channels[6] = !buttonData.channels[6];
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -267,7 +268,7 @@ public class EditButtonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 buttonData.channels[7] = !buttonData.channels[7];
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
         });
@@ -290,7 +291,7 @@ public class EditButtonActivity extends Activity {
                 setSyncSwitch();
             }
         });
-        buttonData = AppGlobal.getButton(buttonData.id);
+        buttonData = AppGlobal.getCurrentDevice().getButton(buttonData.id);
         if (buttonData.iconResourceId != 0) {
             buttonIcon.setImageResource(buttonData.iconResourceId);
         }
@@ -324,21 +325,21 @@ public class EditButtonActivity extends Activity {
 
     private void setChannelNames() {
         TextView channelName1 = findViewById(R.id.channel_text_1);
-        channelName1.setText(AppGlobal.getChannel(1).name);
+        channelName1.setText(AppGlobal.getCurrentDevice().getChannel(1).name);
         TextView channelName2 = findViewById(R.id.channel_text_2);
-        channelName2.setText(AppGlobal.getChannel(2).name);
+        channelName2.setText(AppGlobal.getCurrentDevice().getChannel(2).name);
         TextView channelName3 = findViewById(R.id.channel_text_3);
-        channelName3.setText(AppGlobal.getChannel(3).name);
+        channelName3.setText(AppGlobal.getCurrentDevice().getChannel(3).name);
         TextView channelName4 = findViewById(R.id.channel_text_4);
-        channelName4.setText(AppGlobal.getChannel(4).name);
+        channelName4.setText(AppGlobal.getCurrentDevice().getChannel(4).name);
         TextView channelName5 = findViewById(R.id.channel_text_5);
-        channelName5.setText(AppGlobal.getChannel(5).name);
+        channelName5.setText(AppGlobal.getCurrentDevice().getChannel(5).name);
         TextView channelName6 = findViewById(R.id.channel_text_6);
-        channelName6.setText(AppGlobal.getChannel(6).name);
+        channelName6.setText(AppGlobal.getCurrentDevice().getChannel(6).name);
         TextView channelName7 = findViewById(R.id.channel_text_7);
-        channelName7.setText(AppGlobal.getChannel(7).name);
+        channelName7.setText(AppGlobal.getCurrentDevice().getChannel(7).name);
         TextView channelName8 = findViewById(R.id.channel_text_8);
-        channelName8.setText(AppGlobal.getChannel(8).name);
+        channelName8.setText(AppGlobal.getCurrentDevice().getChannel(8).name);
     }
 
     private void setMomentarySwitch() {
@@ -369,7 +370,7 @@ public class EditButtonActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 1");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(1).name);
                 actionView.setButtonData(buttonData, 0);
                 actionLayout.addView(actionView);
             }
@@ -382,7 +383,7 @@ public class EditButtonActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 2");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(2).name);
                 actionView.setButtonData(buttonData, 1);
                 actionLayout.addView(actionView);
             }
@@ -395,7 +396,7 @@ public class EditButtonActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 3");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(3).name);
                 actionView.setButtonData(buttonData, 2);
                 actionLayout.addView(actionView);
             }
@@ -408,7 +409,7 @@ public class EditButtonActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 4");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(4).name);
                 actionView.setButtonData(buttonData, 3);
                 actionLayout.addView(actionView);
             }
@@ -421,7 +422,7 @@ public class EditButtonActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 5");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(5).name);
                 actionView.setButtonData(buttonData, 4);
                 actionLayout.addView(actionView);
             }
@@ -434,7 +435,7 @@ public class EditButtonActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 6");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(6).name);
                 actionView.setButtonData(buttonData, 5);
                 actionLayout.addView(actionView);
             }
@@ -447,7 +448,7 @@ public class EditButtonActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 7");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(7).name);
                 actionView.setButtonData(buttonData, 6);
                 actionLayout.addView(actionView);
             }
@@ -460,12 +461,13 @@ public class EditButtonActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 8");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(8).name);
                 actionView.setButtonData(buttonData, 7);
                 actionLayout.addView(actionView);
             }
         }
         if (flag) {
+            syncAll.setVisibility(View.VISIBLE);
             noChannelSelectedTextView.setVisibility(View.GONE);
             actionLayout.setVisibility(View.VISIBLE);
             if (buttonData.sync) {
@@ -478,6 +480,7 @@ public class EditButtonActivity extends Activity {
                 actionLayout.addView(actionView);
             }
         } else {
+            syncAll.setVisibility(View.GONE);
             noChannelSelectedTextView.setVisibility(View.VISIBLE);
             actionLayout.setVisibility(View.GONE);
         }

@@ -1,10 +1,16 @@
 package com.xkglow.xkcommand.View;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.MotionEvent;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -17,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.xkglow.xkcommand.EditButtonActivity;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
+import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.R;
 
@@ -30,7 +37,8 @@ public class ControlButton extends FrameLayout {
     private TextView textView;
     private boolean released;
     private boolean editButton;
-    private boolean enabled;
+    private FrameLayout warning;
+    private boolean error;
 
     public ControlButton(@NonNull Context context) {
         super(context);
@@ -40,6 +48,7 @@ public class ControlButton extends FrameLayout {
 
         released = false;
         editButton = false;
+        error = false;
 
         imagePressed = findViewById(R.id.background_image_pressed);
         imageUnpressed = findViewById(R.id.background_image_unpressed);
@@ -52,6 +61,33 @@ public class ControlButton extends FrameLayout {
         icon = findViewById(R.id.foreground_icon);
         image = findViewById(R.id.foreground_image);
         image.setClipToOutline(true);
+
+        warning = findViewById(R.id.warning);
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
+        if (error) {
+            warning.setVisibility(VISIBLE);
+        } else {
+            warning.setVisibility(GONE);
+        }
+        warning.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert)
+                        .setCancelable(true)
+                        .setMessage(AppGlobal.getCurrentDevice().getChannel(1).name + " exceeded max output current and has been shut off. Please turn off the system and check.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                alertDialog.show();
+            }
+        });
     }
 
     public void setIconSize(int iconSize) {
@@ -70,6 +106,11 @@ public class ControlButton extends FrameLayout {
         layoutParams2.width = (int) (iconSize * 0.75);
         layoutParams2.height = (int) (iconSize * 0.75);
         image.setLayoutParams(layoutParams2);
+
+        FrameLayout.LayoutParams layoutParams3 = (LayoutParams) warning.getLayoutParams();
+        layoutParams3.topMargin = (int) (iconSize * 0.25);
+        layoutParams3.rightMargin = (int) (iconSize * 0.25);
+        warning.setLayoutParams(layoutParams3);
     }
 
     public void setButtonData(ButtonData buttonData) {
@@ -98,7 +139,11 @@ public class ControlButton extends FrameLayout {
             imageUnpressed.setVisibility(View.GONE);
             imagePressed.setVisibility(View.VISIBLE);
             imageIllumination.setVisibility(View.VISIBLE);
-            imageIllumination.setColorFilter(AppGlobal.getSystemData().buttonColor);
+            if (error) {
+                imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonWarningColor);
+            } else {
+                imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonColor);
+            }
         } else {
             imageUnpressed.setVisibility(View.VISIBLE);
             imagePressed.setVisibility(View.GONE);
@@ -126,21 +171,30 @@ public class ControlButton extends FrameLayout {
             }
             imageUnpressed.setVisibility(View.GONE);
             imagePressed.setVisibility(View.VISIBLE);
+            Helper.vibrate(context);
             if (released) {
                 buttonData.isPressed = true;
                 imageIllumination.setVisibility(View.VISIBLE);
-                imageIllumination.setColorFilter(AppGlobal.getSystemData().buttonColor);
+                if (error) {
+                    imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonWarningColor);
+                } else {
+                    imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonColor);
+                }
             } else {
                 if (!buttonData.isPressed) {
                     buttonData.isPressed = true;
                     imageIllumination.setVisibility(View.VISIBLE);
-                    imageIllumination.setColorFilter(AppGlobal.getSystemData().buttonColor);
+                    if (error) {
+                        imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonWarningColor);
+                    } else {
+                        imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonColor);
+                    }
                 } else {
                     buttonData.isPressed = false;
                     imageIllumination.setVisibility(View.GONE);
                 }
             }
-            AppGlobal.setButton(buttonData);
+            AppGlobal.getCurrentDevice().setButton(buttonData);
             if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF));
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             imageUnpressed.setVisibility(View.VISIBLE);
@@ -148,7 +202,8 @@ public class ControlButton extends FrameLayout {
             if (released) {
                 buttonData.isPressed = false;
                 imageIllumination.setVisibility(View.GONE);
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
+                Helper.vibrate(context);
             }
         }
         return true;

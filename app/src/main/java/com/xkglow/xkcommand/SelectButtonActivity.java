@@ -39,13 +39,14 @@ public class SelectButtonActivity extends Activity {
             layoutParams.leftMargin = Helper.dpToPx(SelectButtonActivity.this, 70);
             layoutParams.rightMargin = Helper.dpToPx(SelectButtonActivity.this, 70);
             layoutParams.topMargin = Helper.dpToPx(SelectButtonActivity.this, 50);
-            layoutParams.bottomMargin = Helper.dpToPx(SelectButtonActivity.this, 0);
+            layoutParams.bottomMargin = Helper.dpToPx(SelectButtonActivity.this, 30);
         } else {
             layoutParams.leftMargin = Helper.dpToPx(SelectButtonActivity.this, 0);
             layoutParams.rightMargin = Helper.dpToPx(SelectButtonActivity.this, 0);
             layoutParams.topMargin = Helper.dpToPx(SelectButtonActivity.this, 70);
             layoutParams.bottomMargin = Helper.dpToPx(SelectButtonActivity.this, 70);
         }
+        frameLayout.setLayoutParams(layoutParams);
 
         frameLayout.post(new Runnable() {
             @Override
@@ -70,42 +71,42 @@ public class SelectButtonActivity extends Activity {
                 button1 = new ControlButton(SelectButtonActivity.this);
                 button1.setEditButton();
                 button1.setIconSize(iconSize);
-                button1.setButtonData(AppGlobal.getButton(1));
+                button1.setButtonData(AppGlobal.getCurrentDevice().getButton(1));
 
                 button2 = new ControlButton(SelectButtonActivity.this);
                 button2.setEditButton();
                 button2.setIconSize(iconSize);
-                button2.setButtonData(AppGlobal.getButton(2));
+                button2.setButtonData(AppGlobal.getCurrentDevice().getButton(2));
 
                 button3 = new ControlButton(SelectButtonActivity.this);
                 button3.setEditButton();
                 button3.setIconSize(iconSize);
-                button3.setButtonData(AppGlobal.getButton(3));
+                button3.setButtonData(AppGlobal.getCurrentDevice().getButton(3));
 
                 button4 = new ControlButton(SelectButtonActivity.this);
                 button4.setEditButton();
                 button4.setIconSize(iconSize);
-                button4.setButtonData(AppGlobal.getButton(4));
+                button4.setButtonData(AppGlobal.getCurrentDevice().getButton(4));
 
                 button5 = new ControlButton(SelectButtonActivity.this);
                 button5.setEditButton();
                 button5.setIconSize(iconSize);
-                button5.setButtonData(AppGlobal.getButton(5));
+                button5.setButtonData(AppGlobal.getCurrentDevice().getButton(5));
 
                 button6 = new ControlButton(SelectButtonActivity.this);
                 button6.setEditButton();
                 button6.setIconSize(iconSize);
-                button6.setButtonData(AppGlobal.getButton(6));
+                button6.setButtonData(AppGlobal.getCurrentDevice().getButton(6));
 
                 button7 = new ControlButton(SelectButtonActivity.this);
                 button7.setEditButton();
                 button7.setIconSize(iconSize);
-                button7.setButtonData(AppGlobal.getButton(7));
+                button7.setButtonData(AppGlobal.getCurrentDevice().getButton(7));
 
                 button8 = new ControlButton(SelectButtonActivity.this);
                 button8.setEditButton();
                 button8.setIconSize(iconSize);
-                button8.setButtonData(AppGlobal.getButton(8));
+                button8.setButtonData(AppGlobal.getCurrentDevice().getButton(8));
 
                 FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(realIconSize, realIconSize);
                 layoutParams1.leftMargin = paddingH + resize;
@@ -195,28 +196,28 @@ public class SelectButtonActivity extends Activity {
         super.onResume();
 
         if (button1 != null) {
-            button1.setButtonData(AppGlobal.getButton(1));
+            button1.setButtonData(AppGlobal.getCurrentDevice().getButton(1));
         }
         if (button2 != null) {
-            button2.setButtonData(AppGlobal.getButton(2));
+            button2.setButtonData(AppGlobal.getCurrentDevice().getButton(2));
         }
         if (button3 != null) {
-            button3.setButtonData(AppGlobal.getButton(3));
+            button3.setButtonData(AppGlobal.getCurrentDevice().getButton(3));
         }
         if (button4 != null) {
-            button4.setButtonData(AppGlobal.getButton(4));
+            button4.setButtonData(AppGlobal.getCurrentDevice().getButton(4));
         }
         if (button5 != null) {
-            button5.setButtonData(AppGlobal.getButton(5));
+            button5.setButtonData(AppGlobal.getCurrentDevice().getButton(5));
         }
         if (button6 != null) {
-            button6.setButtonData(AppGlobal.getButton(6));
+            button6.setButtonData(AppGlobal.getCurrentDevice().getButton(6));
         }
         if (button7 != null) {
-            button7.setButtonData(AppGlobal.getButton(7));
+            button7.setButtonData(AppGlobal.getCurrentDevice().getButton(7));
         }
         if (button8 != null) {
-            button8.setButtonData(AppGlobal.getButton(8));
+            button8.setButtonData(AppGlobal.getCurrentDevice().getButton(8));
         }
     }
 }

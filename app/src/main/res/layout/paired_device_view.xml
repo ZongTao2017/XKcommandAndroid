@@ -10,6 +10,7 @@
         android:orientation="horizontal"
         android:background="@color/blue_1">
         <TextView
+            android:id="@+id/device_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

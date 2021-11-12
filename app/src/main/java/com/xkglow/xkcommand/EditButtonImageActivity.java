@@ -46,6 +46,7 @@ public class EditButtonImageActivity extends FragmentActivity {
     List<PhotoData> photoList;
 
     static final int REQUEST_READ_EXTERNAL_STORAGE = 111;
+    static final int CELL_NUMBER_IN_ROW = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +65,8 @@ public class EditButtonImageActivity extends FragmentActivity {
         });
 
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(EditButtonImageActivity.this, 4, RecyclerView.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(EditButtonImageActivity.this, CELL_NUMBER_IN_ROW, RecyclerView.VERTICAL, false));
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 8 * CELL_NUMBER_IN_ROW);
 
         FrameLayout done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
@@ -80,11 +82,7 @@ public class EditButtonImageActivity extends FragmentActivity {
 
         TextView title = findViewById(R.id.title);
         title.setText("Take/Select Photo");
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             // Should we show an explanation?
@@ -158,7 +156,7 @@ public class EditButtonImageActivity extends FragmentActivity {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         Bitmap b = BitmapFactory.decodeFile(photoPath, bmOptions);
         int x, y, width, height;
-
+        if (b == null) return;
         if (b.getWidth() > b.getHeight()) {
             y = 0;
             height = b.getHeight();
@@ -188,7 +186,7 @@ public class EditButtonImageActivity extends FragmentActivity {
             out.close();
             buttonData.imagePath = image.getAbsolutePath();
             buttonData.type = 3;
-            AppGlobal.setButton(buttonData);
+            AppGlobal.getCurrentDevice().setButton(buttonData);
         } catch (IOException e) {
             e.printStackTrace();
         }

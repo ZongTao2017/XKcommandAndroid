@@ -18,6 +18,10 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
+import com.xkglow.xkcommand.Helper.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
@@ -34,6 +38,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_main);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -77,6 +82,21 @@ public class MainActivity extends FragmentActivity {
         if (mCurrentTab != -1) mTabHost.setCurrentTab(mCurrentTab);
     }
 
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe(sticky = true)
+    public void onEvent(MessageEvent event) {
+        switch (event.type) {
+            case CHANGE_DEVICE:
+                mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
+                break;
+        }
+    }
+
     private void initTabs() {
         TabHost.OnTabChangeListener tabChangeListener = new TabHost.OnTabChangeListener() {
             @Override
@@ -90,7 +110,7 @@ public class MainActivity extends FragmentActivity {
                         fragment = new CustomizeFragment();
                         mLogo.setVisibility(View.GONE);
                         mTitle.setVisibility(View.VISIBLE);
-                        mTitle.setText(AppGlobal.getSystemData().name);
+                        mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
                         break;
                     case CIRCLE_TAB:
                         mCurrentTab = 2;

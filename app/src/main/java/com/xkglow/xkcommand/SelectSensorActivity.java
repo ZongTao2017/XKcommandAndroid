@@ -32,7 +32,7 @@ public class SelectSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SelectSensorActivity.this, EditSensorActivity.class);
-                intent.putExtra("sensor", AppGlobal.getSensors()[0]);
+                intent.putExtra("sensor", AppGlobal.getCurrentDevice().getSensors()[0]);
                 startActivity(intent);
             }
         });
@@ -42,7 +42,7 @@ public class SelectSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SelectSensorActivity.this, EditSensorActivity.class);
-                intent.putExtra("sensor", AppGlobal.getSensors()[1]);
+                intent.putExtra("sensor", AppGlobal.getCurrentDevice().getSensors()[1]);
                 startActivity(intent);
             }
         });
@@ -52,7 +52,7 @@ public class SelectSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SelectSensorActivity.this, EditSensorActivity.class);
-                intent.putExtra("sensor", AppGlobal.getSensors()[2]);
+                intent.putExtra("sensor", AppGlobal.getCurrentDevice().getSensors()[2]);
                 startActivity(intent);
             }
         });
@@ -65,8 +65,8 @@ public class SelectSensorActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        sensorName1.setText(AppGlobal.getSensors()[0].name);
-        sensorName2.setText(AppGlobal.getSensors()[1].name);
-        sensorName3.setText(AppGlobal.getSensors()[2].name);
+        sensorName1.setText(AppGlobal.getCurrentDevice().getSensors()[0].name);
+        sensorName2.setText(AppGlobal.getCurrentDevice().getSensors()[1].name);
+        sensorName3.setText(AppGlobal.getCurrentDevice().getSensors()[2].name);
     }
 }

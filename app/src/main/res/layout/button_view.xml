@@ -51,5 +51,16 @@
         android:textSize="16sp"
         android:textColor="@color/white"
         android:maxLength="20"/>
-
+    <FrameLayout
+        android:id="@+id/warning"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="end"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center"
+            android:src="@drawable/warning" />
+    </FrameLayout>
 </FrameLayout>

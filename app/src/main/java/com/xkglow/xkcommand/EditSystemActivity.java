@@ -106,7 +106,7 @@ public class EditSystemActivity extends Activity {
                 if (systemData.cutoffInput > 11.0f) {
                     systemData.cutoffInput -= 0.1f;
                     cutoffInputText.setText(String.format("%.1fV", systemData.cutoffInput));
-                    AppGlobal.setSystem(systemData);
+                    AppGlobal.getCurrentDevice().setSystem(systemData);
                 }
                 setButtons1();
             }
@@ -118,7 +118,7 @@ public class EditSystemActivity extends Activity {
                 if (systemData.cutoffInput < 13.0f) {
                     systemData.cutoffInput += 0.1f;
                     cutoffInputText.setText(String.format("%.1fV", systemData.cutoffInput));
-                    AppGlobal.setSystem(systemData);
+                    AppGlobal.getCurrentDevice().setSystem(systemData);
                 }
                 setButtons1();
             }
@@ -130,7 +130,7 @@ public class EditSystemActivity extends Activity {
                 if (systemData.turnBluetoothOffAfter > 60) {
                     systemData.turnBluetoothOffAfter -= 5;
                     turnOffBluetoothText.setText(systemData.turnBluetoothOffAfter + "min");
-                    AppGlobal.setSystem(systemData);
+                    AppGlobal.getCurrentDevice().setSystem(systemData);
                 }
                 setButtons2();
             }
@@ -142,7 +142,7 @@ public class EditSystemActivity extends Activity {
                 if (systemData.turnBluetoothOffAfter < 240) {
                     systemData.turnBluetoothOffAfter += 5;
                     turnOffBluetoothText.setText(systemData.turnBluetoothOffAfter + "min");
-                    AppGlobal.setSystem(systemData);
+                    AppGlobal.getCurrentDevice().setSystem(systemData);
                 }
                 setButtons2();
             }
@@ -153,7 +153,7 @@ public class EditSystemActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        systemData = AppGlobal.getSystemData();
+        systemData = AppGlobal.getCurrentDevice().getSystemData();
 
         controllerName.setText(systemData.name);
         cutoffInputText.setText(String.format("%.1fV", systemData.cutoffInput));
@@ -166,11 +166,11 @@ public class EditSystemActivity extends Activity {
 
         float r = 8;
         ShapeDrawable shape = new ShapeDrawable (new RoundRectShape(new float[] { r, r, r, r, r, r, r, r },null,null));
-        shape.getPaint().setColor(AppGlobal.getSystemData().buttonColor);
+        shape.getPaint().setColor(AppGlobal.getCurrentDevice().getSystemData().buttonColor);
         buttonColorView.setBackground(shape);
 
         ShapeDrawable shape2 = new ShapeDrawable (new RoundRectShape(new float[] { r, r, r, r, r, r, r, r },null,null));
-        shape2.getPaint().setColor(AppGlobal.getSystemData().buttonWarningColor);
+        shape2.getPaint().setColor(AppGlobal.getCurrentDevice().getSystemData().buttonWarningColor);
         buttonWarningColorView.setBackground(shape2);
     }
 

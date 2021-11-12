@@ -36,7 +36,7 @@ public class EditNameActivity extends Activity {
                     String name = editText.getText().toString();
                     if (!name.isEmpty()) {
                         sensorData.name = name;
-                        AppGlobal.setSensor(sensorData);
+                        AppGlobal.getCurrentDevice().setSensor(sensorData);
                     }
                     finish();
                 }
@@ -55,7 +55,7 @@ public class EditNameActivity extends Activity {
                     if (!name.isEmpty()) {
                         buttonData.type = 1;
                         buttonData.text = name;
-                        AppGlobal.setButton(buttonData);
+                        AppGlobal.getCurrentDevice().setButton(buttonData);
                     }
                     finish();
                 }
@@ -73,7 +73,7 @@ public class EditNameActivity extends Activity {
                     String name = editText.getText().toString();
                     if (!name.isEmpty()) {
                         channelData.name = name;
-                        AppGlobal.setChannel(channelData);
+                        AppGlobal.getCurrentDevice().setChannel(channelData);
                     }
                     finish();
                 }
@@ -92,7 +92,7 @@ public class EditNameActivity extends Activity {
                     String name = editText.getText().toString();
                     if (!name.isEmpty()) {
                         systemData.name = name;
-                        AppGlobal.setSystem(systemData);
+                        AppGlobal.getCurrentDevice().setSystem(systemData);
                     }
                     finish();
                 }

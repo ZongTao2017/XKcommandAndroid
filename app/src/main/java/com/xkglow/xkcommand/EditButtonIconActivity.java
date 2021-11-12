@@ -44,7 +44,7 @@ public class EditButtonIconActivity extends Activity {
             public void onClick(View v) {
                 buttonData.type = 2;
                 buttonData.iconResourceId = resourceId;
-                AppGlobal.setButton(buttonData);
+                AppGlobal.getCurrentDevice().setButton(buttonData);
                 finish();
             }
         });

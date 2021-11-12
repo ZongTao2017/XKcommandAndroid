@@ -80,35 +80,28 @@ public class ControlFragment extends Fragment {
 
                 button1 = new ControlButton(getContext());
                 button1.setIconSize(iconSize);
-                button1.setButtonData(AppGlobal.getButton(1));
 
                 button2 = new ControlButton(getContext());
                 button2.setIconSize(iconSize);
-                button2.setButtonData(AppGlobal.getButton(2));
 
                 button3 = new ControlButton(getContext());
                 button3.setIconSize(iconSize);
-                button3.setButtonData(AppGlobal.getButton(3));
 
                 button4 = new ControlButton(getContext());
                 button4.setIconSize(iconSize);
-                button4.setButtonData(AppGlobal.getButton(4));
+                button4.setError(true);
 
                 button5 = new ControlButton(getContext());
                 button5.setIconSize(iconSize);
-                button5.setButtonData(AppGlobal.getButton(5));
 
                 button6 = new ControlButton(getContext());
                 button6.setIconSize(iconSize);
-                button6.setButtonData(AppGlobal.getButton(6));
 
                 button7 = new ControlButton(getContext());
                 button7.setIconSize(iconSize);
-                button7.setButtonData(AppGlobal.getButton(7));
 
                 button8 = new ControlButton(getContext());
                 button8.setIconSize(iconSize);
-                button8.setButtonData(AppGlobal.getButton(8));
 
                 FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(realIconSize, realIconSize);
                 layoutParams1.leftMargin = paddingH + resize;
@@ -225,26 +218,16 @@ public class ControlFragment extends Fragment {
                 powerImageView.setColorFilter(0xffffffff);
                 power.addView(powerImageView);
 
-                if (AppGlobal.isPowerOn()) {
-                    powerBgImageView.setVisibility(View.VISIBLE);
-                    powerBgImageView2.setVisibility(View.GONE);
-                    powerImageView.setAlpha(1f);
-                } else {
-                    powerBgImageView.setVisibility(View.GONE);
-                    powerBgImageView2.setVisibility(View.VISIBLE);
-                    powerImageView.setAlpha(0.2f);
-                }
-
                 power.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         int action = event.getActionMasked();
                         if (action == MotionEvent.ACTION_DOWN) {
-                            if (AppGlobal.isPowerOn()) {
+                            if (AppGlobal.getCurrentDevice().isPowerOn()) {
                                 powerBgImageView.setVisibility(View.GONE);
                                 powerBgImageView2.setVisibility(View.VISIBLE);
                                 powerImageView.setAlpha(0.2f);
-                                AppGlobal.setPowerOn(false);
+                                AppGlobal.getCurrentDevice().setPowerOn(false);
                                 button1.turnOff();
                                 button2.turnOff();
                                 button3.turnOff();
@@ -279,14 +262,66 @@ public class ControlFragment extends Fragment {
 
                 image.setLayoutParams(layoutParams9);
                 statusLayout.setLayoutParams(layoutParams10);
+
+                setDeviceData();
             }
         });
     }
 
     @Subscribe(sticky = true)
     public void onEvent(MessageEvent event) {
-        if (event.type == MessageEvent.MessageEventType.TURN_ON_OFF) {
-            if (AppGlobal.isPowerOn()) {
+        switch (event.type) {
+            case CHANGE_DEVICE:
+                setDeviceData();
+                break;
+            case TURN_ON_OFF:
+                if (AppGlobal.getCurrentDevice().isPowerOn()) {
+                    powerBgImageView.setVisibility(View.VISIBLE);
+                    powerBgImageView2.setVisibility(View.GONE);
+                    powerImageView.setAlpha(1f);
+                } else {
+                    powerBgImageView.setVisibility(View.GONE);
+                    powerBgImageView2.setVisibility(View.VISIBLE);
+                    powerImageView.setAlpha(0.2f);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setDeviceData();
+    }
+
+    private void setDeviceData() {
+        if (button1 != null) {
+            button1.setButtonData(AppGlobal.getCurrentDevice().getButton(1));
+        }
+        if (button2 != null) {
+            button2.setButtonData(AppGlobal.getCurrentDevice().getButton(2));
+        }
+        if (button3 != null) {
+            button3.setButtonData(AppGlobal.getCurrentDevice().getButton(3));
+        }
+        if (button4 != null) {
+            button4.setError(true);
+            button4.setButtonData(AppGlobal.getCurrentDevice().getButton(4));
+        }
+        if (button5 != null) {
+            button5.setButtonData(AppGlobal.getCurrentDevice().getButton(5));
+        }
+        if (button6 != null) {
+            button6.setButtonData(AppGlobal.getCurrentDevice().getButton(6));
+        }
+        if (button7 != null) {
+            button7.setButtonData(AppGlobal.getCurrentDevice().getButton(7));
+        }
+        if (button8 != null) {
+            button8.setButtonData(AppGlobal.getCurrentDevice().getButton(8));
+        }
+        if (powerImageView != null && powerBgImageView != null && powerBgImageView2 != null) {
+            if (AppGlobal.getCurrentDevice().isPowerOn()) {
                 powerBgImageView.setVisibility(View.VISIBLE);
                 powerBgImageView2.setVisibility(View.GONE);
                 powerImageView.setAlpha(1f);
@@ -295,36 +330,6 @@ public class ControlFragment extends Fragment {
                 powerBgImageView2.setVisibility(View.VISIBLE);
                 powerImageView.setAlpha(0.2f);
             }
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (button1 != null) {
-            button1.setButtonData(AppGlobal.getButton(1));
-        }
-        if (button2 != null) {
-            button2.setButtonData(AppGlobal.getButton(2));
-        }
-        if (button3 != null) {
-            button3.setButtonData(AppGlobal.getButton(3));
-        }
-        if (button4 != null) {
-            button4.setButtonData(AppGlobal.getButton(4));
-        }
-        if (button5 != null) {
-            button5.setButtonData(AppGlobal.getButton(5));
-        }
-        if (button6 != null) {
-            button6.setButtonData(AppGlobal.getButton(6));
-        }
-        if (button7 != null) {
-            button7.setButtonData(AppGlobal.getButton(7));
-        }
-        if (button8 != null) {
-            button8.setButtonData(AppGlobal.getButton(8));
         }
     }
 }

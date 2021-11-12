@@ -4,10 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.30885416666666665" />
+        <entry key="../xkcommand/app/src/main/res/drawable/dot_blue.xml" value="0.22" />
+        <entry key="../xkcommand/app/src/main/res/drawable/dot_white.xml" value="0.147" />
         <entry key="../xkcommand/app/src/main/res/drawable/rect_border.xml" value="0.2285" />
         <entry key="../xkcommand/app/src/main/res/drawable/round_corner.xml" value="0.22" />
         <entry key="../xkcommand/app/src/main/res/layout-land/activity_device_pair.xml" value="0.23897707231040563" />
         <entry key="../xkcommand/app/src/main/res/layout-land/activity_main.xml" value="0.23897707231040563" />
+        <entry key="../xkcommand/app/src/main/res/layout-land/activity_select_button.xml" value="0.23897707231040563" />
         <entry key="../xkcommand/app/src/main/res/layout-land/fragment_control.xml" value="0.23897707231040563" />
         <entry key="../xkcommand/app/src/main/res/layout-land/unpaired_device_view.xml" value="0.23897707231040563" />
         <entry key="../xkcommand/app/src/main/res/layout/action_layout.xml" value="0.2164855072463768" />
@@ -25,6 +28,8 @@
         <entry key="../xkcommand/app/src/main/res/layout/activity_select_channel.xml" value="0.2164855072463768" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_select_sensor.xml" value="0.22714681440443213" />
         <entry key="../xkcommand/app/src/main/res/layout/button_view.xml" value="0.21331521739130435" />
+        <entry key="../xkcommand/app/src/main/res/layout/controller_layout.xml" value="0.21331521739130435" />
+        <entry key="../xkcommand/app/src/main/res/layout/controller_layout_land.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/device_list.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/device_view.xml" value="0.375" />
         <entry key="../xkcommand/app/src/main/res/layout/fragment_control.xml" value="0.21331521739130435" />

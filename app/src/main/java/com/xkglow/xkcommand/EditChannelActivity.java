@@ -25,13 +25,13 @@ public class EditChannelActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_channel);
 
-        channelData = AppGlobal.getChannel(getIntent().getIntExtra("channel", 0));
+        channelData = AppGlobal.getCurrentDevice().getChannel(getIntent().getIntExtra("channel", 0));
 
         FrameLayout back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppGlobal.setChannel(channelData);
+                AppGlobal.getCurrentDevice().setChannel(channelData);
                 finish();
             }
         });
@@ -63,7 +63,7 @@ public class EditChannelActivity extends Activity {
                 if (channelData.maxCurrent > 3) {
                     channelData.maxCurrent -= 1;
                     maxCurrentText.setText(channelData.maxCurrent + "A");
-                    AppGlobal.setChannel(channelData);
+                    AppGlobal.getCurrentDevice().setChannel(channelData);
                 }
                 setButtons();
             }
@@ -79,7 +79,7 @@ public class EditChannelActivity extends Activity {
                 if (channelData.maxCurrent < max) {
                     channelData.maxCurrent += 1;
                     maxCurrentText.setText(channelData.maxCurrent + "A");
-                    AppGlobal.setChannel(channelData);
+                    AppGlobal.getCurrentDevice().setChannel(channelData);
                 }
                 setButtons();
             }
@@ -108,7 +108,7 @@ public class EditChannelActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        channelData = AppGlobal.getChannel(channelData.id);
+        channelData = AppGlobal.getCurrentDevice().getChannel(channelData.id);
         channelName.setText(channelData.name);
     }
 }

@@ -34,20 +34,20 @@ public class EditColorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (type.equals("button_color")) {
-                   AppGlobal.setButtonColor(editColorView.getColor());
+                   AppGlobal.getCurrentDevice().setButtonColor(editColorView.getColor());
                 }
                 if (type.equals("button_warning_color")) {
-                    AppGlobal.setWarningButtonColor(editColorView.getColor());
+                    AppGlobal.getCurrentDevice().setWarningButtonColor(editColorView.getColor());
                 }
                 finish();
             }
         });
 
         if (type.equals("button_color")) {
-            editColorView.setColor(AppGlobal.getSystemData().buttonColor);
+            editColorView.setColor(AppGlobal.getCurrentDevice().getSystemData().buttonColor);
         }
         if (type.equals("button_warning_color")) {
-            editColorView.setColor(AppGlobal.getSystemData().buttonWarningColor);
+            editColorView.setColor(AppGlobal.getCurrentDevice().getSystemData().buttonWarningColor);
         }
 
         TextView description = findViewById(R.id.description);

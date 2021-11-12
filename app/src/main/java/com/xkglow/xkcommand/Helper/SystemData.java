@@ -15,6 +15,5 @@ public class SystemData implements Serializable {
         cutoffInput = 12.0f;
         turnBluetoothOffAfter = 120;
         bluetoothAutoOff = true;
-        name = "XKGLOW_1111";
     }
 }

@@ -20,8 +20,8 @@ import com.xkglow.xkcommand.View.SwitchView;
 
 public class EditSensorActivity extends Activity {
     SensorData sensorData;
-    TextView sensorNameTextView, brightnessTextView, noChannelSelectedTextView, functionAction, functionDim;
-    LinearLayout radioButtonDim, radioButtonTrigger, channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8;
+    TextView sensorNameTextView, brightnessTextView, noChannelSelectedTextView, functionAction, functionDim, channelDescription;
+    LinearLayout radioButtonDim, radioButtonTrigger, channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8, syncAll;
     FrameLayout minus, plus;
     ImageView radioButtonDimImage, radioButtonTriggerImage, channelImage1, channelImage2, channelImage3, channelImage4, channelImage5, channelImage6, channelImage7, channelImage8, minusImage, plusImage;
     LinearLayout dimLayout, channelLayout, actionLayout;
@@ -88,20 +88,23 @@ public class EditSensorActivity extends Activity {
         actionLayout = findViewById(R.id.action_layout);
         brightnessTextView = findViewById(R.id.brightness);
         noChannelSelectedTextView = findViewById(R.id.no_channel_selected);
+        channelDescription = findViewById(R.id.channel_description);
+        syncAll = findViewById(R.id.sync_all_channels_layout);
 
+        setChannels();
         if (sensorData.function == 0) {
             setButtonBackLight();
         } else {
             setButtonTrigger();
         }
-        setChannels();
+
         brightnessTextView.setText(sensorData.brightness + "%");
 
         radioButtonDim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sensorData.function = 0;
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setButtonBackLight();
             }
         });
@@ -109,7 +112,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.function = 1;
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setButtonTrigger();
             }
         });
@@ -120,7 +123,7 @@ public class EditSensorActivity extends Activity {
                 if (sensorData.brightness > 0) {
                     sensorData.brightness = sensorData.brightness - 10;
                     brightnessTextView.setText(sensorData.brightness + "%");
-                    AppGlobal.setSensor(sensorData);
+                    AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 setBackColorButtons();
             }
@@ -132,7 +135,7 @@ public class EditSensorActivity extends Activity {
                 if (sensorData.brightness < 100) {
                     sensorData.brightness = sensorData.brightness + 10;
                     brightnessTextView.setText(sensorData.brightness + "%");
-                    AppGlobal.setSensor(sensorData);
+                    AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 setBackColorButtons();
             }
@@ -142,7 +145,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.channels[0] = !sensorData.channels[0];
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -150,7 +153,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.channels[1] = !sensorData.channels[1];
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -158,7 +161,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.channels[2] = !sensorData.channels[2];
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -166,7 +169,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.channels[3] = !sensorData.channels[3];
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -174,7 +177,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.channels[4] = !sensorData.channels[4];
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -182,7 +185,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.channels[5] = !sensorData.channels[5];
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -190,7 +193,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.channels[6] = !sensorData.channels[6];
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -198,7 +201,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 sensorData.channels[7] = !sensorData.channels[7];
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -207,14 +210,14 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onSwitchOn(boolean showMessage) {
                 sensorData.sync = true;
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
 
             @Override
             public void onSwitchOff(boolean showMessage) {
                 sensorData.sync = false;
-                AppGlobal.setSensor(sensorData);
+                AppGlobal.getCurrentDevice().setSensor(sensorData);
                 setChannels();
             }
         });
@@ -226,15 +229,14 @@ public class EditSensorActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        sensorData = AppGlobal.getSensor(sensorData.id);
+        sensorData = AppGlobal.getCurrentDevice().getSensor(sensorData.id);
         sensorNameTextView.setText(sensorData.name);
         setBackColorButtons();
-        if (AppGlobal.hasDim() && sensorData.function == 1) {
+        if (AppGlobal.getCurrentDevice().hasDim() && sensorData.function == 1) {
             radioButtonDim.setAlpha(0.4f);
             radioButtonDim.setClickable(false);
         }
         if (sensorData.function == 0) {
-
             functionDim.setVisibility(View.VISIBLE);
             functionAction.setVisibility(View.GONE);
         }
@@ -252,21 +254,21 @@ public class EditSensorActivity extends Activity {
 
     private void setChannelNames() {
         TextView channelName1 = findViewById(R.id.channel_text_1);
-        channelName1.setText(AppGlobal.getChannel(1).name);
+        channelName1.setText(AppGlobal.getCurrentDevice().getChannel(1).name);
         TextView channelName2 = findViewById(R.id.channel_text_2);
-        channelName2.setText(AppGlobal.getChannel(2).name);
+        channelName2.setText(AppGlobal.getCurrentDevice().getChannel(2).name);
         TextView channelName3 = findViewById(R.id.channel_text_3);
-        channelName3.setText(AppGlobal.getChannel(3).name);
+        channelName3.setText(AppGlobal.getCurrentDevice().getChannel(3).name);
         TextView channelName4 = findViewById(R.id.channel_text_4);
-        channelName4.setText(AppGlobal.getChannel(4).name);
+        channelName4.setText(AppGlobal.getCurrentDevice().getChannel(4).name);
         TextView channelName5 = findViewById(R.id.channel_text_5);
-        channelName5.setText(AppGlobal.getChannel(5).name);
+        channelName5.setText(AppGlobal.getCurrentDevice().getChannel(5).name);
         TextView channelName6 = findViewById(R.id.channel_text_6);
-        channelName6.setText(AppGlobal.getChannel(6).name);
+        channelName6.setText(AppGlobal.getCurrentDevice().getChannel(6).name);
         TextView channelName7 = findViewById(R.id.channel_text_7);
-        channelName7.setText(AppGlobal.getChannel(7).name);
+        channelName7.setText(AppGlobal.getCurrentDevice().getChannel(7).name);
         TextView channelName8 = findViewById(R.id.channel_text_8);
-        channelName8.setText(AppGlobal.getChannel(8).name);
+        channelName8.setText(AppGlobal.getCurrentDevice().getChannel(8).name);
     }
 
     private void setChannel(ImageView imageView, boolean select) {
@@ -283,6 +285,8 @@ public class EditSensorActivity extends Activity {
         dimLayout.setVisibility(View.VISIBLE);
         actionLayout.setVisibility(View.GONE);
         channelLayout.setVisibility(View.GONE);
+        functionDim.setVisibility(View.VISIBLE);
+        functionAction.setVisibility(View.GONE);
     }
 
     private void setButtonTrigger() {
@@ -291,6 +295,8 @@ public class EditSensorActivity extends Activity {
         dimLayout.setVisibility(View.GONE);
         actionLayout.setVisibility(View.VISIBLE);
         channelLayout.setVisibility(View.VISIBLE);
+        functionDim.setVisibility(View.GONE);
+        functionAction.setVisibility(View.VISIBLE);
     }
 
     private void setBackColorButtons() {
@@ -328,7 +334,7 @@ public class EditSensorActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 1");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(1).name);
                 actionView.setSensorData(sensorData, 0);
                 actionLayout.addView(actionView);
             }
@@ -341,7 +347,7 @@ public class EditSensorActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 2");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(2).name);
                 actionView.setSensorData(sensorData, 1);
                 actionLayout.addView(actionView);
             }
@@ -354,7 +360,7 @@ public class EditSensorActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 3");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(3).name);
                 actionView.setSensorData(sensorData, 2);
                 actionLayout.addView(actionView);
             }
@@ -367,7 +373,7 @@ public class EditSensorActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 4");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(4).name);
                 actionView.setSensorData(sensorData, 3);
                 actionLayout.addView(actionView);
             }
@@ -380,7 +386,7 @@ public class EditSensorActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 5");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(5).name);
                 actionView.setSensorData(sensorData, 4);
                 actionLayout.addView(actionView);
             }
@@ -393,7 +399,7 @@ public class EditSensorActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 6");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(6).name);
                 actionView.setSensorData(sensorData, 5);
                 actionLayout.addView(actionView);
             }
@@ -406,7 +412,7 @@ public class EditSensorActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 7");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(7).name);
                 actionView.setSensorData(sensorData, 6);
                 actionLayout.addView(actionView);
             }
@@ -419,12 +425,14 @@ public class EditSensorActivity extends Activity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
-                actionView.setActionName("ACTION - CHANNEL 8");
+                actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(8).name);
                 actionView.setSensorData(sensorData, 7);
                 actionLayout.addView(actionView);
             }
         }
         if (flag) {
+            channelDescription.setVisibility(View.VISIBLE);
+            syncAll.setVisibility(View.VISIBLE);
             noChannelSelectedTextView.setVisibility(View.GONE);
             actionLayout.setVisibility(View.VISIBLE);
             if (sensorData.sync) {
@@ -437,7 +445,12 @@ public class EditSensorActivity extends Activity {
                 actionLayout.addView(actionView);
             }
         } else {
+            channelDescription.setVisibility(View.GONE);
+            syncAll.setVisibility(View.GONE);
             noChannelSelectedTextView.setVisibility(View.VISIBLE);
+            actionLayout.setVisibility(View.GONE);
+        }
+        if (sensorData.function == 0) {
             actionLayout.setVisibility(View.GONE);
         }
     }
