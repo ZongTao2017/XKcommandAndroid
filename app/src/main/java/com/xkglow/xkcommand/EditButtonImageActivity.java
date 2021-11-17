@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -44,9 +45,9 @@ public class EditButtonImageActivity extends FragmentActivity {
     ButtonData buttonData;
     int photoPosition;
     List<PhotoData> photoList;
+    int number;
 
     static final int REQUEST_READ_EXTERNAL_STORAGE = 111;
-    static final int CELL_NUMBER_IN_ROW = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,16 +65,22 @@ public class EditButtonImageActivity extends FragmentActivity {
             }
         });
 
+        number = Helper.CELL_NUMBER_IN_ROW;
+        if (Helper.checkIfTablet(EditButtonImageActivity.this)) {
+            number = Helper.CELL_NUMBER_IN_ROW_PAD;
+        }
+
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(EditButtonImageActivity.this, CELL_NUMBER_IN_ROW, RecyclerView.VERTICAL, false));
-        recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 8 * CELL_NUMBER_IN_ROW);
+        recyclerView.setLayoutManager(new GridLayoutManager(EditButtonImageActivity.this, number, RecyclerView.VERTICAL, false));
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 8 * number);
 
         FrameLayout done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (photoList != null && photoList.size() > 0 && photoPosition > -1) {
-                    savePhoto(photoList.get(photoPosition).path);
+                    PhotoData photoData = photoList.get(photoPosition);
+                    savePhoto(photoData.path);
                 } else {
                     finish();
                 }
@@ -119,7 +126,7 @@ public class EditButtonImageActivity extends FragmentActivity {
                     public void run() {
                         photoList = photos;
                         photoPosition = -1;
-                        adapter = new RecyclerViewAdapter(EditButtonImageActivity.this, 1, photos, 4);
+                        adapter = new RecyclerViewAdapter(EditButtonImageActivity.this, 1, photos, number);
                         recyclerView.setAdapter(adapter);
                         adapter.setItemClickLister(new RecyclerViewAdapter.ItemClickListener() {
                             @Override
@@ -153,27 +160,46 @@ public class EditButtonImageActivity extends FragmentActivity {
     }
 
     private void savePhoto(String photoPath) {
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap b = BitmapFactory.decodeFile(photoPath, bmOptions);
-        int x, y, width, height;
-        if (b == null) return;
-        if (b.getWidth() > b.getHeight()) {
-            y = 0;
-            height = b.getHeight();
-            x = (b.getWidth() - b.getHeight()) / 2;
-            width = b.getHeight();
-        } else {
-            x = 0;
-            width = b.getWidth();
-            y = (b.getHeight() - b.getWidth()) / 2;
-            height = b.getWidth();
-        }
-        Bitmap bitmap = Bitmap.createBitmap(b, x, y, width, height);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp;
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-        File image = null;
         try {
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            Bitmap bb = BitmapFactory.decodeFile(photoPath, bmOptions);
+            ExifInterface ei = new ExifInterface(photoPath);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+            Bitmap b = null;
+            switch(orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    b = Helper.rotateImage(bb, 90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    b = Helper.rotateImage(bb, 180);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    b = Helper.rotateImage(bb, 270);
+                    break;
+                case ExifInterface.ORIENTATION_NORMAL:
+                default:
+                    b = bb;
+            }
+            int x, y, width, height;
+            if (b == null) return;
+            if (b.getWidth() > b.getHeight()) {
+                y = 0;
+                height = b.getHeight();
+                x = (b.getWidth() - b.getHeight()) / 2;
+                width = b.getHeight();
+            } else {
+                x = 0;
+                width = b.getWidth();
+                y = (b.getHeight() - b.getWidth()) / 2;
+                height = b.getWidth();
+            }
+            Bitmap bitmap = Bitmap.createBitmap(b, x, y, width, height);
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String imageFileName = "JPEG_" + timeStamp;
+            File storageDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+            File image = null;
+
             image = File.createTempFile(
                     imageFileName,  /* prefix */
                     ".jpg",         /* suffix */

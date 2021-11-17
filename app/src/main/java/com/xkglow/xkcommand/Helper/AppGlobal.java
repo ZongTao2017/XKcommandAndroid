@@ -104,12 +104,22 @@ public class AppGlobal {
         return R.drawable.button_icon1;
     }
 
-    public static DeviceData[] getDevices() {
-        return null;
+    public static ArrayList<DeviceData> getDevices() {
+        return devices;
     }
 
     public static DeviceData getCurrentDevice() {
         return currentDevice;
+    }
+
+    public static int getCurrentDeviceIndex() {
+        for (int i = 0; i < devices.size(); i++) {
+            DeviceData deviceData1 = devices.get(i);
+            if (currentDevice.deviceId.equals(deviceData1.deviceId)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public static DeviceData getCurrentPairingDevice() {
@@ -119,7 +129,7 @@ public class AppGlobal {
     public static void setCurrentDevice(int index) {
         if (index >= 0 && index <= devices.size() - 1) {
             currentDevice = devices.get(index);
-            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE));
+            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE, index));
         }
     }
 
@@ -128,5 +138,22 @@ public class AppGlobal {
             return devices.get(index);
         }
         return null;
+    }
+
+    public static DeviceData findDevice(DeviceData deviceData) {
+        for (DeviceData deviceData1 : devices) {
+            if (deviceData.deviceId.equals(deviceData1.deviceId)) return deviceData1;
+        }
+        return null;
+    }
+
+    public static int findDeviceIndex(DeviceData deviceData) {
+        for (int i = 0; i < devices.size(); i++) {
+            DeviceData deviceData1 = devices.get(i);
+            if (deviceData.deviceId.equals(deviceData1.deviceId)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

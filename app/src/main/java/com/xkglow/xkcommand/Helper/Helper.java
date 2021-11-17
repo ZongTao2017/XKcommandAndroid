@@ -1,7 +1,9 @@
 package com.xkglow.xkcommand.Helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -14,9 +16,13 @@ import com.xkglow.xkcommand.R;
 
 public class Helper {
     public static final int PADDING = 1;
-    public static final int ICON_SIZE = 3;
+    public static final int ICON_SIZE = 4;
+    public static final int ICON_SIZE_TAB = 3;
+    public static final float ICON_SIZE_TAB_H = 1.5f;
     public static final float ICON_RATIO = 455 / 360f;
     public static final float STATUS_RATIO = 936f / 842f;
+    public static final int CELL_NUMBER_IN_ROW = 4;
+    public static final int CELL_NUMBER_IN_ROW_PAD = 8;
 
     public static int dpToPx(Context context, float dp) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
@@ -58,5 +64,27 @@ public class Helper {
         }
         AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         audioManager.playSoundEffect(SoundEffectConstants.CLICK, 1.0f);
+    }
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+    public static boolean checkIfTablet(Activity activity) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+        double diagonalInches = Math.sqrt(xInches*xInches + yInches*yInches);
+        if (diagonalInches >= 6.5){
+            // 6.5inch device or bigger
+            return true;
+        }else{
+            return false;
+        }
     }
 }

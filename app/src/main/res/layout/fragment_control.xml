@@ -8,50 +8,41 @@
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/statusBarHeight"
-        android:layout_marginBottom="10dp">
-        <ImageView
-            android:id="@+id/status_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/system_status_base"
-            android:layout_gravity="center"/>
+        android:layout_weight="1">
         <LinearLayout
-            android:id="@+id/status_layout"
-            android:layout_width="match_parent"
+            android:id="@+id/content_layout"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginBottom="3dp"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginStart="20dp"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textColor="@color/gray"
-                android:text="13.4V" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textColor="@color/gray"
-                android:text="23.2A" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="20dp"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:textColor="@color/red"
-                android:text="121\u2109" />
-        </LinearLayout>
+            android:orientation="horizontal"/>
+        <FrameLayout
+            android:id="@+id/previous"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/triangle_left"
+                android:scaleType="fitCenter"/>
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/next"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/triangle_right"
+                android:scaleType="fitCenter"/>
+        </FrameLayout>
     </FrameLayout>
+    <com.xkglow.xkcommand.View.ViewPagerIndicator
+        android:id="@+id/view_pager_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

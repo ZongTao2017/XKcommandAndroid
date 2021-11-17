@@ -15,7 +15,9 @@ public class MessageEvent {
 
     public enum MessageEventType {
         CHANGE_DEVICE,
+        CHANGE_DEVICE_LIST,
         SET_CAMERA_PHOTO,
-        TURN_ON_OFF
+        TURN_ON_OFF,
+        POWER_OFF
     }
 }

@@ -12,6 +12,7 @@ import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.R;
 
 public class DeviceList extends ScrollView {
+    PairedDeviceView device1, device2;
 
     public DeviceList(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -19,8 +20,8 @@ public class DeviceList extends ScrollView {
         inflate(getContext(), R.layout.device_list, this);
 
         LinearLayout pairedLayout = findViewById(R.id.paired_device_layout);
-        PairedDeviceView device1 = findViewById(R.id.device_1);
-        PairedDeviceView device2 = findViewById(R.id.device_2);
+        device1 = findViewById(R.id.device_1);
+        device2 = findViewById(R.id.device_2);
         UnpairedDeviceView device3 = findViewById(R.id.device_3);
 
         device1.setCurrent(true);
@@ -53,6 +54,15 @@ public class DeviceList extends ScrollView {
         });
 
         LinearLayout unpairedLayout = findViewById(R.id.unpaired_device_layout);
+    }
 
+    public void setCurrent(int index) {
+        if (index == 0) {
+            device1.setCurrent(true);
+            device2.setCurrent(false);
+        } else {
+            device1.setCurrent(false);
+            device2.setCurrent(true);
+        }
     }
 }

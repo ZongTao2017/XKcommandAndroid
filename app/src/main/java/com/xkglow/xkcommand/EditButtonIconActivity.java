@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
+import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.Helper.PhotoData;
 import com.xkglow.xkcommand.Helper.RecyclerViewAdapter;
 
@@ -55,9 +56,9 @@ public class EditButtonIconActivity extends Activity {
             photos.add(new PhotoData(AppGlobal.getIconResourceId(i)));
         }
         boolean horizontal = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        int number = 4;
-        if (horizontal) {
-            number = 8;
+        int number = Helper.CELL_NUMBER_IN_ROW;
+        if (horizontal || Helper.checkIfTablet(EditButtonIconActivity.this)) {
+            number = Helper.CELL_NUMBER_IN_ROW_PAD;
         }
         recyclerView.setLayoutManager(new GridLayoutManager(EditButtonIconActivity.this, number, RecyclerView.VERTICAL, false));
         adapter = new RecyclerViewAdapter(EditButtonIconActivity.this, 0, photos, number);
@@ -74,6 +75,4 @@ public class EditButtonIconActivity extends Activity {
             }
         });
     }
-
-
 }

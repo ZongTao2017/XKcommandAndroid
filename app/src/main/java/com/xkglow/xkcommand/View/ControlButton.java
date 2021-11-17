@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
@@ -17,12 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
 import com.xkglow.xkcommand.EditButtonActivity;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
+import com.xkglow.xkcommand.Helper.DeviceData;
 import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.R;
@@ -31,6 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 
 public class ControlButton extends FrameLayout {
     private Context context;
+    private DeviceData deviceData;
     private ButtonData buttonData;
     private ImageView imagePressed, imageUnpressed, imageIllumination;
     private ImageView icon, image;
@@ -40,8 +44,8 @@ public class ControlButton extends FrameLayout {
     private FrameLayout warning;
     private boolean error;
 
-    public ControlButton(@NonNull Context context) {
-        super(context);
+    public ControlButton(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
 
         this.context = context;
         inflate(context, R.layout.button_view, this);
@@ -113,10 +117,11 @@ public class ControlButton extends FrameLayout {
         warning.setLayoutParams(layoutParams3);
     }
 
-    public void setButtonData(ButtonData buttonData) {
+    public void setData(DeviceData deviceData, ButtonData buttonData) {
         textView.setVisibility(GONE);
         icon.setVisibility(GONE);
         image.setVisibility(GONE);
+        this.deviceData = deviceData;
         this.buttonData = buttonData;
         this.released = buttonData.momentary;
         if (buttonData.type == 0) {
@@ -194,15 +199,15 @@ public class ControlButton extends FrameLayout {
                     imageIllumination.setVisibility(View.GONE);
                 }
             }
-            AppGlobal.getCurrentDevice().setButton(buttonData);
-            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF));
+            deviceData.setButton(buttonData);
+            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF, AppGlobal.findDeviceIndex(deviceData)));
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             imageUnpressed.setVisibility(View.VISIBLE);
             imagePressed.setVisibility(View.GONE);
             if (released) {
                 buttonData.isPressed = false;
                 imageIllumination.setVisibility(View.GONE);
-                AppGlobal.getCurrentDevice().setButton(buttonData);
+                deviceData.setButton(buttonData);
                 Helper.vibrate(context);
             }
         }

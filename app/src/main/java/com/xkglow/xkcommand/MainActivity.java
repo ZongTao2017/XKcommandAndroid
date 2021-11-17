@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.MessageEvent;
+import com.xkglow.xkcommand.View.DeviceList;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,6 +31,7 @@ public class MainActivity extends FragmentActivity {
     private int mCurrentTab;
     private TextView mTitle;
     private ImageView mLogo;
+    private DeviceList mDeviceList;
 
     public static final String CONTROL_TAB = "CONTROL_TAB";
     public static final String CUSTOMIZE_TAB = "CUSTOMIZE_TAB";
@@ -80,6 +82,8 @@ public class MainActivity extends FragmentActivity {
         else
             mCurrentTab = -1;
         if (mCurrentTab != -1) mTabHost.setCurrentTab(mCurrentTab);
+
+        mDeviceList = findViewById(R.id.device_list);
     }
 
     @Override
@@ -93,6 +97,14 @@ public class MainActivity extends FragmentActivity {
         switch (event.type) {
             case CHANGE_DEVICE:
                 mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                }
+                break;
+            case CHANGE_DEVICE_LIST:
+                int index = (int) event.data;
+                mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
+                mDeviceList.setCurrent(index);
                 break;
         }
     }
