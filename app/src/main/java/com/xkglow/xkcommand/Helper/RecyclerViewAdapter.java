@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.xkglow.xkcommand.CameraActivity;
 import com.xkglow.xkcommand.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
@@ -133,5 +134,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public interface ItemClickListener {
         void onItemClick(int position);
         void onCameraClick();
+    }
+
+    public void addData(List<PhotoData> photos) {
+        this.photos.addAll(photos);
+        notifyDataSetChanged();
     }
 }

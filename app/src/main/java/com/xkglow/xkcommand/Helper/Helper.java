@@ -6,13 +6,19 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.SoundEffectConstants;
 
 import com.xkglow.xkcommand.R;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Helper {
     public static final int PADDING = 1;
@@ -23,6 +29,7 @@ public class Helper {
     public static final float STATUS_RATIO = 936f / 842f;
     public static final int CELL_NUMBER_IN_ROW = 4;
     public static final int CELL_NUMBER_IN_ROW_PAD = 8;
+
 
     public static int dpToPx(Context context, float dp) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

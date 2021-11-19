@@ -44,14 +44,12 @@ public class PhotoGalleryHelper implements LoaderManager.LoaderCallbacks<Cursor>
         String orientation = MediaStore.Images.Media.ORIENTATION;// "orientation"
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;// getContentUri("external")
         String[] columns = {photo_id, path, mime_type, photo_date, orientation, photo_width, photo_height};
-//        return new CursorLoader(this.context, uri, columns, null, null, photo_date + " DESC");
-        return new CursorLoader(this.context, uri, columns, null, null, null);
+        return new CursorLoader(this.context, uri, columns, null, null, photo_date + " DESC");
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         List<PhotoData> photos = new ArrayList<>();
-        int i = 0;
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
@@ -75,10 +73,9 @@ public class PhotoGalleryHelper implements LoaderManager.LoaderCallbacks<Cursor>
                         (cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
 
                 if (new File(path).exists()) {
-                    PhotoData photoData = new PhotoData(i++, path, url, mimeType, orientation, width, height, date);
+                    PhotoData photoData = new PhotoData(path, url, mimeType, orientation, width, height, date);
                     photos.add(photoData);
                 }
-
             } while (cursor.moveToNext());
         }
 

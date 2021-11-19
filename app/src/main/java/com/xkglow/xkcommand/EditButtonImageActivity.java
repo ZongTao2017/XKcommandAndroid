@@ -26,6 +26,7 @@ import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.Helper.PhotoData;
 import com.xkglow.xkcommand.Helper.PhotoGalleryHelper;
+import com.xkglow.xkcommand.Helper.PhotoLoaderHelper;
 import com.xkglow.xkcommand.Helper.RecyclerViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -56,6 +57,8 @@ public class EditButtonImageActivity extends FragmentActivity {
         setContentView(R.layout.activity_edit_button_icon);
 
         buttonData = (ButtonData) getIntent().getSerializableExtra("button");
+        photoList = new ArrayList<>();
+        photoPosition = -1;
 
         FrameLayout back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +76,22 @@ public class EditButtonImageActivity extends FragmentActivity {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(EditButtonImageActivity.this, number, RecyclerView.VERTICAL, false));
         recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 8 * number);
+
+        adapter = new RecyclerViewAdapter(EditButtonImageActivity.this, 1, new ArrayList<>(), number);
+        recyclerView.setAdapter(adapter);
+        adapter.setItemClickLister(new RecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                photoPosition = position;
+            }
+
+            @Override
+            public void onCameraClick() {
+                Intent intent = new Intent(EditButtonImageActivity.this, CameraActivity.class);
+                intent.putExtra("button", buttonData);
+                startActivity(intent);
+            }
+        });
 
         FrameLayout done = findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +119,7 @@ public class EditButtonImageActivity extends FragmentActivity {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_READ_EXTERNAL_STORAGE);
         } else {
-            startPhotoLoader();
+            startPhotoLoader(0);
         }
     }
 
@@ -117,33 +136,26 @@ public class EditButtonImageActivity extends FragmentActivity {
         }
     }
 
-    private void startPhotoLoader() {
-        new PhotoGalleryHelper().startPhotoLoader(this, new PhotoGalleryHelper.PhotoGalleryLoaderCallback() {
+    private void startPhotoLoader(final int index) {
+//        new PhotoGalleryHelper().startPhotoLoader(this, index, new PhotoGalleryHelper.PhotoGalleryLoaderCallback() {
+//            @Override
+//            public void photoGalleryLoaderDone(List<PhotoData> photos) {
+//                photoList.addAll(photos);
+//                photoPosition = -1;
+//                adapter.addData(photos);
+//                if (photos.size() == Helper.LOADER_PAGE_SIZE) {
+//                    startPhotoLoader(index + 1);
+//                }
+//            }
+//        });
+        PhotoLoaderHelper.loadPhotoPage(this, -1, index, new PhotoGalleryHelper.PhotoGalleryLoaderCallback() {
             @Override
             public void photoGalleryLoaderDone(List<PhotoData> photos) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        photoList = photos;
-                        photoPosition = -1;
-                        adapter = new RecyclerViewAdapter(EditButtonImageActivity.this, 1, photos, number);
-                        recyclerView.setAdapter(adapter);
-                        adapter.setItemClickLister(new RecyclerViewAdapter.ItemClickListener() {
-                            @Override
-                            public void onItemClick(int position) {
-                                photoPosition = position;
-                            }
-
-                            @Override
-                            public void onCameraClick() {
-                                Intent intent = new Intent(EditButtonImageActivity.this, CameraActivity.class);
-                                intent.putExtra("button", buttonData);
-                                startActivity(intent);
-                            }
-                        });
-                    }
-                });
-
+                photoList.addAll(photos);
+                adapter.addData(photos);
+                if (photos.size() == PhotoLoaderHelper.PAGE_SIZE) {
+                    startPhotoLoader(index + 1);
+                }
             }
         });
     }
@@ -154,7 +166,7 @@ public class EditButtonImageActivity extends FragmentActivity {
         switch (requestCode) {
             case REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    startPhotoLoader();
+                    startPhotoLoader(0);
                 break;
         }
     }
