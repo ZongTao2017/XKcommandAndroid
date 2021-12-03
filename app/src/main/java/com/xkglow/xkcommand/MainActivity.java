@@ -1,6 +1,7 @@
 package com.xkglow.xkcommand;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -9,8 +10,18 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -20,9 +31,13 @@ import android.widget.TextView;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.View.DeviceList;
+import com.xkglow.xkcommand.bluetooth.BluetoothService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
@@ -32,6 +47,7 @@ public class MainActivity extends FragmentActivity {
     private TextView mTitle;
     private ImageView mLogo;
     private DeviceList mDeviceList;
+    private boolean alreadyStarted = false;
 
     public static final String CONTROL_TAB = "CONTROL_TAB";
     public static final String CUSTOMIZE_TAB = "CUSTOMIZE_TAB";
@@ -84,12 +100,52 @@ public class MainActivity extends FragmentActivity {
         if (mCurrentTab != -1) mTabHost.setCurrentTab(mCurrentTab);
 
         mDeviceList = findViewById(R.id.device_list);
+
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter != null) {
+            if (bluetoothAdapter.isEnabled()) {
+                checkPermissions();
+            } else {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, AppGlobal.REQUEST_ENABLE_BT);
+            }
+        }
+
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mReceiver, filter);
+
+//        if (AppGlobal.hasNoPairedDevices()) {
+//            startActivity(new Intent(MainActivity.this, DevicePairActivity.class));
+//        }
     }
 
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // do nothing
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppGlobal.REQUEST_ENABLE_BT && resultCode == RESULT_OK) {
+            checkPermissions();
+        }
+    }
+
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == AppGlobal.REQUEST_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startBluetoothService();
+            }
+        }
     }
 
     @Subscribe(sticky = true)
@@ -194,4 +250,70 @@ public class MainActivity extends FragmentActivity {
 
         }
     }
+
+    private void checkPermissions() {
+        List<String> permissions = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        } else {
+            startBluetoothService();
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissions.size() > 0) {
+            String[] list = new String[permissions.size()];
+            int i = 0;
+            for (String per : permissions)
+                list[i++] = per;
+            ActivityCompat.requestPermissions(this, list, AppGlobal.REQUEST_LOCATION);
+        }
+    }
+
+    private void startBluetoothService() {
+        if (!alreadyStarted) {
+            Intent gattServiceIntent = new Intent(this, BluetoothService.class);
+            getApplicationContext().bindService(gattServiceIntent,
+                    mServiceConnection, BIND_AUTO_CREATE);
+            alreadyStarted = true;
+        }
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            AppGlobal.bluetoothService = ((BluetoothService.LocalBinder) service).getService();
+            AppGlobal.bluetoothService.init();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            AppGlobal.bluetoothService = null;
+        }
+    };
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                        BluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_ON:
+                        if (AppGlobal.bluetoothService == null) {
+                            checkPermissions();
+                        } else {
+                            AppGlobal.bluetoothService.startScanTimers();
+                        }
+                        break;
+                    case BluetoothAdapter.STATE_OFF:
+                        if (AppGlobal.bluetoothService != null) {
+                            AppGlobal.bluetoothService.stopScanTimers();
+                        }
+                        AppGlobal.turnOffBluetooth();
+                        break;
+                }
+            }
+        }
+    };
 }

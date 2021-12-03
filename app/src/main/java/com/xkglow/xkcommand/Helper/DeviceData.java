@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DeviceData implements Serializable {
-    public String deviceId;
     public String address;
+    private boolean isAddingRssi = false;
     public ArrayList<Integer> rssiList;
     public int signalPercent;
     public DeviceState deviceState;
@@ -15,8 +15,10 @@ public class DeviceData implements Serializable {
     public SystemData systemData;
     public boolean powerOn;
 
-    public DeviceData(String id, String name) {
-        deviceId = id;
+    public byte[] deviceSettings;
+
+    public DeviceData(String address, String name) {
+        this.address = address;
 
         sensors = new SensorData[3];
         sensors[0] = new SensorData(1);
@@ -45,6 +47,10 @@ public class DeviceData implements Serializable {
 
         systemData = new SystemData();
         systemData.name = name;
+
+        rssiList = new ArrayList<>();
+
+        deviceSettings = new byte[20];
     }
 
     public void setSensor(SensorData sensorData) {
@@ -159,5 +165,23 @@ public class DeviceData implements Serializable {
     public void setSystem(SystemData systemData1) {
         systemData = systemData1;
         AppGlobal.saveInfo();
+    }
+
+    public void addRssi(int rssi) {
+        if (isAddingRssi) {
+            return;
+        }
+        isAddingRssi = true;
+        if (rssiList.size() == 5) {
+            rssiList.remove((int) 0);
+        }
+        rssiList.add(rssi);
+        int total = 0;
+        for (float rssiVal : rssiList) {
+            total += rssiVal;
+        }
+        int avg = total / rssiList.size();
+        signalPercent = Math.min(100, 100 - ((Math.abs(avg) - 70) * 100 / 45));
+        isAddingRssi = false;
     }
 }

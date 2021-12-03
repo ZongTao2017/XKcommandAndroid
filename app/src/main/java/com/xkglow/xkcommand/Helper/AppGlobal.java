@@ -1,85 +1,47 @@
 package com.xkglow.xkcommand.Helper;
 
+import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.util.Log;
 
 import com.xkglow.xkcommand.R;
+import com.xkglow.xkcommand.bluetooth.BluetoothService;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class AppGlobal {
     private static Context context;
-    private static ArrayList<DeviceData> devices;
+    public static BluetoothService bluetoothService;
     private static DeviceData currentDevice;
+    private static LinkedHashMap<String, BluetoothGatt> bluetoothGattMap;
+    private static LinkedHashMap<String, DeviceData> scanDeviceMap;
+    private static HashMap<String, DeviceData> pairedDeviceMap;
+    private static boolean isSavingPairedDevices = false;
+    private static boolean isCurrentDeviceDisconnected = false;
 
     public static int loaderId;
 
-    public static String FILE_INFO = "fileinfo";
+    private static final String FILE_DEVICE = "FileDevice";
+    public static final int REQUEST_LOCATION = 110;
+    public static final int REQUEST_ENABLE_BT = 111;
 
     public static void init(Context contextGlobal) {
         context = contextGlobal;
-        if (!loadInfo()) {
-            initFirstTime();
-        }
+        loadPairedDevices();
         loaderId = 1;
-        currentDevice = devices.get(0);
-    }
-
-    private static void initFirstTime() {
-        devices = new ArrayList<>();
-
-        DeviceData deviceData1 = new DeviceData("1", "XKGLOW_1111");
-        devices.add(deviceData1);
-        DeviceData deviceData2 = new DeviceData("2", "XKGLOW_2222");
-        devices.add(deviceData2);
-
-        saveInfo();
-    }
-
-    public static void saveInfo() {
-        try {
-            FileOutputStream fos = context.openFileOutput(FILE_INFO, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(devices);
-            os.close();
-            fos.close();
-            Log.e("YAY", "save info done!!!");
-        } catch (Exception e) {
-            Log.e("ERROR", "save info error!");
-        }
-    }
-
-    public static boolean loadInfo() {
-        try {
-            if (context == null) {
-                Log.e("ERROR", "load info failed!");
-                return false;
-            }
-
-            FileInputStream fis = context.openFileInput(FILE_INFO);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            Object obj = is.readObject();
-            if (obj == null) {
-                Log.e("ERROR", "load info error!");
-                return false;
-            }
-            devices = (ArrayList<DeviceData>) obj;
-            is.close();
-            fis.close();
-            Log.e("YAY", "load info done!!!");
-            return true;
-        } catch (Exception e) {
-            Log.e("ERROR", "load info error!");
-        }
-        return false;
+        bluetoothGattMap = new LinkedHashMap<>();
+        scanDeviceMap = new LinkedHashMap<>();
+        pairedDeviceMap = new HashMap<>();
     }
 
     public static int getIconResourceId(int index) {
@@ -104,7 +66,13 @@ public class AppGlobal {
         return R.drawable.button_icon1;
     }
 
-    public static ArrayList<DeviceData> getDevices() {
+    public static ArrayList<DeviceData> getConnectedDevices() {
+        ArrayList<DeviceData> devices = new ArrayList<>();
+        for (String address : scanDeviceMap.keySet()) {
+            if (pairedDeviceMap.containsKey(address)) {
+                devices.add(scanDeviceMap.get(address));
+            }
+        }
         return devices;
     }
 
@@ -113,9 +81,10 @@ public class AppGlobal {
     }
 
     public static int getCurrentDeviceIndex() {
-        for (int i = 0; i < devices.size(); i++) {
-            DeviceData deviceData1 = devices.get(i);
-            if (currentDevice.deviceId.equals(deviceData1.deviceId)) {
+        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
+        for (int i = 0; i < connectedDevices.size(); i++) {
+            DeviceData deviceData1 = connectedDevices.get(i);
+            if (currentDevice.address.equals(deviceData1.address)) {
                 return i;
             }
         }
@@ -127,33 +96,256 @@ public class AppGlobal {
     }
 
     public static void setCurrentDevice(int index) {
-        if (index >= 0 && index <= devices.size() - 1) {
-            currentDevice = devices.get(index);
+        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
+        if (index >= 0 && index <= connectedDevices.size() - 1) {
+            currentDevice = connectedDevices.get(index);
             EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE, index));
         }
     }
 
-    public static DeviceData getDevice(int index) {
-        if (index >= 0 && index <= devices.size() - 1) {
-            return devices.get(index);
+    public static void setCurrentDevice(DeviceData deviceData) {
+        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
+        for (int i = 0; i < connectedDevices.size(); i++) {
+            DeviceData deviceData1 = connectedDevices.get(i);
+            if (deviceData.address.equals(deviceData1.address)) {
+                setCurrentDevice(i);
+            }
+        }
+    }
+
+    public static DeviceData getConnectedDevice(int index) {
+        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
+        if (index >= 0 && index <= connectedDevices.size() - 1) {
+            return connectedDevices.get(index);
         }
         return null;
     }
 
-    public static DeviceData findDevice(DeviceData deviceData) {
-        for (DeviceData deviceData1 : devices) {
-            if (deviceData.deviceId.equals(deviceData1.deviceId)) return deviceData1;
+    public static DeviceData findConnectedDevice(DeviceData deviceData) {
+        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
+        for (DeviceData deviceData1 : connectedDevices) {
+            if (deviceData.address.equals(deviceData1.address)) return deviceData1;
         }
         return null;
     }
 
-    public static int findDeviceIndex(DeviceData deviceData) {
-        for (int i = 0; i < devices.size(); i++) {
-            DeviceData deviceData1 = devices.get(i);
-            if (deviceData.deviceId.equals(deviceData1.deviceId)) {
+    public static int findConnectedDeviceIndex(DeviceData deviceData) {
+        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
+        for (int i = 0; i < connectedDevices.size(); i++) {
+            DeviceData deviceData1 = connectedDevices.get(i);
+            if (deviceData.address.equals(deviceData1.address)) {
                 return i;
             }
         }
         return -1;
+    }
+
+    public static LinkedHashMap<String, BluetoothGatt> getGattMap() {
+        return bluetoothGattMap;
+    }
+
+    public static void clearGattMap() {
+        bluetoothGattMap.clear();
+    }
+
+    public static void setBluetoothGatt(String address, BluetoothGatt bluetoothGatt) {
+        if (bluetoothGatt == null) {
+            bluetoothGattMap.remove(address);
+        } else {
+            bluetoothGattMap.put(address, bluetoothGatt);
+        }
+    }
+
+    public static BluetoothGatt getBluetoothGatt(String address) {
+        return bluetoothGattMap.get(address);
+    }
+
+    public static DeviceData getFirstScanPairedDevice() {
+        for (String address : scanDeviceMap.keySet()) {
+            if (pairedDeviceMap.containsKey(address)) {
+                return scanDeviceMap.get(address);
+            }
+        }
+        return null;
+    }
+
+    public static void connect(DeviceData deviceData) {
+        if (bluetoothService != null && deviceData != null &&
+                deviceData.deviceState != DeviceState.CONNECTING &&
+                deviceData.deviceState != DeviceState.CONNECTED &&
+                deviceData.deviceState != DeviceState.INITIALIZING &&
+                deviceData.deviceState != DeviceState.READY) {
+            deviceData.deviceState = DeviceState.CONNECTING;
+            bluetoothService.connect(deviceData.address);
+        }
+    }
+
+    public static void disconnect(DeviceData deviceData, boolean shouldRemove) {
+        if (bluetoothService != null) {
+            deviceData.deviceState = DeviceState.DISCONNECTING;
+            bluetoothService.disconnect(deviceData, shouldRemove);
+        }
+    }
+
+    public static void setCurrentPairingDevice(DeviceData deviceData) {
+        AppGlobal.addPairDevice(deviceData);
+        setCurrentDevice(deviceData);
+        connect(deviceData);
+    }
+
+    public static void addPairDevice(DeviceData deviceData) {
+        if (deviceData != null && !pairedDeviceMap.containsKey(deviceData.address)) {
+            pairedDeviceMap.put(deviceData.address, deviceData);
+            saveInfo();
+        }
+    }
+
+    public static void removePairDevice(String address) {
+        if (address != null && pairedDeviceMap.containsKey(address)) {
+            pairedDeviceMap.remove(address);
+            saveInfo();
+        }
+    }
+
+    public static boolean hasNoPairedDevices() {
+        return pairedDeviceMap.size() == 0;
+    }
+
+    public static void saveInfo() {
+        try {
+            if (isSavingPairedDevices) {
+                Log.e("ERROR", "not saving paired devices");
+                return;
+            }
+            if (pairedDeviceMap == null || context == null) {
+                Log.e("ERROR", "save paired devices failed!");
+                return;
+            }
+            isSavingPairedDevices = true;
+            FileOutputStream fos = context.openFileOutput(FILE_DEVICE, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(pairedDeviceMap);
+            os.close();
+            fos.close();
+            isSavingPairedDevices = false;
+            Log.e("YAY", "save paired devices done!!!");
+        } catch (Exception e) {
+            Log.e("ERROR", "save paired devices error!");
+            isSavingPairedDevices = false;
+        }
+    }
+
+    public static boolean loadPairedDevices() {
+        try {
+            if (context == null) {
+                Log.e("ERROR", "load paired devices failed!");
+                return false;
+            }
+            FileInputStream fis = context.openFileInput(FILE_DEVICE);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            Object obj = is.readObject();
+            if (obj == null) {
+                pairedDeviceMap = new HashMap<>();
+            } else {
+                pairedDeviceMap = (HashMap<String, DeviceData>) obj;
+            }
+            is.close();
+            fis.close();
+            Log.e("YAY", "load paired devices done!!!");
+            for (String address : pairedDeviceMap.keySet()) {
+                DeviceData deviceData = pairedDeviceMap.get(address);
+                deviceData.deviceState = DeviceState.OFFLINE;
+            }
+        } catch (Exception e) {
+            Log.e("ERROR", "load paired devices error!");
+            return false;
+        }
+        return pairedDeviceMap.size() == 0;
+    }
+
+    public static DeviceData updateScanDevice(String address, String name, int rssi) {
+        DeviceData deviceData;
+        if (scanDeviceMap.containsKey(address)) {
+            deviceData = scanDeviceMap.get(address);
+            deviceData.addRssi(rssi);
+        } else if (pairedDeviceMap.containsKey(address)) {
+            deviceData = pairedDeviceMap.get(address);
+            deviceData.addRssi(rssi);
+            scanDeviceMap.put(address, deviceData);
+        } else {
+            deviceData = new DeviceData(address, name);
+            deviceData.addRssi(rssi);
+            scanDeviceMap.put(address, deviceData);
+        }
+        if (deviceData.deviceState == DeviceState.OFFLINE || deviceData.deviceState == DeviceState.DISCONNECTING || deviceData.deviceState == DeviceState.DISCONNECTED) {
+            deviceData.deviceState = DeviceState.ONLINE;
+        }
+        return deviceData;
+    }
+
+    public static void updateDeviceState(ArrayList<String> deviceAddressList) {
+        Iterator<Map.Entry<String, DeviceData>> iter = scanDeviceMap.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<String, DeviceData> entry = iter.next();
+            String address = entry.getKey();
+            if (!deviceAddressList.contains(address)) {
+                iter.remove();
+            }
+        }
+        for (String address : pairedDeviceMap.keySet()) {
+            if (!deviceAddressList.contains(address)) {
+                DeviceData deviceData = pairedDeviceMap.get(address);
+                if (!deviceData.equals(currentDevice) ||
+                        currentDevice.deviceState == DeviceState.DISCONNECTED) {
+                    deviceData.deviceState = DeviceState.OFFLINE;
+                }
+            }
+        }
+        if (!isCurrentDeviceDisconnected &&
+                (currentDevice == null || currentDevice.deviceState == DeviceState.OFFLINE)) {
+
+            isCurrentDeviceDisconnected = true;
+        } else {
+            isCurrentDeviceDisconnected = false;
+        }
+    }
+
+    public static DeviceData getConnectedDevice(String address) {
+        if (pairedDeviceMap.containsKey(address)) {
+            return pairedDeviceMap.get(address);
+        }
+        if (scanDeviceMap.containsKey(address)) {
+            return scanDeviceMap.get(address);
+        }
+        return null;
+    }
+
+    public static void turnOffBluetooth() {
+        HashMap<String, DeviceData> deviceMap = new HashMap<>(pairedDeviceMap);
+        deviceMap.putAll(scanDeviceMap);
+        for (String address : deviceMap.keySet()) {
+            DeviceData deviceData = deviceMap.get(address);
+            deviceData.deviceState = DeviceState.OFFLINE;
+        }
+        setCurrentDevice(null);
+        bluetoothGattMap.clear();
+        scanDeviceMap.clear();
+    }
+
+    public static DeviceData getDevice(String address) {
+        if (pairedDeviceMap.containsKey(address)) {
+            return pairedDeviceMap.get(address);
+        }
+        if (scanDeviceMap.containsKey(address)) {
+            return scanDeviceMap.get(address);
+        }
+        return null;
+    }
+
+    public static void writeDeviceCutoffInput(float volt) {
+        if (currentDevice != null) {
+            currentDevice.deviceSettings[8] = (byte) ((volt + 0.001f) / 0.2f);
+            bluetoothService.writeDeviceSettings(currentDevice);
+        }
     }
 }

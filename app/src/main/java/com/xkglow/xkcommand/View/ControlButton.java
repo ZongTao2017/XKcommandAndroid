@@ -6,12 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -200,7 +196,7 @@ public class ControlButton extends FrameLayout {
                 }
             }
             deviceData.setButton(buttonData);
-            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF, AppGlobal.findDeviceIndex(deviceData)));
+            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF, AppGlobal.findConnectedDeviceIndex(deviceData)));
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             imageUnpressed.setVisibility(View.VISIBLE);
             imagePressed.setVisibility(View.GONE);

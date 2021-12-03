@@ -26,6 +26,8 @@ public class EditSystemActivity extends Activity {
     SwitchView switchAutoOff;
     LinearLayout autoOffLayout;
 
+    float cutoffInput;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,7 @@ public class EditSystemActivity extends Activity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppGlobal.writeDeviceCutoffInput(cutoffInput);
                 finish();
             }
         });
@@ -84,6 +87,11 @@ public class EditSystemActivity extends Activity {
         plusImage2 = findViewById(R.id.plus_image_2);
 
         cutoffInputText = findViewById(R.id.volt);
+        cutoffInput = AppGlobal.getCurrentDevice().deviceSettings[8] * 0.2f;
+        if (cutoffInput < 10.8f || cutoffInput > 13.2f) {
+            cutoffInput = 12f;
+        }
+        cutoffInputText.setText(String.format("%.1fV", cutoffInput));
         turnOffBluetoothText = findViewById(R.id.minutes);
 
         autoOffLayout = findViewById(R.id.bluetooth_auto_off_layout);
@@ -103,10 +111,9 @@ public class EditSystemActivity extends Activity {
         minus1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (systemData.cutoffInput > 11.0f) {
-                    systemData.cutoffInput -= 0.1f;
-                    cutoffInputText.setText(String.format("%.1fV", systemData.cutoffInput));
-                    AppGlobal.getCurrentDevice().setSystem(systemData);
+                if (cutoffInput > 11.0f) {
+                    cutoffInput -= 0.2f;
+                    cutoffInputText.setText(String.format("%.1fV", cutoffInput));
                 }
                 setButtons1();
             }
@@ -115,10 +122,9 @@ public class EditSystemActivity extends Activity {
         plus1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (systemData.cutoffInput < 13.0f) {
-                    systemData.cutoffInput += 0.1f;
-                    cutoffInputText.setText(String.format("%.1fV", systemData.cutoffInput));
-                    AppGlobal.getCurrentDevice().setSystem(systemData);
+                if (cutoffInput < 13.0f) {
+                    cutoffInput += 0.2f;
+                    cutoffInputText.setText(String.format("%.1fV", cutoffInput));
                 }
                 setButtons1();
             }
@@ -156,7 +162,7 @@ public class EditSystemActivity extends Activity {
         systemData = AppGlobal.getCurrentDevice().getSystemData();
 
         controllerName.setText(systemData.name);
-        cutoffInputText.setText(String.format("%.1fV", systemData.cutoffInput));
+        cutoffInputText.setText(String.format("%.1fV", cutoffInput));
         turnOffBluetoothText.setText(systemData.turnBluetoothOffAfter + "min");
         if (systemData.bluetoothAutoOff) {
             switchAutoOff.switchOn(true, false);
@@ -175,10 +181,10 @@ public class EditSystemActivity extends Activity {
     }
 
     private void setButtons1() {
-        if (Math.abs(systemData.cutoffInput - 11f) < 0.001) {
+        if (Math.abs(cutoffInput - 11f) < 0.001) {
             minusImage1.setColorFilter(getResources().getColor(R.color.gray));
             minus1.setClickable(false);
-        } else if (Math.abs(systemData.cutoffInput - 13f) < 0.001) {
+        } else if (Math.abs(cutoffInput - 13f) < 0.001) {
             plusImage1.setColorFilter(getResources().getColor(R.color.gray));
             plus1.setClickable(false);
         } else {

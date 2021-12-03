@@ -65,7 +65,7 @@ public class DevicePairActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (mCurrentPairingDevice != null) {
-
+                    AppGlobal.disconnect(mCurrentPairingDevice, true);
                 }
                 finish();
             }

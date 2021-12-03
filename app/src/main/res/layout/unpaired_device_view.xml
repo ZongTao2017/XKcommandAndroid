@@ -17,7 +17,7 @@
             android:gravity="bottom"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:text="XKGLOW-2312" />
+            android:text="XKGLOW-0003" />
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"

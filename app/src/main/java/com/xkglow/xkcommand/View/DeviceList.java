@@ -25,7 +25,7 @@ public class DeviceList extends ScrollView {
         UnpairedDeviceView device3 = findViewById(R.id.device_3);
 
         device1.setCurrent(true);
-        device1.setDeviceName(AppGlobal.getDevice(0).systemData.name);
+        device1.setDeviceName("XKGLOW-0001");
         device1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,7 +36,7 @@ public class DeviceList extends ScrollView {
         });
 
         device2.setCurrent(false);
-        device2.setDeviceName(AppGlobal.getDevice(1).systemData.name);
+        device2.setDeviceName("XKGLOW-0002");
         device2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

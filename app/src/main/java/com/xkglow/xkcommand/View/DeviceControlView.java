@@ -12,8 +12,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -249,7 +247,7 @@ public class DeviceControlView extends LinearLayout {
     }
 
     public void reset() {
-        deviceData = AppGlobal.findDevice(deviceData);
+        deviceData = AppGlobal.findConnectedDevice(deviceData);
         if (deviceData != null) {
             button1.setData(deviceData, deviceData.getButton(1));
             button2.setData(deviceData, deviceData.getButton(2));

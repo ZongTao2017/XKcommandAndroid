@@ -27,7 +27,7 @@ public class ControlFragment extends Fragment {
     ArrayList<DeviceControlView> deviceControlViews;
     int width, height;
     LinearLayout contentLayout;
-    FrameLayout previous, next;
+    FrameLayout frameLayout, previous, next;
     ViewPagerIndicator viewPagerIndicator;
 
     @Override
@@ -47,25 +47,12 @@ public class ControlFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_control, container, false);
 
-        FrameLayout frameLayout = view.findViewById(R.id.frame_layout);
+        frameLayout = view.findViewById(R.id.frame_layout);
         contentLayout = view.findViewById(R.id.content_layout);
         contentLayout.post(new Runnable() {
             @Override
             public void run() {
-                deviceControlViews = new ArrayList<>();
-                height = frameLayout.getHeight();
-                width = frameLayout.getWidth();
-                for (int i = 0; i < AppGlobal.getDevices().size(); i++) {
-                    DeviceData deviceData = AppGlobal.getDevice(i);
-                    DeviceControlView deviceControlView = new DeviceControlView(getContext(), width, height, deviceData);
-                    deviceControlView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
-                    contentLayout.addView(deviceControlView);
-                    deviceControlViews.add(deviceControlView);
-                }
-                int index = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice());
-                final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) contentLayout.getLayoutParams();
-                params.leftMargin = -index * width;
-                contentLayout.setLayoutParams(params);
+                setDevices();
             }
         });
 
@@ -73,7 +60,7 @@ public class ControlFragment extends Fragment {
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int current = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice()) - 1;
+                int current = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice()) - 1;
                 AppGlobal.setCurrentDevice(current);
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE_LIST, current));
             }
@@ -82,7 +69,7 @@ public class ControlFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int current = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice()) + 1;
+                int current = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice()) + 1;
                 AppGlobal.setCurrentDevice(current);
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE_LIST, current));
             }
@@ -90,7 +77,7 @@ public class ControlFragment extends Fragment {
         resetArrows();
 
         viewPagerIndicator = view.findViewById(R.id.view_pager_indicator);
-        viewPagerIndicator.setDotsCount(AppGlobal.getDevices().size());
+        viewPagerIndicator.setDotsCount(AppGlobal.getConnectedDevices().size());
         viewPagerIndicator.setCurrent(AppGlobal.getCurrentDeviceIndex());
 
         return view;
@@ -99,6 +86,9 @@ public class ControlFragment extends Fragment {
     @Subscribe(sticky = true)
     public void onEvent(MessageEvent event) {
         switch (event.type) {
+            case ADD_DEVICE:
+                setDevices();
+                break;
             case CHANGE_DEVICE:
                 int index1 = (int) event.data;
                 animateTo(index1);
@@ -132,10 +122,15 @@ public class ControlFragment extends Fragment {
     }
 
     private void resetArrows() {
-        int current = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice());
-        int count = AppGlobal.getDevices().size();
-        previous.setVisibility(View.VISIBLE);
-        next.setVisibility(View.VISIBLE);
+        int current = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice());
+        int count = AppGlobal.getConnectedDevices().size();
+        if (count < 2) {
+            previous.setVisibility(View.GONE);
+            next.setVisibility(View.GONE);
+        } else {
+            previous.setVisibility(View.VISIBLE);
+            next.setVisibility(View.VISIBLE);
+        }
         if (current == 0) {
             previous.setVisibility(View.GONE);
         }
@@ -152,5 +147,23 @@ public class ControlFragment extends Fragment {
                 deviceControlView.reset();
             }
         }
+    }
+
+    private void setDevices() {
+        contentLayout.removeAllViews();
+        deviceControlViews = new ArrayList<>();
+        height = frameLayout.getHeight();
+        width = frameLayout.getWidth();
+        for (int i = 0; i < AppGlobal.getConnectedDevices().size(); i++) {
+            DeviceData deviceData = AppGlobal.getConnectedDevice(i);
+            DeviceControlView deviceControlView = new DeviceControlView(getContext(), width, height, deviceData);
+            deviceControlView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+            contentLayout.addView(deviceControlView);
+            deviceControlViews.add(deviceControlView);
+        }
+        int index = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice());
+        final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) contentLayout.getLayoutParams();
+        params.leftMargin = -index * width;
+        contentLayout.setLayoutParams(params);
     }
 }
