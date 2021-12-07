@@ -74,11 +74,8 @@ public class ControlFragment extends Fragment {
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE_LIST, current));
             }
         });
-        resetArrows();
 
         viewPagerIndicator = view.findViewById(R.id.view_pager_indicator);
-        viewPagerIndicator.setDotsCount(AppGlobal.getConnectedDevices().size());
-        viewPagerIndicator.setCurrent(AppGlobal.getCurrentDeviceIndex());
 
         return view;
     }
@@ -152,8 +149,12 @@ public class ControlFragment extends Fragment {
     private void setDevices() {
         contentLayout.removeAllViews();
         deviceControlViews = new ArrayList<>();
-        height = frameLayout.getHeight();
-        width = frameLayout.getWidth();
+        if (frameLayout.getWidth() != 0) {
+            width = frameLayout.getWidth();
+        }
+        if (frameLayout.getHeight() != 0) {
+            height = frameLayout.getHeight();
+        }
         for (int i = 0; i < AppGlobal.getConnectedDevices().size(); i++) {
             DeviceData deviceData = AppGlobal.getConnectedDevice(i);
             DeviceControlView deviceControlView = new DeviceControlView(getContext(), width, height, deviceData);
@@ -165,5 +166,10 @@ public class ControlFragment extends Fragment {
         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) contentLayout.getLayoutParams();
         params.leftMargin = -index * width;
         contentLayout.setLayoutParams(params);
+
+        viewPagerIndicator.setDotsCount(AppGlobal.getConnectedDevices().size());
+        viewPagerIndicator.setCurrent(AppGlobal.getCurrentDeviceIndex());
+
+        resetArrows();
     }
 }

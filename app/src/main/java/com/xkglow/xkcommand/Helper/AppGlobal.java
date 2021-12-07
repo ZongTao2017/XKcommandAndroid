@@ -344,8 +344,21 @@ public class AppGlobal {
 
     public static void writeDeviceCutoffInput(float volt) {
         if (currentDevice != null) {
-            currentDevice.deviceSettings[8] = (byte) ((volt + 0.001f) / 0.2f);
-            bluetoothService.writeDeviceSettings(currentDevice);
+            byte voltByte = (byte) ((volt + 0.001f) / 0.2f);;
+            if (currentDevice.deviceSettingsBytes[8] != voltByte) {
+                currentDevice.deviceSettingsBytes[8] = voltByte;
+                bluetoothService.writeDeviceSettings(currentDevice);
+            }
+        }
+    }
+
+    public static void writeChannelAmpLimit(int index, float amp) {
+        if (currentDevice != null) {
+            byte ampByte = (byte) ((amp + 0.001f) / 0.2f);
+            if (currentDevice.channelBytes[index * 2 + 1] != ampByte) {
+                currentDevice.channelBytes[index * 2 + 1] = ampByte;
+                bluetoothService.writeChannel(currentDevice);
+            }
         }
     }
 }

@@ -15,7 +15,8 @@ public class DeviceData implements Serializable {
     public SystemData systemData;
     public boolean powerOn;
 
-    public byte[] deviceSettings;
+    public byte[] deviceSettingsBytes;
+    public byte[] channelBytes;
 
     public DeviceData(String address, String name) {
         this.address = address;
@@ -50,7 +51,8 @@ public class DeviceData implements Serializable {
 
         rssiList = new ArrayList<>();
 
-        deviceSettings = new byte[20];
+        deviceSettingsBytes = new byte[20];
+        channelBytes = new byte[16];
     }
 
     public void setSensor(SensorData sensorData) {

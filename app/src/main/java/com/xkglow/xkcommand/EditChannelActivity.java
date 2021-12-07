@@ -32,6 +32,7 @@ public class EditChannelActivity extends Activity {
             @Override
             public void onClick(View v) {
                 AppGlobal.getCurrentDevice().setChannel(channelData);
+                AppGlobal.writeChannelAmpLimit(channelData.id - 1, channelData.maxCurrent);
                 finish();
             }
         });
