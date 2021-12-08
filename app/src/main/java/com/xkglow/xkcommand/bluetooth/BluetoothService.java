@@ -22,6 +22,8 @@ import android.os.ParcelUuid;
 import android.util.Log;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
+import com.xkglow.xkcommand.Helper.BluetoothData;
+import com.xkglow.xkcommand.Helper.BluetoothDataType;
 import com.xkglow.xkcommand.Helper.DeviceData;
 import com.xkglow.xkcommand.Helper.DeviceState;
 import com.xkglow.xkcommand.Helper.Helper;
@@ -35,6 +37,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class BluetoothService extends Service {
     private BluetoothAdapter mBluetoothAdapter;
@@ -44,6 +47,8 @@ public class BluetoothService extends Service {
     private Timer mConnectTimer;
     private ConnectTimerTask mConnectTimerTask;
     private ArrayList<String> mScanDeviceAddressList;
+    private LinkedBlockingDeque<BluetoothData> mWaitingList;
+    private boolean isSending;
 
     public static final String CONTROLLER_SERVICE = "02A8AF3E-C199-4735-BACE-FA8E9F74803E";
     public static final String DEVICE_SETTING = "02A8AF3E-C002-4735-BACE-FA8E9F74803E";
@@ -83,6 +88,8 @@ public class BluetoothService extends Service {
 
     public void init() {
         mScanDeviceAddressList = new ArrayList<>();
+        mWaitingList = new LinkedBlockingDeque<>();
+        isSending = false;
         mHandler = new Handler();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter != null) {
@@ -277,23 +284,33 @@ public class BluetoothService extends Service {
         BluetoothGattCharacteristic gattChar = gattService.getCharacteristic(UUID.fromString(service));
         if (gattChar == null)
             return;
+        boolean result = bluetoothGatt.readCharacteristic(gattChar);
+        if (result) {
+            Log.d(TAG, "read char: " + bluetoothGatt.getDevice().getName());
+        } else {
+            Log.e(TAG, "read char fail: " + bluetoothGatt.getDevice().getName());
+        }
+    }
+
+    private void writeDescriptor(BluetoothGatt bluetoothGatt, String service) {
+        if (bluetoothGatt == null)
+            return;
+        BluetoothGattService gattService = bluetoothGatt.getService(UUID.fromString(CONTROLLER_SERVICE));
+        if (gattService == null)
+            return;
+        BluetoothGattCharacteristic gattChar = gattService.getCharacteristic(UUID.fromString(service));
+        if (gattChar == null)
+            return;
         bluetoothGatt.setCharacteristicNotification(gattChar, true);
         BluetoothGattDescriptor descriptor = gattChar.getDescriptors().get(0);
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 //        descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
-        bluetoothGatt.writeDescriptor(descriptor);
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                boolean result = bluetoothGatt.readCharacteristic(gattChar);
-                if (result) {
-//                    Log.d(TAG, "read char: " + bluetoothGatt.getDevice().getName());
-                } else {
-                    Log.e(TAG, "read char fail: " + bluetoothGatt.getDevice().getName());
-                }
-            }
-        }, 200);
-
+        boolean result = bluetoothGatt.writeDescriptor(descriptor);
+        if (result) {
+            Log.d(TAG, "set notification: " + bluetoothGatt.getDevice().getName());
+        } else {
+            Log.e(TAG, "set notification fail: " + bluetoothGatt.getDevice().getName());
+        }
     }
 
 
@@ -349,6 +366,8 @@ public class BluetoothService extends Service {
             } else {
                 Log.e(TAG, "Write fail: " + gatt.getDevice().getName());
             }
+            isSending = false;
+            sendNext();
         }
 
         @Override
@@ -357,7 +376,6 @@ public class BluetoothService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 final byte[] data = characteristic.getValue();
                 if (data != null && data.length > 0) {
-
                     DeviceData deviceData = AppGlobal.getConnectedDevice(address);
                     if (deviceData != null) {
                         if (characteristic.getUuid().toString().equalsIgnoreCase(DEVICE_SETTING)) {
@@ -374,6 +392,8 @@ public class BluetoothService extends Service {
                     }
                 }
             }
+            isSending = false;
+            sendNext();
         }
 
         @Override
@@ -398,7 +418,11 @@ public class BluetoothService extends Service {
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(TAG, "get notification.");
+            } else {
+                Log.e(TAG, "get notification error: " + status + ".");
             }
+            isSending = false;
+            sendNext();
         }
     };
 
@@ -416,24 +440,45 @@ public class BluetoothService extends Service {
         DeviceData deviceData = AppGlobal.getDevice(address);
         if (deviceData != null) {
             deviceData.deviceState = DeviceState.INITIALIZING;
-            BluetoothGatt gatt = AppGlobal.getBluetoothGatt(address);
-            readCharacteristic(gatt, CHANNEL_STATUS);
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    readCharacteristic(gatt, DEVICE_SETTING);
-                }
-            }, 500);
+            BluetoothData bluetoothData1 = new BluetoothData(BluetoothDataType.Read_Char, deviceData.address, DEVICE_SETTING, null);
+            mWaitingList.add(bluetoothData1);
+            BluetoothData bluetoothData2 = new BluetoothData(BluetoothDataType.Write_Descriptor, deviceData.address, DEVICE_SETTING, null);
+            mWaitingList.add(bluetoothData2);
+            BluetoothData bluetoothData3 = new BluetoothData(BluetoothDataType.Read_Char, deviceData.address, CHANNEL_STATUS, null);
+            mWaitingList.add(bluetoothData3);
+            BluetoothData bluetoothData4 = new BluetoothData(BluetoothDataType.Write_Descriptor, deviceData.address, CHANNEL_STATUS, null);
+            mWaitingList.add(bluetoothData4);
+            sendNext();
         }
     }
 
     public void writeDeviceSettings(DeviceData deviceData) {
-        BluetoothGatt gatt = AppGlobal.getBluetoothGatt(deviceData.address);
-        writeCharacteristic(gatt, DEVICE_SETTING, deviceData.deviceSettingsBytes);
+        BluetoothData bluetoothData = new BluetoothData(BluetoothDataType.Write_Char, deviceData.address, DEVICE_SETTING, deviceData.deviceSettingsBytes);
+        mWaitingList.add(bluetoothData);
+        sendNext();
     }
 
     public void writeChannel(DeviceData deviceData) {
-        BluetoothGatt gatt = AppGlobal.getBluetoothGatt(deviceData.address);
-        writeCharacteristic(gatt, CHANNEL_STATUS, deviceData.channelBytes);
+        BluetoothData bluetoothData = new BluetoothData(BluetoothDataType.Write_Char, deviceData.address, CHANNEL_STATUS, deviceData.channelBytes);
+        mWaitingList.add(bluetoothData);
+        sendNext();
+    }
+
+    private void sendNext() {
+        BluetoothData bluetoothData = mWaitingList.poll();
+        if (!isSending && bluetoothData != null) {
+            isSending = true;
+            BluetoothGatt gatt = AppGlobal.getBluetoothGatt(bluetoothData.address);
+            switch (bluetoothData.type) {
+                case Write_Char:
+                    writeCharacteristic(gatt, bluetoothData.service, bluetoothData.data);
+                    break;
+                case Read_Char:
+                    readCharacteristic(gatt, bluetoothData.service);
+                    break;
+                case Write_Descriptor:
+                    writeDescriptor(gatt, bluetoothData.service);
+            }
+        }
     }
 }
