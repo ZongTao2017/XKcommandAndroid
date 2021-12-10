@@ -65,6 +65,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
             <TextView
+                android:id="@+id/status_volt"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -72,16 +73,18 @@
                 android:gravity="center"
                 android:textSize="12sp"
                 android:textColor="@color/gray"
-                android:text="13.4V" />
+                android:text="0.0V" />
             <TextView
+                android:id="@+id/status_amp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textSize="12sp"
                 android:textColor="@color/gray"
-                android:text="23.2A" />
+                android:text="0.0A" />
             <TextView
+                android:id="@+id/status_temp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -89,7 +92,7 @@
                 android:gravity="center"
                 android:textSize="12sp"
                 android:textColor="@color/red"
-                android:text="121\u2109" />
+                android:text="0\u2109" />
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

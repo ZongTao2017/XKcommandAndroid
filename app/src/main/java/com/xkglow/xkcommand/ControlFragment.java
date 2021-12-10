@@ -1,6 +1,7 @@
 package com.xkglow.xkcommand;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ControlFragment extends Fragment {
     ArrayList<DeviceControlView> deviceControlViews;
@@ -29,6 +32,8 @@ public class ControlFragment extends Fragment {
     LinearLayout contentLayout;
     FrameLayout frameLayout, previous, next;
     ViewPagerIndicator viewPagerIndicator;
+    private Timer mDeviceInfoTimer;
+    private DeviceInfoTimerTask mDeviceInfoTimerTask;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,27 +118,37 @@ public class ControlFragment extends Fragment {
             }
         });
         animator.setDuration(300);
-        animator.start();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                animator.start();
+            }
+        });
         resetArrows();
         viewPagerIndicator.setCurrent(index);
     }
 
     private void resetArrows() {
-        int current = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice());
-        int count = AppGlobal.getConnectedDevices().size();
-        if (count < 2) {
-            previous.setVisibility(View.GONE);
-            next.setVisibility(View.GONE);
-        } else {
-            previous.setVisibility(View.VISIBLE);
-            next.setVisibility(View.VISIBLE);
-        }
-        if (current == 0) {
-            previous.setVisibility(View.GONE);
-        }
-        if (current == count - 1) {
-            next.setVisibility(View.GONE);
-        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int current = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice());
+                int count = AppGlobal.getConnectedDevices().size();
+                if (count < 2) {
+                    previous.setVisibility(View.GONE);
+                    next.setVisibility(View.GONE);
+                } else {
+                    previous.setVisibility(View.VISIBLE);
+                    next.setVisibility(View.VISIBLE);
+                }
+                if (current == 0) {
+                    previous.setVisibility(View.GONE);
+                }
+                if (current == count - 1) {
+                    next.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -144,6 +159,13 @@ public class ControlFragment extends Fragment {
                 deviceControlView.reset();
             }
         }
+        startTimer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopTimer();
     }
 
     private void setDevices() {
@@ -171,5 +193,37 @@ public class ControlFragment extends Fragment {
         viewPagerIndicator.setCurrent(AppGlobal.getCurrentDeviceIndex());
 
         resetArrows();
+    }
+
+    private void startTimer() {
+        mDeviceInfoTimer = new Timer();
+        mDeviceInfoTimerTask = new DeviceInfoTimerTask();
+        mDeviceInfoTimer.schedule(mDeviceInfoTimerTask, 1000, 1);
+    }
+
+    private void stopTimer() {
+        if (mDeviceInfoTimer != null) {
+            mDeviceInfoTimer.cancel();
+        }
+        if (mDeviceInfoTimerTask != null) {
+            mDeviceInfoTimerTask.cancel();
+        }
+    }
+
+    private class DeviceInfoTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (DeviceControlView deviceControlView : deviceControlViews) {
+                            deviceControlView.updateDeviceInfo();
+                        }
+                    }
+                });
+            }
+        }
     }
 }

@@ -15,18 +15,24 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.xkglow.xkcommand.DevicePairActivity;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.DeviceData;
 import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class DeviceControlView extends LinearLayout {
     DeviceData deviceData;
     ControlButton button1, button2, button3, button4, button5, button6, button7, button8;
     PowerView power;
+    TextView textVolt, textAmp, textTemp;
 
     public DeviceControlView(@NonNull Context context, int w, int h, DeviceData deviceData) {
         super(context);
@@ -92,6 +98,10 @@ public class DeviceControlView extends LinearLayout {
 
         button8 = findViewById(R.id.button_8);
         button8.setIconSize(iconSize);
+
+        textVolt = findViewById(R.id.status_volt);
+        textAmp = findViewById(R.id.status_amp);
+        textTemp = findViewById(R.id.status_temp);
 
         FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(realIconSize, realIconSize);
         layoutParams1.leftMargin = paddingH + resize;
@@ -274,5 +284,14 @@ public class DeviceControlView extends LinearLayout {
         button6.turnOff();
         button7.turnOff();
         button8.turnOff();
+    }
+
+    public void updateDeviceInfo() {
+        deviceData = AppGlobal.findConnectedDevice(deviceData);
+        if (deviceData != null) {
+            textVolt.setText(String.format("%.1fV", deviceData.deviceSettingsBytes[4] * 0.2f));
+            textAmp.setText(String.format("%.1fA",(deviceData.deviceSettingsBytes[6] + deviceData.deviceSettingsBytes[7] * 0xff) * 0.2f));
+            textTemp.setText(deviceData.deviceSettingsBytes[5] - 50 + "\u2103");
+        }
     }
 }

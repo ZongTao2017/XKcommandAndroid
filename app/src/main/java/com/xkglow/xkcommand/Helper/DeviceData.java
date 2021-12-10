@@ -105,12 +105,37 @@ public class DeviceData implements Serializable {
             if (buttonData.id == buttonData1.id) {
                 buttonData1.type = buttonData.type;
                 buttonData1.channels = buttonData.channels;
-                buttonData1.actions = buttonData.actions;
                 buttonData1.sync = buttonData.sync;
+                if (buttonData1.sync) {
+                    int action = 0;
+                    for (int i = 0; i < buttonData1.channels.length; i++) {
+                        if (buttonData1.channels[i]) {
+                            if (action == 0) {
+                                action = buttonData1.actions[i];
+                            } else {
+                                buttonData1.actions[i] = action;
+                            }
+                        }
+                    }
+                }
                 buttonData1.momentary = buttonData.momentary;
                 buttonData1.iconResourceId = buttonData.iconResourceId;
                 buttonData1.text = buttonData.text;
-                buttonData1.imagePath = buttonData.imagePath;
+                buttonData1.buttonBytes[0] = Helper.setBit(buttonData1.buttonBytes[0], 7, 1);
+                buttonData1.buttonBytes[0] = Helper.setBit(buttonData1.buttonBytes[0], 6, 0);
+                buttonData1.buttonBytes[0] = Helper.setBit(buttonData1.buttonBytes[0], 5, 1);
+                if (buttonData1.momentary) {
+                    buttonData1.buttonBytes[0] = Helper.setBit(buttonData1.buttonBytes[0], 4, 1);
+                } else {
+                    buttonData1.buttonBytes[0] = Helper.setBit(buttonData1.buttonBytes[0], 4, 0);
+                }
+                for (int i = 0; i < buttonData1.channels.length; i++) {
+                    if (!buttonData1.channels[i]) {
+                        buttonData1.buttonBytes[i + 1] = (byte) 0;
+                    } else {
+                        buttonData1.buttonBytes[i + 1] = (byte) buttonData1.actions[i];
+                    }
+                }
             }
             if (buttonData1.isPressed) {
                 powerOn = true;

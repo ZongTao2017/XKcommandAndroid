@@ -20,7 +20,7 @@ public class ActionView extends LinearLayout {
     private LinearLayout radioButton1, radioButton2, radioButton3, radioButton4;
     private ImageView radioButtonImage1, radioButtonImage2, radioButtonImage3, radioButtonImage4;
     private TextView actionNameTextView;
-    private int channelId;
+    private int[] channelIds;
 
     public ActionView(Context context) {
         super(context);
@@ -49,11 +49,15 @@ public class ActionView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 if (sensorData != null) {
-                    sensorData.actions[channelId] = 0;
+                    for (int channelId : channelIds) {
+                        sensorData.actions[channelId] = 1;
+                    }
                     AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 if (buttonData != null) {
-                    buttonData.actions[channelId] = 0;
+                    for (int channelId : channelIds) {
+                        buttonData.actions[channelId] = 1;
+                    }
                     AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setRadioImages();
@@ -63,11 +67,15 @@ public class ActionView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 if (sensorData != null) {
-                    sensorData.actions[channelId] = 1;
+                    for (int channelId : channelIds) {
+                        sensorData.actions[channelId] = 2;
+                    }
                     AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 if (buttonData != null) {
-                    buttonData.actions[channelId] = 1;
+                    for (int channelId : channelIds) {
+                        buttonData.actions[channelId] = 2;
+                    }
                     AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setRadioImages();
@@ -77,11 +85,15 @@ public class ActionView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 if (sensorData != null) {
-                    sensorData.actions[channelId] = 2;
+                    for (int channelId : channelIds) {
+                        sensorData.actions[channelId] = 3;
+                    }
                     AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 if (buttonData != null) {
-                    buttonData.actions[channelId] = 2;
+                    for (int channelId : channelIds) {
+                        buttonData.actions[channelId] = 3;
+                    }
                     AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setRadioImages();
@@ -91,11 +103,15 @@ public class ActionView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 if (sensorData != null) {
-                    sensorData.actions[channelId] = 3;
+                    for (int channelId : channelIds) {
+                        sensorData.actions[channelId] = 4;
+                    }
                     AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
                 if (buttonData != null) {
-                    buttonData.actions[channelId] = 3;
+                    for (int channelId : channelIds) {
+                        buttonData.actions[channelId] = 4;
+                    }
                     AppGlobal.getCurrentDevice().setButton(buttonData);
                 }
                 setRadioImages();
@@ -103,15 +119,15 @@ public class ActionView extends LinearLayout {
         });
     }
 
-    public void setSensorData(SensorData sensorData, int channelId) {
+    public void setSensorData(SensorData sensorData, int[] channelIds) {
         this.sensorData = sensorData;
-        this.channelId = channelId;
+        this.channelIds = channelIds;
         setRadioImages();
     }
 
-    public void setButtonData(ButtonData buttonData, int channelId) {
+    public void setButtonData(ButtonData buttonData, int[] channelIds) {
         this.buttonData = buttonData;
-        this.channelId = channelId;
+        this.channelIds = channelIds;
         setRadioImages();
     }
 
@@ -125,33 +141,33 @@ public class ActionView extends LinearLayout {
         radioButtonImage3.setImageResource(R.drawable.radio_unselected);
         radioButtonImage4.setImageResource(R.drawable.radio_unselected);
         if (sensorData != null) {
-            switch (sensorData.actions[channelId]) {
-                case 0:
+            switch (sensorData.actions[channelIds[0]]) {
+                case 1:
                     radioButtonImage1.setImageResource(R.drawable.radio_selected);
                     break;
-                case 1:
+                case 2:
                     radioButtonImage2.setImageResource(R.drawable.radio_selected);
                     break;
-                case 2:
+                case 3:
                     radioButtonImage3.setImageResource(R.drawable.radio_selected);
                     break;
-                case 3:
+                case 4:
                     radioButtonImage4.setImageResource(R.drawable.radio_selected);
                     break;
             }
         }
         if (buttonData != null) {
-            switch (buttonData.actions[channelId]) {
-                case 0:
+            switch (buttonData.actions[channelIds[0]]) {
+                case 1:
                     radioButtonImage1.setImageResource(R.drawable.radio_selected);
                     break;
-                case 1:
+                case 2:
                     radioButtonImage2.setImageResource(R.drawable.radio_selected);
                     break;
-                case 2:
+                case 3:
                     radioButtonImage3.setImageResource(R.drawable.radio_selected);
                     break;
-                case 3:
+                case 4:
                     radioButtonImage4.setImageResource(R.drawable.radio_selected);
                     break;
             }

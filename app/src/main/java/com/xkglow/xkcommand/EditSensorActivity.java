@@ -335,7 +335,7 @@ public class EditSensorActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(1).name);
-                actionView.setSensorData(sensorData, 0);
+                actionView.setSensorData(sensorData, new int[] { 0 });
                 actionLayout.addView(actionView);
             }
         }
@@ -348,7 +348,7 @@ public class EditSensorActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(2).name);
-                actionView.setSensorData(sensorData, 1);
+                actionView.setSensorData(sensorData, new int[] { 1 });
                 actionLayout.addView(actionView);
             }
         }
@@ -361,7 +361,7 @@ public class EditSensorActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(3).name);
-                actionView.setSensorData(sensorData, 2);
+                actionView.setSensorData(sensorData, new int[] { 2 });
                 actionLayout.addView(actionView);
             }
         }
@@ -374,7 +374,7 @@ public class EditSensorActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(4).name);
-                actionView.setSensorData(sensorData, 3);
+                actionView.setSensorData(sensorData, new int[] { 3 });
                 actionLayout.addView(actionView);
             }
         }
@@ -387,7 +387,7 @@ public class EditSensorActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(5).name);
-                actionView.setSensorData(sensorData, 4);
+                actionView.setSensorData(sensorData, new int[] { 4 });
                 actionLayout.addView(actionView);
             }
         }
@@ -400,7 +400,7 @@ public class EditSensorActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(6).name);
-                actionView.setSensorData(sensorData, 5);
+                actionView.setSensorData(sensorData, new int[] { 5 });
                 actionLayout.addView(actionView);
             }
         }
@@ -413,7 +413,7 @@ public class EditSensorActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(7).name);
-                actionView.setSensorData(sensorData, 6);
+                actionView.setSensorData(sensorData, new int[] { 6 });
                 actionLayout.addView(actionView);
             }
         }
@@ -426,7 +426,7 @@ public class EditSensorActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(8).name);
-                actionView.setSensorData(sensorData, 7);
+                actionView.setSensorData(sensorData, new int[] { 7 });
                 actionLayout.addView(actionView);
             }
         }
@@ -436,12 +436,23 @@ public class EditSensorActivity extends Activity {
             noChannelSelectedTextView.setVisibility(View.GONE);
             actionLayout.setVisibility(View.VISIBLE);
             if (sensorData.sync) {
+                int number = 0;
+                for (boolean channel : sensorData.channels) {
+                    if (channel) number++;
+                }
+                int[] actions = new int[number];
+                int n = 0;
+                for (int i = 0; i < sensorData.channels.length; i++) {
+                    if (sensorData.channels[i]) {
+                        actions[n++] = i;
+                    }
+                }
                 ActionView actionView = new ActionView(EditSensorActivity.this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - ALL CHANNELS");
-                actionView.setSensorData(sensorData, 0);
+                actionView.setSensorData(sensorData, actions);
                 actionLayout.addView(actionView);
             }
         } else {

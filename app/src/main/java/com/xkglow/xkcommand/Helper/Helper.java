@@ -104,4 +104,16 @@ public class Helper {
         sb.append("]");
         return sb.toString();
     }
+
+    public static byte setBit(byte b, int index, int number) {
+        if (number == 1) {
+            return (byte) (b | (1 << index));
+        } else {
+            return (byte) (b & ~(1 << index));
+        }
+    }
+
+    public static int getBit(Byte b, int index) {
+        return (b >> index) & 1;
+    }
 }

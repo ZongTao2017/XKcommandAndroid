@@ -67,13 +67,21 @@ public class AppGlobal {
     }
 
     public static ArrayList<DeviceData> getConnectedDevices() {
-        ArrayList<DeviceData> devices = new ArrayList<>();
+        HashMap<String, DeviceData> deviceMap = new HashMap<>();
         for (String address : scanDeviceMap.keySet()) {
             if (pairedDeviceMap.containsKey(address)) {
-                devices.add(scanDeviceMap.get(address));
+                deviceMap.put(address, scanDeviceMap.get(address));
             }
         }
-        return devices;
+        for (DeviceData deviceData : pairedDeviceMap.values()) {
+            if (deviceData.deviceState == DeviceState.CONNECTING ||
+                    deviceData.deviceState == DeviceState.CONNECTED ||
+                    deviceData.deviceState == DeviceState.INITIALIZING ||
+                    deviceData.deviceState == DeviceState.READY) {
+                deviceMap.put(deviceData.address, deviceData);
+            }
+        }
+        return new ArrayList<DeviceData>(deviceMap.values());
     }
 
     public static DeviceData getCurrentDevice() {
@@ -359,6 +367,12 @@ public class AppGlobal {
                 currentDevice.channelBytes[index * 2 + 1] = ampByte;
                 bluetoothService.writeChannel(currentDevice);
             }
+        }
+    }
+    
+    public static void writeButtonData(int buttonId) {
+        if (currentDevice != null) {
+            bluetoothService.writeButton(currentDevice, currentDevice.buttons[buttonId - 1]);
         }
     }
 }

@@ -45,6 +45,7 @@ public class EditButtonActivity extends Activity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppGlobal.writeButtonData(buttonData.id);
                 finish();
             }
         });
@@ -240,7 +241,7 @@ public class EditButtonActivity extends Activity {
         channel5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonData.channels[5] = !buttonData.channels[5];
+                buttonData.channels[4] = !buttonData.channels[4];
                 AppGlobal.getCurrentDevice().setButton(buttonData);
                 setChannels();
             }
@@ -371,7 +372,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(1).name);
-                actionView.setButtonData(buttonData, 0);
+                actionView.setButtonData(buttonData, new int[]{ 0 });
                 actionLayout.addView(actionView);
             }
         }
@@ -384,7 +385,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(2).name);
-                actionView.setButtonData(buttonData, 1);
+                actionView.setButtonData(buttonData, new int[]{ 1 });
                 actionLayout.addView(actionView);
             }
         }
@@ -397,7 +398,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(3).name);
-                actionView.setButtonData(buttonData, 2);
+                actionView.setButtonData(buttonData, new int[]{ 2 });
                 actionLayout.addView(actionView);
             }
         }
@@ -410,7 +411,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(4).name);
-                actionView.setButtonData(buttonData, 3);
+                actionView.setButtonData(buttonData, new int[]{ 3 });
                 actionLayout.addView(actionView);
             }
         }
@@ -423,7 +424,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(5).name);
-                actionView.setButtonData(buttonData, 4);
+                actionView.setButtonData(buttonData, new int[]{ 4 });
                 actionLayout.addView(actionView);
             }
         }
@@ -436,7 +437,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(6).name);
-                actionView.setButtonData(buttonData, 5);
+                actionView.setButtonData(buttonData, new int[]{ 5 });
                 actionLayout.addView(actionView);
             }
         }
@@ -449,7 +450,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(7).name);
-                actionView.setButtonData(buttonData, 6);
+                actionView.setButtonData(buttonData, new int[]{ 6 });
                 actionLayout.addView(actionView);
             }
         }
@@ -462,7 +463,7 @@ public class EditButtonActivity extends Activity {
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - " + AppGlobal.getCurrentDevice().getChannel(8).name);
-                actionView.setButtonData(buttonData, 7);
+                actionView.setButtonData(buttonData, new int[]{ 7 });
                 actionLayout.addView(actionView);
             }
         }
@@ -471,12 +472,23 @@ public class EditButtonActivity extends Activity {
             noChannelSelectedTextView.setVisibility(View.GONE);
             actionLayout.setVisibility(View.VISIBLE);
             if (buttonData.sync) {
+                int number = 0;
+                for (boolean channel : buttonData.channels) {
+                    if (channel) number++;
+                }
+                int[] actions = new int[number];
+                int n = 0;
+                for (int i = 0; i < buttonData.channels.length; i++) {
+                    if (buttonData.channels[i]) {
+                        actions[n++] = i;
+                    }
+                }
                 ActionView actionView = new ActionView(EditButtonActivity.this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditButtonActivity.this, 30);
                 actionView.setLayoutParams(layoutParams);
                 actionView.setActionName("ACTION - ALL CHANNELS");
-                actionView.setButtonData(buttonData, 0);
+                actionView.setButtonData(buttonData, actions);
                 actionLayout.addView(actionView);
             }
         } else {
