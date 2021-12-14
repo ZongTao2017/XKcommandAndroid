@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.R;
 
@@ -43,6 +44,7 @@ public class PowerView extends FrameLayout {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN && clickable) {
             setPowerClickable(false);
+            AppGlobal.writeButtonAllOff();
             EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.POWER_OFF));
             return true;
         }

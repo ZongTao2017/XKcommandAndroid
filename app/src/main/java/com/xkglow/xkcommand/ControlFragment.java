@@ -98,7 +98,7 @@ public class ControlFragment extends Fragment {
             case TURN_ON_OFF:
                 int index2 = (int) event.data;
                 DeviceControlView deviceControlView = deviceControlViews.get(index2);
-                deviceControlView.reset();
+                deviceControlView.resetPower();
                 break;
             case POWER_OFF:
                 DeviceControlView currentDevice = deviceControlViews.get(AppGlobal.getCurrentDeviceIndex());
@@ -198,7 +198,7 @@ public class ControlFragment extends Fragment {
     private void startTimer() {
         mDeviceInfoTimer = new Timer();
         mDeviceInfoTimerTask = new DeviceInfoTimerTask();
-        mDeviceInfoTimer.schedule(mDeviceInfoTimerTask, 1000, 1);
+        mDeviceInfoTimer.schedule(mDeviceInfoTimerTask, 0, 500);
     }
 
     private void stopTimer() {
@@ -218,8 +218,10 @@ public class ControlFragment extends Fragment {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        for (DeviceControlView deviceControlView : deviceControlViews) {
-                            deviceControlView.updateDeviceInfo();
+                        if (deviceControlViews != null) {
+                            for (DeviceControlView deviceControlView : deviceControlViews) {
+                                deviceControlView.updateDeviceInfo();
+                            }
                         }
                     }
                 });

@@ -11,6 +11,7 @@ public class SensorData implements Serializable {
     public boolean[] channels;
     public int[] actions;
     public boolean sync;
+    public byte[] sensorBytes;
 
     public SensorData(int id) {
         this.id = id;
@@ -20,7 +21,8 @@ public class SensorData implements Serializable {
         this.channels = new boolean[8];
         Arrays.fill(this.channels, false);
         this.actions = new int[8];
-        Arrays.fill(this.actions, 0);
+        Arrays.fill(this.actions, 1);
         this.sync = true;
+        this.sensorBytes = new byte[]{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     }
 }

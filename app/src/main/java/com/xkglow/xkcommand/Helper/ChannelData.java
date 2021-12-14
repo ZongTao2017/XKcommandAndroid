@@ -5,11 +5,12 @@ import java.io.Serializable;
 public class ChannelData implements Serializable {
     public int id;
     public String name;
-    public int maxCurrent;
+    public int maxAmp;
+    public int amp;
 
     public ChannelData(int id) {
         this.id = id;
-        maxCurrent = 9;
+        maxAmp = 9;
         name = "Channel Name " + id;
     }
 }

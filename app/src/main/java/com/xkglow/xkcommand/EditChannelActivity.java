@@ -32,7 +32,7 @@ public class EditChannelActivity extends Activity {
             @Override
             public void onClick(View v) {
                 AppGlobal.getCurrentDevice().setChannel(channelData);
-                AppGlobal.writeChannelAmpLimit(channelData.id - 1, channelData.maxCurrent);
+                AppGlobal.writeChannelAmpLimit(channelData.id - 1, channelData.maxAmp);
                 finish();
             }
         });
@@ -56,14 +56,14 @@ public class EditChannelActivity extends Activity {
         plus = findViewById(R.id.plus);
         plusImage = findViewById(R.id.plus_image);
         maxCurrentText = findViewById(R.id.current);
-        maxCurrentText.setText(channelData.maxCurrent + "A");
+        maxCurrentText.setText(channelData.maxAmp + "A");
 
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (channelData.maxCurrent > 3) {
-                    channelData.maxCurrent -= 1;
-                    maxCurrentText.setText(channelData.maxCurrent + "A");
+                if (channelData.maxAmp > 3) {
+                    channelData.maxAmp -= 1;
+                    maxCurrentText.setText(channelData.maxAmp + "A");
                     AppGlobal.getCurrentDevice().setChannel(channelData);
                 }
                 setButtons();
@@ -77,9 +77,9 @@ public class EditChannelActivity extends Activity {
                 if (channelData.id > 4) {
                     max = 35;
                 }
-                if (channelData.maxCurrent < max) {
-                    channelData.maxCurrent += 1;
-                    maxCurrentText.setText(channelData.maxCurrent + "A");
+                if (channelData.maxAmp < max) {
+                    channelData.maxAmp += 1;
+                    maxCurrentText.setText(channelData.maxAmp + "A");
                     AppGlobal.getCurrentDevice().setChannel(channelData);
                 }
                 setButtons();
@@ -92,10 +92,10 @@ public class EditChannelActivity extends Activity {
         if (channelData.id > 4) {
             max = 35;
         }
-        if (channelData.maxCurrent == 3) {
+        if (channelData.maxAmp == 3) {
             minusImage.setColorFilter(getResources().getColor(R.color.gray));
             minus.setClickable(false);
-        } else if (channelData.maxCurrent == max) {
+        } else if (channelData.maxAmp == max) {
             plusImage.setColorFilter(getResources().getColor(R.color.gray));
             plus.setClickable(false);
         } else {

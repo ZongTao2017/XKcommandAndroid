@@ -66,28 +66,30 @@ public class ControlButton extends FrameLayout {
     }
 
     public void setError(boolean error) {
-        this.error = error;
-        if (error) {
-            warning.setVisibility(VISIBLE);
-        } else {
-            warning.setVisibility(GONE);
-        }
-        warning.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AlertDialog alertDialog = new AlertDialog.Builder(context, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert)
-                        .setCancelable(true)
-                        .setMessage(AppGlobal.getCurrentDevice().getChannel(1).name + " exceeded max output current and has been shut off. Please turn off the system and check.")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                alertDialog.show();
+        if (this.error != error) {
+            this.error = error;
+            if (error) {
+                warning.setVisibility(VISIBLE);
+            } else {
+                warning.setVisibility(GONE);
             }
-        });
+            warning.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert)
+                            .setCancelable(true)
+                            .setMessage(AppGlobal.getCurrentDevice().getChannel(1).name + " exceeded max output current and has been shut off. Please turn off the system and check.")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+                    alertDialog.show();
+                }
+            });
+        }
     }
 
     public void setIconSize(int iconSize) {
@@ -159,6 +161,26 @@ public class ControlButton extends FrameLayout {
         imageIllumination.setVisibility(View.GONE);
     }
 
+    public void turnOn() {
+        buttonData.isPressed = true;
+        imageIllumination.setVisibility(View.VISIBLE);
+        if (error) {
+            imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonWarningColor);
+        } else {
+            imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonColor);
+        }
+    }
+
+    public void press() {
+        imageUnpressed.setVisibility(View.GONE);
+        imagePressed.setVisibility(View.VISIBLE);
+    }
+
+    public void release() {
+        imageUnpressed.setVisibility(View.VISIBLE);
+        imagePressed.setVisibility(View.GONE);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -168,6 +190,20 @@ public class ControlButton extends FrameLayout {
                 Intent intent = new Intent(getContext(), EditButtonActivity.class);
                 intent.putExtra("button", buttonData);
                 getContext().startActivity(intent);
+                return false;
+            }
+            if (deviceData.deviceSettingsBytes[4] < deviceData.deviceSettingsBytes[8]) {
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert)
+                        .setCancelable(true)
+                        .setMessage("Current volt is lower than auto cutoff volt.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                alertDialog.show();
                 return false;
             }
             imageUnpressed.setVisibility(View.GONE);
@@ -181,6 +217,7 @@ public class ControlButton extends FrameLayout {
                 } else {
                     imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonColor);
                 }
+                AppGlobal.writeButtonOnOff(buttonData.id, true);
             } else {
                 if (!buttonData.isPressed) {
                     buttonData.isPressed = true;
@@ -190,9 +227,11 @@ public class ControlButton extends FrameLayout {
                     } else {
                         imageIllumination.setColorFilter(AppGlobal.getCurrentDevice().getSystemData().buttonColor);
                     }
+                    AppGlobal.writeButtonOnOff(buttonData.id, true);
                 } else {
                     buttonData.isPressed = false;
                     imageIllumination.setVisibility(View.GONE);
+                    AppGlobal.writeButtonOnOff(buttonData.id, false);
                 }
             }
             deviceData.setButton(buttonData);
@@ -205,6 +244,7 @@ public class ControlButton extends FrameLayout {
                 imageIllumination.setVisibility(View.GONE);
                 deviceData.setButton(buttonData);
                 Helper.vibrate(context);
+                AppGlobal.writeButtonOnOff(buttonData.id, false);
             }
         }
         return true;

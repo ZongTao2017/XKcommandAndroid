@@ -21,10 +21,14 @@ import androidx.annotation.NonNull;
 
 import com.xkglow.xkcommand.DevicePairActivity;
 import com.xkglow.xkcommand.Helper.AppGlobal;
+import com.xkglow.xkcommand.Helper.ButtonData;
+import com.xkglow.xkcommand.Helper.ChannelData;
 import com.xkglow.xkcommand.Helper.DeviceData;
 import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +37,7 @@ public class DeviceControlView extends LinearLayout {
     ControlButton button1, button2, button3, button4, button5, button6, button7, button8;
     PowerView power;
     TextView textVolt, textAmp, textTemp;
+    ArrayList<ControlButton> controlButtons;
 
     public DeviceControlView(@NonNull Context context, int w, int h, DeviceData deviceData) {
         super(context);
@@ -74,30 +79,39 @@ public class DeviceControlView extends LinearLayout {
         int realIconSize = (int) (iconSize * ICON_RATIO);
         int resize = (iconSize - realIconSize) / 2;
 
+        controlButtons = new ArrayList<>();
+
         button1 = findViewById(R.id.button_1);
         button1.setIconSize(iconSize);
+        controlButtons.add(button1);
 
         button2 = findViewById(R.id.button_2);
         button2.setIconSize(iconSize);
+        controlButtons.add(button2);
 
         button3 = findViewById(R.id.button_3);
         button3.setIconSize(iconSize);
+        controlButtons.add(button3);
 
         button4 = findViewById(R.id.button_4);
         button4.setIconSize(iconSize);
-        button4.setError(true);
+        controlButtons.add(button4);
 
         button5 = findViewById(R.id.button_5);
         button5.setIconSize(iconSize);
+        controlButtons.add(button5);
 
         button6 = findViewById(R.id.button_6);
         button6.setIconSize(iconSize);
+        controlButtons.add(button6);
 
         button7 = findViewById(R.id.button_7);
         button7.setIconSize(iconSize);
+        controlButtons.add(button7);
 
         button8 = findViewById(R.id.button_8);
         button8.setIconSize(iconSize);
+        controlButtons.add(button8);
 
         textVolt = findViewById(R.id.status_volt);
         textAmp = findViewById(R.id.status_amp);
@@ -259,14 +273,17 @@ public class DeviceControlView extends LinearLayout {
     public void reset() {
         deviceData = AppGlobal.findConnectedDevice(deviceData);
         if (deviceData != null) {
-            button1.setData(deviceData, deviceData.getButton(1));
-            button2.setData(deviceData, deviceData.getButton(2));
-            button3.setData(deviceData, deviceData.getButton(3));
-            button4.setData(deviceData, deviceData.getButton(4));
-            button5.setData(deviceData, deviceData.getButton(5));
-            button6.setData(deviceData, deviceData.getButton(6));
-            button7.setData(deviceData, deviceData.getButton(7));
-            button8.setData(deviceData, deviceData.getButton(8));
+            for (int i = 0; i < 8; i++) {
+                ControlButton controlButton = controlButtons.get(i);
+                controlButton.setData(deviceData, deviceData.getButton(i + 1));
+            }
+            resetPower();
+        }
+    }
+
+    public void resetPower() {
+        deviceData = AppGlobal.findConnectedDevice(deviceData);
+        if (deviceData != null) {
             if (deviceData.isPowerOn()) {
                 power.setPowerClickable(true);
             } else {
@@ -276,14 +293,9 @@ public class DeviceControlView extends LinearLayout {
     }
 
     public void powerOff() {
-        button1.turnOff();
-        button2.turnOff();
-        button3.turnOff();
-        button4.turnOff();
-        button5.turnOff();
-        button6.turnOff();
-        button7.turnOff();
-        button8.turnOff();
+        for (ControlButton controlButton : controlButtons) {
+            controlButton.turnOff();
+        }
     }
 
     public void updateDeviceInfo() {
@@ -292,6 +304,43 @@ public class DeviceControlView extends LinearLayout {
             textVolt.setText(String.format("%.1fV", deviceData.deviceSettingsBytes[4] * 0.2f));
             textAmp.setText(String.format("%.1fA",(deviceData.deviceSettingsBytes[6] + deviceData.deviceSettingsBytes[7] * 0xff) * 0.2f));
             textTemp.setText(deviceData.deviceSettingsBytes[5] - 50 + "\u2103");
+            boolean error = false;
+            if (deviceData.deviceSettingsBytes[4] < deviceData.deviceSettingsBytes[8]) {
+                powerOff();
+                error = true;
+            }
+            boolean[] errorFlags = new boolean[8];
+            Arrays.fill(errorFlags, false);
+            for (int i = 0; i < 8; i++) {
+                ChannelData channelData = deviceData.channels[i];
+                if (channelData.amp == 255) {
+                    for (int j = 0; j < 8; j++) {
+                        ButtonData buttonData = deviceData.buttons[j];
+                        if (buttonData.channels[i]) {
+                            errorFlags[j] = true;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < 8; i++) {
+                ControlButton controlButton = controlButtons.get(i);
+                controlButton.setError(errorFlags[i]);
+
+                ButtonData buttonData = deviceData.buttons[i];
+                if (!error) {
+                    if (Helper.getBit(buttonData.buttonBytes[0], 0) == 1) {
+                        controlButton.turnOn();
+                    } else {
+                        controlButton.turnOff();
+                    }
+                    if (Helper.getBit(buttonData.buttonBytes[0], 1) == 1) {
+                        controlButton.press();
+                    } else {
+                        controlButton.release();
+                    }
+                }
+            }
+            resetPower();
         }
     }
 }

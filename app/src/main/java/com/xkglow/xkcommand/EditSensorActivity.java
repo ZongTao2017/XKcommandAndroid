@@ -37,6 +37,7 @@ public class EditSensorActivity extends Activity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppGlobal.writeSensorData(sensorData.id);
                 finish();
             }
         });
@@ -381,7 +382,7 @@ public class EditSensorActivity extends Activity {
         setChannel(channelImage5, sensorData.channels[4]);
         if (sensorData.channels[4]) {
             flag = true;
-            if (sensorData.sync) {
+            if (!sensorData.sync) {
                 ActionView actionView = new ActionView(EditSensorActivity.this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
@@ -394,7 +395,7 @@ public class EditSensorActivity extends Activity {
         setChannel(channelImage6, sensorData.channels[5]);
         if (sensorData.channels[5]) {
             flag = true;
-            if (sensorData.sync) {
+            if (!sensorData.sync) {
                 ActionView actionView = new ActionView(EditSensorActivity.this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
@@ -407,7 +408,7 @@ public class EditSensorActivity extends Activity {
         setChannel(channelImage7, sensorData.channels[6]);
         if (sensorData.channels[6]) {
             flag = true;
-            if (sensorData.sync) {
+            if (!sensorData.sync) {
                 ActionView actionView = new ActionView(EditSensorActivity.this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);
@@ -420,7 +421,7 @@ public class EditSensorActivity extends Activity {
         setChannel(channelImage8, sensorData.channels[7]);
         if (sensorData.channels[7]) {
             flag = true;
-            if (sensorData.sync) {
+            if (!sensorData.sync) {
                 ActionView actionView = new ActionView(EditSensorActivity.this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.bottomMargin = Helper.dpToPx(EditSensorActivity.this, 30);

@@ -88,6 +88,10 @@ public class AppGlobal {
         return currentDevice;
     }
 
+    public static boolean getCurrentDeviceVoltError() {
+        return currentDevice.deviceSettingsBytes[4] > currentDevice.deviceSettingsBytes[8];
+    }
+
     public static int getCurrentDeviceIndex() {
         ArrayList<DeviceData> connectedDevices = getConnectedDevices();
         for (int i = 0; i < connectedDevices.size(); i++) {
@@ -372,7 +376,32 @@ public class AppGlobal {
     
     public static void writeButtonData(int buttonId) {
         if (currentDevice != null) {
+            currentDevice.buttons[buttonId - 1].buttonBytes[0] = Helper.setBit(currentDevice.buttons[buttonId - 1].buttonBytes[0], 3, 0);
             bluetoothService.writeButton(currentDevice, currentDevice.buttons[buttonId - 1]);
+        }
+    }
+
+    public static void writeButtonOnOff(int buttonId, boolean on) {
+        if (currentDevice != null) {
+            currentDevice.buttons[buttonId - 1].buttonBytes[0] = Helper.setBit(currentDevice.buttons[buttonId - 1].buttonBytes[0], 3, 1);
+            currentDevice.buttons[buttonId - 1].buttonBytes[0] = Helper.setBit(currentDevice.buttons[buttonId - 1].buttonBytes[0], 0, on ? 1 : 0);
+            bluetoothService.writeButton(currentDevice, currentDevice.buttons[buttonId - 1]);
+        }
+    }
+
+    public static void writeButtonAllOff() {
+        if (currentDevice != null) {
+            for (int i = 0; i < 8; i++) {
+                currentDevice.buttons[i].buttonBytes[0] = Helper.setBit(currentDevice.buttons[i].buttonBytes[0], 3, 1);
+                currentDevice.buttons[i].buttonBytes[0] = Helper.setBit(currentDevice.buttons[i].buttonBytes[0], 0, 0);
+                bluetoothService.writeButton(currentDevice, currentDevice.buttons[i]);
+            }
+        }
+    }
+
+    public static void writeSensorData(int sensorId) {
+        if (currentDevice != null) {
+            bluetoothService.writeSensor(currentDevice, currentDevice.sensors[sensorId - 1]);
         }
     }
 }

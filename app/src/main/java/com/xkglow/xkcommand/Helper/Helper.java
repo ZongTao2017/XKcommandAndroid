@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.SoundEffectConstants;
 
 import com.xkglow.xkcommand.R;
@@ -95,11 +96,19 @@ public class Helper {
         }
     }
 
-    public static String print(byte[] bytes) {
+    public static String convertBytesToBitsString(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         sb.append("[ ");
         for (byte b : bytes) {
-            sb.append(String.format("0x%02X ", b));
+            sb.append(getBit(b, 7));
+            sb.append(getBit(b, 6));
+            sb.append(getBit(b, 5));
+            sb.append(getBit(b, 4));
+            sb.append(getBit(b, 3));
+            sb.append(getBit(b, 2));
+            sb.append(getBit(b, 1));
+            sb.append(getBit(b, 0));
+            sb.append(" ");
         }
         sb.append("]");
         return sb.toString();

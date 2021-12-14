@@ -27,6 +27,14 @@
             android:layout_gravity="center"
             android:src="@drawable/xkglow_logo" />
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="v1"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="90dp" />
+        <TextView
             android:id="@+id/controller_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

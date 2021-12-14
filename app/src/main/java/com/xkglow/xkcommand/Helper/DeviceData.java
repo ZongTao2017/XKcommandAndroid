@@ -1,5 +1,7 @@
 package com.xkglow.xkcommand.Helper;
 
+import com.xkglow.xkcommand.bluetooth.BluetoothService;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -13,7 +15,6 @@ public class DeviceData implements Serializable {
     public SensorData[] sensors;
     public ChannelData[] channels;
     public SystemData systemData;
-    public boolean powerOn;
 
     public byte[] deviceSettingsBytes;
     public byte[] channelBytes;
@@ -63,6 +64,30 @@ public class DeviceData implements Serializable {
                 sensorData1.function = sensorData.function;
                 sensorData1.brightness = sensorData.brightness;
                 sensorData1.name = sensorData.name;
+                sensorData1.sync = sensorData.sync;
+                if (sensorData1.sync) {
+                    int action = 0;
+                    for (int i = 0; i < sensorData1.channels.length; i++) {
+                        if (sensorData1.channels[i]) {
+                            if (action == 0) {
+                                action = sensorData1.actions[i];
+                            } else {
+                                sensorData1.actions[i] = action;
+                            }
+                        }
+                    }
+                }
+                sensorData1.sensorBytes[0] = Helper.setBit(sensorData1.sensorBytes[0], 7, 1);
+                sensorData1.sensorBytes[0] = Helper.setBit(sensorData1.sensorBytes[0], 6, 1 - sensorData1.function);
+                sensorData1.sensorBytes[0] = Helper.setBit(sensorData1.sensorBytes[0], 5, 1);
+                sensorData1.sensorBytes[0] = Helper.setBit(sensorData1.sensorBytes[0], 4, 1);
+                for (int i = 0; i < sensorData1.channels.length; i++) {
+                    if (!sensorData1.channels[i]) {
+                        sensorData1.sensorBytes[i + 1] = (byte) 0;
+                    } else {
+                        sensorData1.sensorBytes[i + 1] = (byte) sensorData1.actions[i];
+                    }
+                }
             }
         }
         AppGlobal.saveInfo();
@@ -100,7 +125,6 @@ public class DeviceData implements Serializable {
     }
 
     public void setButton(ButtonData buttonData) {
-        powerOn = false;
         for (ButtonData buttonData1 : buttons) {
             if (buttonData.id == buttonData1.id) {
                 buttonData1.type = buttonData.type;
@@ -137,9 +161,6 @@ public class DeviceData implements Serializable {
                     }
                 }
             }
-            if (buttonData1.isPressed) {
-                powerOn = true;
-            }
         }
         AppGlobal.saveInfo();
     }
@@ -156,14 +177,6 @@ public class DeviceData implements Serializable {
     public void setWarningButtonColor(int color) {
         systemData.buttonWarningColor = color;
         AppGlobal.saveInfo();
-    }
-
-    public void setPowerOn(boolean isPowerOn) {
-        powerOn = isPowerOn;
-    }
-
-    public boolean isPowerOn() {
-        return powerOn;
     }
 
     public ChannelData[] getChannels() {
@@ -183,7 +196,7 @@ public class DeviceData implements Serializable {
         for (ChannelData channelData1 : channels) {
             if (channelData1.id == channelData.id) {
                 channelData1.name = channelData.name;
-                channelData1.maxCurrent = channelData.maxCurrent;
+                channelData1.maxAmp = channelData.maxAmp;
             }
         }
         AppGlobal.saveInfo();
@@ -210,5 +223,14 @@ public class DeviceData implements Serializable {
         int avg = total / rssiList.size();
         signalPercent = Math.min(100, 100 - ((Math.abs(avg) - 70) * 100 / 45));
         isAddingRssi = false;
+    }
+
+    public boolean isPowerOn() {
+        for (ButtonData buttonData : buttons) {
+            if (buttonData.isPressed && !buttonData.momentary) {
+                return true;
+            }
+        }
+        return false;
     }
 }
