@@ -89,7 +89,12 @@ public class ControlFragment extends Fragment {
     public void onEvent(MessageEvent event) {
         switch (event.type) {
             case ADD_DEVICE:
-                setDevices();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setDevices();
+                    }
+                });
                 break;
             case CHANGE_DEVICE:
                 int index1 = (int) event.data;

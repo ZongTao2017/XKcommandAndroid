@@ -1,7 +1,5 @@
 package com.xkglow.xkcommand.Helper;
 
-import com.xkglow.xkcommand.bluetooth.BluetoothService;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -54,6 +52,8 @@ public class DeviceData implements Serializable {
 
         deviceSettingsBytes = new byte[20];
         channelBytes = new byte[16];
+
+        deviceState = DeviceState.OFFLINE;
     }
 
     public void setSensor(SensorData sensorData) {
@@ -90,7 +90,7 @@ public class DeviceData implements Serializable {
                 }
             }
         }
-        AppGlobal.saveInfo();
+        AppGlobal.savPairedDevices();
     }
 
     public SensorData[] getSensors() {
@@ -162,7 +162,7 @@ public class DeviceData implements Serializable {
                 }
             }
         }
-        AppGlobal.saveInfo();
+        AppGlobal.savPairedDevices();
     }
 
     public SystemData getSystemData() {
@@ -171,12 +171,12 @@ public class DeviceData implements Serializable {
 
     public void setButtonColor(int color) {
         systemData.buttonColor = color;
-        AppGlobal.saveInfo();
+        AppGlobal.savPairedDevices();
     }
 
     public void setWarningButtonColor(int color) {
         systemData.buttonWarningColor = color;
-        AppGlobal.saveInfo();
+        AppGlobal.savPairedDevices();
     }
 
     public ChannelData[] getChannels() {
@@ -199,12 +199,12 @@ public class DeviceData implements Serializable {
                 channelData1.maxAmp = channelData.maxAmp;
             }
         }
-        AppGlobal.saveInfo();
+        AppGlobal.savPairedDevices();
     }
 
     public void setSystem(SystemData systemData1) {
         systemData = systemData1;
-        AppGlobal.saveInfo();
+        AppGlobal.savPairedDevices();
     }
 
     public void addRssi(int rssi) {

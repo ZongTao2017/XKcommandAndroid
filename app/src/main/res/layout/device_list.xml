@@ -22,15 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <com.xkglow.xkcommand.View.PairedDeviceView
-                android:id="@+id/device_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <com.xkglow.xkcommand.View.PairedDeviceView
-                android:id="@+id/device_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"/>
+
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
@@ -48,10 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <com.xkglow.xkcommand.View.UnpairedDeviceView
-                android:id="@+id/device_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

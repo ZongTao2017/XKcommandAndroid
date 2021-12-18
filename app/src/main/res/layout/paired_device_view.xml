@@ -43,12 +43,13 @@
             android:textSize="12sp"
             android:text="8-button control pannel" />
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/device_state"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginEnd="30dp"
+            android:gravity="center"
             android:textColor="@color/gray"
             android:textSize="12sp"
-            android:text="CONNECTED"/>
+            android:text="CONNECTED"
+            />
     </LinearLayout>
 </LinearLayout>

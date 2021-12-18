@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.MessageEvent;
+import com.xkglow.xkcommand.View.DeviceControlView;
 import com.xkglow.xkcommand.View.DeviceList;
 import com.xkglow.xkcommand.bluetooth.BluetoothService;
 
@@ -38,6 +40,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
@@ -48,6 +52,8 @@ public class MainActivity extends FragmentActivity {
     private ImageView mLogo;
     private DeviceList mDeviceList;
     private boolean alreadyStarted = false;
+    private UpdateDeviceTimerTask mTimerTask;
+    private Timer mTimer;
 
     public static final String CONTROL_TAB = "CONTROL_TAB";
     public static final String CUSTOMIZE_TAB = "CUSTOMIZE_TAB";
@@ -117,11 +123,13 @@ public class MainActivity extends FragmentActivity {
 //        if (AppGlobal.hasNoPairedDevices()) {
 //            startActivity(new Intent(MainActivity.this, DevicePairActivity.class));
 //        }
+        startTimer();
     }
 
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
+        stopTimer();
         super.onDestroy();
     }
 
@@ -316,4 +324,32 @@ public class MainActivity extends FragmentActivity {
             }
         }
     };
+
+    private void startTimer() {
+        mTimer = new Timer();
+        mTimerTask = new UpdateDeviceTimerTask();
+        mTimer.schedule(mTimerTask, 0, 500);
+    }
+
+    private void stopTimer() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+        }
+    }
+
+    private class UpdateDeviceTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mDeviceList != null)
+                        mDeviceList.update();
+                }
+            });
+        }
+    }
 }

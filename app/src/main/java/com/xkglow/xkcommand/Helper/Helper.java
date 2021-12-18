@@ -31,7 +31,6 @@ public class Helper {
     public static final int CELL_NUMBER_IN_ROW = 4;
     public static final int CELL_NUMBER_IN_ROW_PAD = 8;
 
-
     public static int dpToPx(Context context, float dp) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         return (int)(dp * displayMetrics.density);
@@ -94,6 +93,16 @@ public class Helper {
         }else{
             return false;
         }
+    }
+
+    public String convertBytesToStr(byte[] b) {
+        StringBuffer result = new StringBuffer();
+        for (byte value : b) {
+            String str1 = Integer.toString(value >> 4 & 0x0f, 16);
+            String str2 = Integer.toString(value & 0x0f, 16);
+            result.append(str1 + str2 + " ");
+        }
+        return result.toString().substring(0, result.length() - 1);
     }
 
     public static String convertBytesToBitsString(byte[] bytes) {

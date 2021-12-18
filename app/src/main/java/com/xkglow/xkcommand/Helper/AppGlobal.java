@@ -23,6 +23,7 @@ public class AppGlobal {
     private static Context context;
     public static BluetoothService bluetoothService;
     private static DeviceData currentDevice;
+    private static DeviceData currentPairingDevice;
     private static LinkedHashMap<String, BluetoothGatt> bluetoothGattMap;
     private static LinkedHashMap<String, DeviceData> scanDeviceMap;
     private static HashMap<String, DeviceData> pairedDeviceMap;
@@ -37,11 +38,11 @@ public class AppGlobal {
 
     public static void init(Context contextGlobal) {
         context = contextGlobal;
-        loadPairedDevices();
         loaderId = 1;
         bluetoothGattMap = new LinkedHashMap<>();
         scanDeviceMap = new LinkedHashMap<>();
         pairedDeviceMap = new HashMap<>();
+        loadPairedDevices();
     }
 
     public static int getIconResourceId(int index) {
@@ -64,6 +65,24 @@ public class AppGlobal {
                 return R.drawable.button_icon8;
         }
         return R.drawable.button_icon1;
+    }
+
+    public static LinkedHashMap<String, DeviceData> getScanDeviceMap() {
+        return scanDeviceMap;
+    }
+
+    public static HashMap<String, DeviceData> getPairedDeviceMap() {
+        return pairedDeviceMap;
+    }
+
+    public static HashMap<String, DeviceData> getUnpairedDeviceMap() {
+        HashMap<String, DeviceData> unpairedDeviceMap = new HashMap<>();
+        for (String address : scanDeviceMap.keySet()) {
+            if (!pairedDeviceMap.containsKey(address)) {
+                unpairedDeviceMap.put(address, scanDeviceMap.get(address));
+            }
+        }
+        return unpairedDeviceMap;
     }
 
     public static ArrayList<DeviceData> getConnectedDevices() {
@@ -104,23 +123,40 @@ public class AppGlobal {
     }
 
     public static DeviceData getCurrentPairingDevice() {
+        return currentPairingDevice;
+    }
+
+    public static DeviceData getFirstScanUnpairedDevice() {
+        for (String address : scanDeviceMap.keySet()) {
+            if (!pairedDeviceMap.containsKey(address)) {
+                return scanDeviceMap.get(address);
+            }
+        }
         return null;
     }
 
     public static void setCurrentDevice(int index) {
         ArrayList<DeviceData> connectedDevices = getConnectedDevices();
         if (index >= 0 && index <= connectedDevices.size() - 1) {
-            currentDevice = connectedDevices.get(index);
+            DeviceData deviceData = connectedDevices.get(index);
+            if (currentDevice != null && !currentDevice.equals(deviceData)) {
+                disconnect(currentDevice, false);
+            }
+            currentDevice = deviceData;
             EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE, index));
         }
     }
 
     public static void setCurrentDevice(DeviceData deviceData) {
-        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
-        for (int i = 0; i < connectedDevices.size(); i++) {
-            DeviceData deviceData1 = connectedDevices.get(i);
-            if (deviceData.address.equals(deviceData1.address)) {
-                setCurrentDevice(i);
+        if (deviceData == null) {
+            setCurrentDevice(-1);
+        } else {
+            ArrayList<DeviceData> connectedDevices = getConnectedDevices();
+            for (int i = 0; i < connectedDevices.size(); i++) {
+                DeviceData deviceData1 = connectedDevices.get(i);
+                if (deviceData.address.equals(deviceData1.address)) {
+                    setCurrentDevice(i);
+                }
             }
         }
     }
@@ -181,6 +217,10 @@ public class AppGlobal {
         return null;
     }
 
+    public static boolean hasDeviceGatt(String address) {
+        return bluetoothGattMap.containsKey(address);
+    }
+
     public static void connect(DeviceData deviceData) {
         if (bluetoothService != null && deviceData != null &&
                 deviceData.deviceState != DeviceState.CONNECTING &&
@@ -200,7 +240,10 @@ public class AppGlobal {
     }
 
     public static void setCurrentPairingDevice(DeviceData deviceData) {
-        AppGlobal.addPairDevice(deviceData);
+        currentPairingDevice = deviceData;
+        if (currentPairingDevice != null) {
+            AppGlobal.addPairDevice(currentPairingDevice);
+        }
         setCurrentDevice(deviceData);
         connect(deviceData);
     }
@@ -208,14 +251,14 @@ public class AppGlobal {
     public static void addPairDevice(DeviceData deviceData) {
         if (deviceData != null && !pairedDeviceMap.containsKey(deviceData.address)) {
             pairedDeviceMap.put(deviceData.address, deviceData);
-            saveInfo();
+            savPairedDevices();
         }
     }
 
     public static void removePairDevice(String address) {
         if (address != null && pairedDeviceMap.containsKey(address)) {
             pairedDeviceMap.remove(address);
-            saveInfo();
+            savPairedDevices();
         }
     }
 
@@ -223,7 +266,7 @@ public class AppGlobal {
         return pairedDeviceMap.size() == 0;
     }
 
-    public static void saveInfo() {
+    public static void savPairedDevices() {
         try {
             if (isSavingPairedDevices) {
                 Log.e("ERROR", "not saving paired devices");

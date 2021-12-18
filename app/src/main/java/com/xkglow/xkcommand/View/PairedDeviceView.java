@@ -7,31 +7,51 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.xkglow.xkcommand.Helper.DeviceState;
 import com.xkglow.xkcommand.R;
 
 public class PairedDeviceView extends LinearLayout {
     LinearLayout topLayout, bottomLayout;
-    TextView deviceName;
+    TextView deviceNameText, deviceStateText;
+    DeviceState deviceState;
+    boolean isCurrent;
 
-    public PairedDeviceView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+    public PairedDeviceView(Context context) {
+        super(context);
         inflate(getContext(), R.layout.paired_device_view, this);
         topLayout = findViewById(R.id.top_layout);
         bottomLayout = findViewById(R.id.bottom_layout);
-        deviceName = findViewById(R.id.device_name);
+        deviceNameText = findViewById(R.id.device_name);
+        deviceStateText = findViewById(R.id.device_state);
     }
 
     public void setCurrent(boolean flag) {
-        if (flag) {
-            topLayout.setBackgroundColor(getResources().getColor(R.color.blue_1));
-            bottomLayout.setBackgroundColor(getResources().getColor(R.color.blue_2));
-        } else {
-            topLayout.setBackgroundColor(getResources().getColor(R.color.blue_3));
-            bottomLayout.setBackgroundColor(getResources().getColor(R.color.blue_4));
-        }
+        isCurrent = flag;
+        update();
     }
 
     public void setDeviceName(String name) {
-        deviceName.setText(name);
+        deviceNameText.setText(name);
+    }
+
+    public void setDeviceState(DeviceState state) {
+        deviceState = state;
+        deviceStateText.setText(state.name());
+        update();
+    }
+
+    private void update() {
+//        if (deviceState == DeviceState.OFFLINE) {
+//            topLayout.setBackgroundColor(getResources().getColor(R.color.gray_2));
+//            bottomLayout.setBackgroundColor(getResources().getColor(R.color.gray_1));
+//        } else {
+            if (isCurrent) {
+                topLayout.setBackgroundColor(getResources().getColor(R.color.blue_1));
+                bottomLayout.setBackgroundColor(getResources().getColor(R.color.blue_2));
+            } else {
+                topLayout.setBackgroundColor(getResources().getColor(R.color.blue_3));
+                bottomLayout.setBackgroundColor(getResources().getColor(R.color.blue_4));
+            }
+//        }
     }
 }

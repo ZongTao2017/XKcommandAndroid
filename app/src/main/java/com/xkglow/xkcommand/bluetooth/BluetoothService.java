@@ -66,7 +66,7 @@ public class BluetoothService extends Service {
     public static final String SENSOR_2_STATUS = "02A8AF3E-C019-4735-BACE-FA8E9F74803E";
     public static final String SENSOR_3_STATUS = "02A8AF3E-C01A-4735-BACE-FA8E9F74803E";
 
-    public static final String TAG = "BluetoothService";
+    public static final String TAG = "BleService";
 
     public class LocalBinder extends Binder {
         public BluetoothService getService() {
@@ -189,9 +189,7 @@ public class BluetoothService extends Service {
                             if (!mScanDeviceAddressList.contains(address)) {
                                 Log.d(TAG, "scan device: " + device.getName());
                                 mScanDeviceAddressList.add(address);
-                                DeviceData deviceData = AppGlobal.updateScanDevice(address, name, rssi);
-                                AppGlobal.setCurrentPairingDevice(deviceData);
-                                EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.ADD_DEVICE));
+                                AppGlobal.updateScanDevice(address, name, rssi);
                             }
                         }
                     }
@@ -248,6 +246,7 @@ public class BluetoothService extends Service {
             }
             else if (currentDevice.deviceState == DeviceState.ONLINE) {
                 AppGlobal.connect(currentDevice);
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.ADD_DEVICE));
             }
             for (String address: AppGlobal.getGattMap().keySet()) {
                 BluetoothGatt gatt = AppGlobal.getBluetoothGatt(address);
@@ -380,6 +379,7 @@ public class BluetoothService extends Service {
                     DeviceData deviceData = AppGlobal.getConnectedDevice(address);
                     if (deviceData != null) {
                         if (characteristic.getUuid().toString().equalsIgnoreCase(DEVICE_SETTING)) {
+                            deviceData.deviceState = DeviceState.READY;
                             deviceData.deviceSettingsBytes = data;
                             Log.d(TAG, "read device info: " + Helper.convertBytesToBitsString(data));
                         }
@@ -543,16 +543,6 @@ public class BluetoothService extends Service {
             sendNext();
         }
     };
-
-//    public String convertBytesToStr(byte[] b) {
-//        StringBuffer result = new StringBuffer();
-//        for(int i = 0; i < b.length; i++) {
-//            String str1 = Integer.toString(b[i] >> 4 & 0x0f, 16);
-//            String str2 = Integer.toString(b[i] & 0x0f, 16);
-//            result.append(str1 + str2 + " ");
-//        }
-//        return result.toString().substring(0, result.length() - 1);
-//    }
 
     private void readDeviceInfo(String address) {
         DeviceData deviceData = AppGlobal.getDevice(address);

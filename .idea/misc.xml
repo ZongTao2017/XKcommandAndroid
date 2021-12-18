@@ -38,12 +38,14 @@
         <entry key="../xkcommand/app/src/main/res/layout/device_view.xml" value="0.375" />
         <entry key="../xkcommand/app/src/main/res/layout/fragment_control.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/fragment_customize.xml" value="0.2164855072463768" />
+        <entry key="../xkcommand/app/src/main/res/layout/paired_device_view.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/power_view.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/recycler_view_item.xml" value="0.2318840579710145" />
         <entry key="../xkcommand/app/src/main/res/layout/status_bar.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/status_bar_vertical.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/test.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/unpaired_device_view.xml" value="0.375" />
+        <entry key="../xkcommand/app/src/main/res/menu/device_pop_up_menu.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/drawable/ic_menu_circle_selector.xml" value="0.217" />
         <entry key="app/src/main/res/drawable/ic_menu_color_selector.xml" value="0.147" />
         <entry key="app/src/main/res/drawable/ic_menu_control_selector.xml" value="0.217" />

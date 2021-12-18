@@ -18,7 +18,10 @@ import androidx.core.content.ContextCompat;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.DeviceData;
+import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.View.DevicePairView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +60,8 @@ public class DevicePairActivity extends Activity {
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLawsAndUsageDialog();
+                EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.ADD_DEVICE));
+                finish();
             }
         });
         mCancelButton = findViewById(R.id.cancel);
@@ -101,10 +105,6 @@ public class DevicePairActivity extends Activity {
                 }
             }
         );
-    }
-
-    private void showLawsAndUsageDialog() {
-
     }
 
     private void startTimers() {
@@ -155,6 +155,12 @@ public class DevicePairActivity extends Activity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    if (mCurrentPairingDevice == null) {
+                        mCurrentPairingDevice = AppGlobal.getFirstScanUnpairedDevice();
+                        if (mCurrentPairingDevice != null) {
+                            AppGlobal.setCurrentPairingDevice(mCurrentPairingDevice);
+                        }
+                    }
                     mDevicePairView.animateCircle();
                 }
             });
@@ -165,7 +171,20 @@ public class DevicePairActivity extends Activity {
         @Override
         public void run() {
             if (mCurrentPairingDevice != null) {
-
+                Log.d("Pairing Device", Integer.toString(mCurrentPairingDevice.signalPercent));
+                if (AppGlobal.hasDeviceGatt(mCurrentPairingDevice.address) &&
+                        mCurrentPairingDevice.signalPercent == 100) {
+                    mFullCount++;
+                    mDevicePairView.setProgress(100, mFullCount);
+                    if (mFullCount >= 100) {
+                        Log.d("Pairing Device", "Done");
+                        stopTimers();
+                        donePair();
+                    }
+                } else {
+                    mFullCount = 0;
+                    mDevicePairView.setProgress(mCurrentPairingDevice.signalPercent, 0);
+                }
             } else {
                 Log.e("Pairing Device", "no device");
                 mFullCount = 0;
