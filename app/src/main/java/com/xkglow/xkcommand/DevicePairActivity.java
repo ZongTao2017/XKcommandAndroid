@@ -60,7 +60,6 @@ public class DevicePairActivity extends Activity {
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.ADD_DEVICE));
                 finish();
             }
         });

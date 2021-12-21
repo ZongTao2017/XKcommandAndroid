@@ -14,7 +14,8 @@ public class DeviceData implements Serializable {
     public ChannelData[] channels;
     public SystemData systemData;
 
-    public byte[] deviceSettingsBytes;
+    public byte[] deviceInfoBytes;
+    public byte[] userSettingsBytes;
     public byte[] channelBytes;
 
     public DeviceData(String address, String name) {
@@ -50,7 +51,8 @@ public class DeviceData implements Serializable {
 
         rssiList = new ArrayList<>();
 
-        deviceSettingsBytes = new byte[20];
+        deviceInfoBytes = new byte[20];
+        userSettingsBytes = new byte[20];
         channelBytes = new byte[16];
 
         deviceState = DeviceState.OFFLINE;
@@ -90,7 +92,7 @@ public class DeviceData implements Serializable {
                 }
             }
         }
-        AppGlobal.savPairedDevices();
+        AppGlobal.savePairedDevices();
     }
 
     public SensorData[] getSensors() {
@@ -162,7 +164,7 @@ public class DeviceData implements Serializable {
                 }
             }
         }
-        AppGlobal.savPairedDevices();
+        AppGlobal.savePairedDevices();
     }
 
     public SystemData getSystemData() {
@@ -171,12 +173,12 @@ public class DeviceData implements Serializable {
 
     public void setButtonColor(int color) {
         systemData.buttonColor = color;
-        AppGlobal.savPairedDevices();
+        AppGlobal.savePairedDevices();
     }
 
     public void setWarningButtonColor(int color) {
         systemData.buttonWarningColor = color;
-        AppGlobal.savPairedDevices();
+        AppGlobal.savePairedDevices();
     }
 
     public ChannelData[] getChannels() {
@@ -199,12 +201,12 @@ public class DeviceData implements Serializable {
                 channelData1.maxAmp = channelData.maxAmp;
             }
         }
-        AppGlobal.savPairedDevices();
+        AppGlobal.savePairedDevices();
     }
 
     public void setSystem(SystemData systemData1) {
         systemData = systemData1;
-        AppGlobal.savPairedDevices();
+        AppGlobal.savePairedDevices();
     }
 
     public void addRssi(int rssi) {

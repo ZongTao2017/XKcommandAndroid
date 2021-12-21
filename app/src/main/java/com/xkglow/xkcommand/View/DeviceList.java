@@ -172,7 +172,10 @@ public class DeviceList extends ScrollView {
     }
 
     private void unpairDevice(DeviceData deviceData) {
-        AppGlobal.setCurrentDevice(null);
         AppGlobal.disconnect(deviceData, true);
+        DeviceData deviceData1 = AppGlobal.getFirstScanPairedDevice();
+        if (deviceData1 != null) {
+            AppGlobal.setCurrentDevice(deviceData1);
+        }
     }
 }

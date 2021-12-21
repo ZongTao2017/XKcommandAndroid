@@ -85,36 +85,14 @@ public class AppGlobal {
         return unpairedDeviceMap;
     }
 
-    public static ArrayList<DeviceData> getConnectedDevices() {
-        HashMap<String, DeviceData> deviceMap = new HashMap<>();
-        for (String address : scanDeviceMap.keySet()) {
-            if (pairedDeviceMap.containsKey(address)) {
-                deviceMap.put(address, scanDeviceMap.get(address));
-            }
-        }
-        for (DeviceData deviceData : pairedDeviceMap.values()) {
-            if (deviceData.deviceState == DeviceState.CONNECTING ||
-                    deviceData.deviceState == DeviceState.CONNECTED ||
-                    deviceData.deviceState == DeviceState.INITIALIZING ||
-                    deviceData.deviceState == DeviceState.READY) {
-                deviceMap.put(deviceData.address, deviceData);
-            }
-        }
-        return new ArrayList<DeviceData>(deviceMap.values());
-    }
-
     public static DeviceData getCurrentDevice() {
         return currentDevice;
     }
 
-    public static boolean getCurrentDeviceVoltError() {
-        return currentDevice.deviceSettingsBytes[4] > currentDevice.deviceSettingsBytes[8];
-    }
-
     public static int getCurrentDeviceIndex() {
-        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
-        for (int i = 0; i < connectedDevices.size(); i++) {
-            DeviceData deviceData1 = connectedDevices.get(i);
+        ArrayList<DeviceData> pairedDevices = new ArrayList<>(getPairedDeviceMap().values());
+        for (int i = 0; i < pairedDevices.size(); i++) {
+            DeviceData deviceData1 = pairedDevices.get(i);
             if (currentDevice.address.equals(deviceData1.address)) {
                 return i;
             }
@@ -136,51 +114,41 @@ public class AppGlobal {
     }
 
     public static void setCurrentDevice(int index) {
-        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
-        if (index >= 0 && index <= connectedDevices.size() - 1) {
-            DeviceData deviceData = connectedDevices.get(index);
-            if (currentDevice != null && !currentDevice.equals(deviceData)) {
-                disconnect(currentDevice, false);
-            }
-            currentDevice = deviceData;
-            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE, index));
+        ArrayList<DeviceData> pairedDevices = new ArrayList<>(getPairedDeviceMap().values());
+        if (index >= 0 && index <= pairedDevices.size() - 1) {
+            DeviceData deviceData = pairedDevices.get(index);
+            setCurrentDevice(deviceData);
         }
     }
 
     public static void setCurrentDevice(DeviceData deviceData) {
-        if (deviceData == null) {
-            setCurrentDevice(-1);
-        } else {
-            ArrayList<DeviceData> connectedDevices = getConnectedDevices();
-            for (int i = 0; i < connectedDevices.size(); i++) {
-                DeviceData deviceData1 = connectedDevices.get(i);
+        if (currentDevice != null && !currentDevice.equals(deviceData)) {
+            disconnect(currentDevice, false);
+        }
+        currentDevice = deviceData;
+        if (deviceData != null) {
+            ArrayList<DeviceData> pairedDevices = new ArrayList<>(getPairedDeviceMap().values());
+            for (int i = 0; i < pairedDevices.size(); i++) {
+                DeviceData deviceData1 = pairedDevices.get(i);
                 if (deviceData.address.equals(deviceData1.address)) {
-                    setCurrentDevice(i);
+                    EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE, i));
+                    return;
                 }
             }
         }
     }
 
-    public static DeviceData getConnectedDevice(int index) {
-        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
-        if (index >= 0 && index <= connectedDevices.size() - 1) {
-            return connectedDevices.get(index);
-        }
-        return null;
-    }
-
-    public static DeviceData findConnectedDevice(DeviceData deviceData) {
-        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
-        for (DeviceData deviceData1 : connectedDevices) {
+    public static DeviceData findDevice(DeviceData deviceData) {
+        for (DeviceData deviceData1 : getPairedDeviceMap().values()) {
             if (deviceData.address.equals(deviceData1.address)) return deviceData1;
         }
         return null;
     }
 
-    public static int findConnectedDeviceIndex(DeviceData deviceData) {
-        ArrayList<DeviceData> connectedDevices = getConnectedDevices();
-        for (int i = 0; i < connectedDevices.size(); i++) {
-            DeviceData deviceData1 = connectedDevices.get(i);
+    public static int findDeviceIndex(DeviceData deviceData) {
+        ArrayList<DeviceData> pairedDevices = new ArrayList<>(getPairedDeviceMap().values());
+        for (int i = 0; i < pairedDevices.size(); i++) {
+            DeviceData deviceData1 = pairedDevices.get(i);
             if (deviceData.address.equals(deviceData1.address)) {
                 return i;
             }
@@ -251,22 +219,17 @@ public class AppGlobal {
     public static void addPairDevice(DeviceData deviceData) {
         if (deviceData != null && !pairedDeviceMap.containsKey(deviceData.address)) {
             pairedDeviceMap.put(deviceData.address, deviceData);
-            savPairedDevices();
+            savePairedDevices();
         }
     }
 
     public static void removePairDevice(String address) {
         if (address != null && pairedDeviceMap.containsKey(address)) {
             pairedDeviceMap.remove(address);
-            savPairedDevices();
+            savePairedDevices();
         }
     }
-
-    public static boolean hasNoPairedDevices() {
-        return pairedDeviceMap.size() == 0;
-    }
-
-    public static void savPairedDevices() {
+    public static void savePairedDevices() {
         try {
             if (isSavingPairedDevices) {
                 Log.e("ERROR", "not saving paired devices");
@@ -382,7 +345,6 @@ public class AppGlobal {
             DeviceData deviceData = deviceMap.get(address);
             deviceData.deviceState = DeviceState.OFFLINE;
         }
-        setCurrentDevice(null);
         bluetoothGattMap.clear();
         scanDeviceMap.clear();
     }
@@ -400,9 +362,9 @@ public class AppGlobal {
     public static void writeDeviceCutoffInput(float volt) {
         if (currentDevice != null) {
             byte voltByte = (byte) ((volt + 0.001f) / 0.2f);;
-            if (currentDevice.deviceSettingsBytes[8] != voltByte) {
-                currentDevice.deviceSettingsBytes[8] = voltByte;
-                bluetoothService.writeDeviceSettings(currentDevice);
+            if (currentDevice.userSettingsBytes[0] != voltByte) {
+                currentDevice.userSettingsBytes[0] = voltByte;
+                bluetoothService.writeUserSettings(currentDevice);
             }
         }
     }

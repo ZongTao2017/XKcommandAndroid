@@ -87,7 +87,7 @@ public class EditSystemActivity extends Activity {
         plusImage2 = findViewById(R.id.plus_image_2);
 
         cutoffInputText = findViewById(R.id.volt);
-        cutoffInput = AppGlobal.getCurrentDevice().deviceSettingsBytes[8] * 0.2f;
+        cutoffInput = AppGlobal.getCurrentDevice().userSettingsBytes[0] * 0.2f;
         if (cutoffInput < 10.8f || cutoffInput > 13.2f) {
             cutoffInput = 12f;
         }

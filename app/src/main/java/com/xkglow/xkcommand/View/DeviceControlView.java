@@ -19,24 +19,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.xkglow.xkcommand.DevicePairActivity;
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.ButtonData;
 import com.xkglow.xkcommand.Helper.ChannelData;
 import com.xkglow.xkcommand.Helper.DeviceData;
+import com.xkglow.xkcommand.Helper.DeviceState;
 import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class DeviceControlView extends LinearLayout {
     DeviceData deviceData;
     ControlButton button1, button2, button3, button4, button5, button6, button7, button8;
     PowerView power;
-    TextView textVolt, textAmp, textTemp;
+    TextView textNotConnected, textVolt, textAmp, textTemp;
     ArrayList<ControlButton> controlButtons;
 
     public DeviceControlView(@NonNull Context context, int w, int h, DeviceData deviceData) {
@@ -113,6 +111,7 @@ public class DeviceControlView extends LinearLayout {
         button8.setIconSize(iconSize);
         controlButtons.add(button8);
 
+        textNotConnected = findViewById(R.id.not_connected);
         textVolt = findViewById(R.id.status_volt);
         textAmp = findViewById(R.id.status_amp);
         textTemp = findViewById(R.id.status_temp);
@@ -268,10 +267,11 @@ public class DeviceControlView extends LinearLayout {
         }
 
         reset();
+        checkConnection();
     }
 
     public void reset() {
-        deviceData = AppGlobal.findConnectedDevice(deviceData);
+        deviceData = AppGlobal.findDevice(deviceData);
         if (deviceData != null) {
             for (int i = 0; i < 8; i++) {
                 ControlButton controlButton = controlButtons.get(i);
@@ -281,8 +281,20 @@ public class DeviceControlView extends LinearLayout {
         }
     }
 
+    public void checkConnection() {
+        deviceData = AppGlobal.findDevice(deviceData);
+        if (deviceData != null) {
+            if (deviceData.deviceState == DeviceState.DISCONNECTED ||
+                    deviceData.deviceState == DeviceState.OFFLINE) {
+                textNotConnected.setVisibility(VISIBLE);
+            } else {
+                textNotConnected.setVisibility(GONE);
+            }
+        }
+    }
+
     public void resetPower() {
-        deviceData = AppGlobal.findConnectedDevice(deviceData);
+        deviceData = AppGlobal.findDevice(deviceData);
         if (deviceData != null) {
             if (deviceData.isPowerOn()) {
                 power.setPowerClickable(true);
@@ -299,13 +311,13 @@ public class DeviceControlView extends LinearLayout {
     }
 
     public void updateDeviceInfo() {
-        deviceData = AppGlobal.findConnectedDevice(deviceData);
+        deviceData = AppGlobal.findDevice(deviceData);
         if (deviceData != null) {
-            textVolt.setText(String.format("%.1fV", deviceData.deviceSettingsBytes[4] * 0.2f));
-            textAmp.setText(String.format("%.1fA",(deviceData.deviceSettingsBytes[6] + deviceData.deviceSettingsBytes[7] * 0xff) * 0.2f));
-            textTemp.setText(deviceData.deviceSettingsBytes[5] - 50 + "\u2103");
+            textVolt.setText(String.format("%.1fV", deviceData.deviceInfoBytes[4] * 0.2f));
+            textAmp.setText(String.format("%.1fA",(deviceData.deviceInfoBytes[6] + deviceData.deviceInfoBytes[7] * 0xff) * 0.2f));
+            textTemp.setText(deviceData.deviceInfoBytes[5] - 50 + "\u2103");
             boolean error = false;
-            if (deviceData.deviceSettingsBytes[4] < deviceData.deviceSettingsBytes[8]) {
+            if (deviceData.deviceInfoBytes[4] < deviceData.userSettingsBytes[0]) {
                 powerOff();
                 error = true;
             }
@@ -341,6 +353,7 @@ public class DeviceControlView extends LinearLayout {
                 }
             }
             resetPower();
+            checkConnection();
         }
     }
 }

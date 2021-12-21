@@ -192,7 +192,7 @@ public class ControlButton extends FrameLayout {
                 getContext().startActivity(intent);
                 return false;
             }
-            if (deviceData.deviceSettingsBytes[4] < deviceData.deviceSettingsBytes[8]) {
+            if (deviceData.deviceInfoBytes[4] < deviceData.userSettingsBytes[0]) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert)
                         .setCancelable(true)
                         .setMessage("Current volt is lower than auto cutoff volt.")
@@ -235,7 +235,7 @@ public class ControlButton extends FrameLayout {
                 }
             }
             deviceData.setButton(buttonData);
-            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF, AppGlobal.findConnectedDeviceIndex(deviceData)));
+            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF, AppGlobal.findDeviceIndex(deviceData)));
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             imageUnpressed.setVisibility(View.VISIBLE);
             imagePressed.setVisibility(View.GONE);

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.DeviceData;
+import com.xkglow.xkcommand.Helper.DeviceState;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.View.DeviceControlView;
 import com.xkglow.xkcommand.View.ViewPagerIndicator;
@@ -22,12 +23,14 @@ import com.xkglow.xkcommand.View.ViewPagerIndicator;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class ControlFragment extends Fragment {
-    ArrayList<DeviceControlView> deviceControlViews;
+    DeviceControlView fakeControlView;
+    LinkedHashMap<String, DeviceControlView> deviceControlViews;
     int width, height;
     LinearLayout contentLayout;
     FrameLayout frameLayout, previous, next;
@@ -65,7 +68,7 @@ public class ControlFragment extends Fragment {
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int current = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice()) - 1;
+                int current = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice()) - 1;
                 AppGlobal.setCurrentDevice(current);
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE_LIST, current));
             }
@@ -74,7 +77,7 @@ public class ControlFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int current = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice()) + 1;
+                int current = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice()) + 1;
                 AppGlobal.setCurrentDevice(current);
                 EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.CHANGE_DEVICE_LIST, current));
             }
@@ -82,20 +85,14 @@ public class ControlFragment extends Fragment {
 
         viewPagerIndicator = view.findViewById(R.id.view_pager_indicator);
 
+        deviceControlViews = new LinkedHashMap<>();
+
         return view;
     }
 
     @Subscribe(sticky = true)
     public void onEvent(MessageEvent event) {
         switch (event.type) {
-            case ADD_DEVICE:
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setDevices();
-                    }
-                });
-                break;
             case CHANGE_DEVICE:
                 int index1 = (int) event.data;
                 animateTo(index1);
@@ -137,8 +134,8 @@ public class ControlFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                int current = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice());
-                int count = AppGlobal.getConnectedDevices().size();
+                int current = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice());
+                int count = AppGlobal.getPairedDeviceMap().size();
                 if (count < 2) {
                     previous.setVisibility(View.GONE);
                     next.setVisibility(View.GONE);
@@ -159,10 +156,8 @@ public class ControlFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (deviceControlViews != null) {
-            for (DeviceControlView deviceControlView : deviceControlViews) {
-                deviceControlView.reset();
-            }
+        for (DeviceControlView deviceControlView : deviceControlViews.values()) {
+            deviceControlView.reset();
         }
         startTimer();
     }
@@ -174,28 +169,53 @@ public class ControlFragment extends Fragment {
     }
 
     private void setDevices() {
-        contentLayout.removeAllViews();
-        deviceControlViews = new ArrayList<>();
         if (frameLayout.getWidth() != 0) {
             width = frameLayout.getWidth();
         }
         if (frameLayout.getHeight() != 0) {
             height = frameLayout.getHeight();
         }
-        for (int i = 0; i < AppGlobal.getConnectedDevices().size(); i++) {
-            DeviceData deviceData = AppGlobal.getConnectedDevice(i);
-            DeviceControlView deviceControlView = new DeviceControlView(getContext(), width, height, deviceData);
-            deviceControlView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
-            contentLayout.addView(deviceControlView);
-            deviceControlViews.add(deviceControlView);
+        if (width == 0 || height == 0) return;
+        HashMap<String, DeviceData> pairedDeviceMap = AppGlobal.getPairedDeviceMap();
+        if (pairedDeviceMap.isEmpty()) {
+            if (fakeControlView == null) {
+                DeviceData deviceData = new DeviceData("", "XK-Device");
+                deviceData.deviceState = DeviceState.CONNECTED;
+                fakeControlView = new DeviceControlView(getContext(), width, height, deviceData);
+                fakeControlView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+                contentLayout.addView(fakeControlView);
+                AppGlobal.setCurrentDevice(deviceData);
+            }
+        } else if (fakeControlView != null) {
+            contentLayout.removeView(fakeControlView);
+            fakeControlView = null;
         }
-        int index = AppGlobal.findConnectedDeviceIndex(AppGlobal.getCurrentDevice());
+        for (String address : pairedDeviceMap.keySet()) {
+            DeviceData deviceData = pairedDeviceMap.get(address);
+            if (!deviceControlViews.containsKey(address)) {
+                DeviceControlView deviceControlView = new DeviceControlView(getContext(), width, height, deviceData);
+                deviceControlView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+                contentLayout.addView(deviceControlView);
+                deviceControlViews.put(address, deviceControlView);
+            }
+        }
+        int index = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice());
         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) contentLayout.getLayoutParams();
-        params.leftMargin = -index * width;
+        params.leftMargin = Math.min(-index * width, 0);
         contentLayout.setLayoutParams(params);
 
-        viewPagerIndicator.setDotsCount(AppGlobal.getConnectedDevices().size());
+        viewPagerIndicator.setDotsCount(AppGlobal.getPairedDeviceMap().size());
         viewPagerIndicator.setCurrent(AppGlobal.getCurrentDeviceIndex());
+
+        for (String address : deviceControlViews.keySet()) {
+            DeviceControlView deviceControlView = deviceControlViews.get(address);
+            if (!pairedDeviceMap.containsKey(address)) {
+                deviceControlViews.remove(address);
+                contentLayout.removeView(deviceControlView);
+            } else {
+                deviceControlView.updateDeviceInfo();
+            }
+        }
 
         resetArrows();
     }
@@ -223,11 +243,7 @@ public class ControlFragment extends Fragment {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (deviceControlViews != null) {
-                            for (DeviceControlView deviceControlView : deviceControlViews) {
-                                deviceControlView.updateDeviceInfo();
-                            }
-                        }
+                        setDevices();
                     }
                 });
             }
