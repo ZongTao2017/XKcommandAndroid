@@ -3,15 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/not_connected"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@color/red"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:text="Device not connected."/>
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"

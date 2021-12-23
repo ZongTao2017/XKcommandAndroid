@@ -98,13 +98,24 @@ public class ControlFragment extends Fragment {
                 animateTo(index1);
                 break;
             case TURN_ON_OFF:
-                int index2 = (int) event.data;
-                DeviceControlView deviceControlView = deviceControlViews.get(index2);
+                String address = (String) event.data;
+                DeviceControlView deviceControlView = deviceControlViews.get(address);
                 deviceControlView.resetPower();
                 break;
             case POWER_OFF:
-                DeviceControlView currentDevice = deviceControlViews.get(AppGlobal.getCurrentDeviceIndex());
+                DeviceControlView currentDevice = deviceControlViews.get(AppGlobal.getCurrentDevice().address);
                 currentDevice.powerOff();
+                break;
+            case UPDATE_DEVICE:
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String address1 = (String) event.data;
+                        DeviceControlView deviceControlView1 = deviceControlViews.get(address1);
+                        deviceControlView1.updateDeviceInfo();
+                    }
+                });
+                break;
         }
     }
 
@@ -213,7 +224,7 @@ public class ControlFragment extends Fragment {
                 deviceControlViews.remove(address);
                 contentLayout.removeView(deviceControlView);
             } else {
-                deviceControlView.updateDeviceInfo();
+//                deviceControlView.updateDeviceInfo();
             }
         }
 

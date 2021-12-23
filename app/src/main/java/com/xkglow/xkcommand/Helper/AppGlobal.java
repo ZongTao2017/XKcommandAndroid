@@ -316,6 +316,7 @@ public class AppGlobal {
                 if (!deviceData.equals(currentDevice) ||
                         currentDevice.deviceState == DeviceState.DISCONNECTED) {
                     deviceData.deviceState = DeviceState.OFFLINE;
+                    deviceData.signalPercent = 0;
                 }
             }
         }
@@ -328,22 +329,13 @@ public class AppGlobal {
         }
     }
 
-    public static DeviceData getConnectedDevice(String address) {
-        if (pairedDeviceMap.containsKey(address)) {
-            return pairedDeviceMap.get(address);
-        }
-        if (scanDeviceMap.containsKey(address)) {
-            return scanDeviceMap.get(address);
-        }
-        return null;
-    }
-
     public static void turnOffBluetooth() {
         HashMap<String, DeviceData> deviceMap = new HashMap<>(pairedDeviceMap);
         deviceMap.putAll(scanDeviceMap);
         for (String address : deviceMap.keySet()) {
             DeviceData deviceData = deviceMap.get(address);
             deviceData.deviceState = DeviceState.OFFLINE;
+            deviceData.signalPercent = 0;
         }
         bluetoothGattMap.clear();
         scanDeviceMap.clear();
@@ -361,11 +353,23 @@ public class AppGlobal {
 
     public static void writeDeviceCutoffInput(float volt) {
         if (currentDevice != null) {
-            byte voltByte = (byte) ((volt + 0.001f) / 0.2f);;
+            byte voltByte = (byte) ((volt + 0.001f) / 0.2f);
             if (currentDevice.userSettingsBytes[0] != voltByte) {
                 currentDevice.userSettingsBytes[0] = voltByte;
                 bluetoothService.writeUserSettings(currentDevice);
             }
+        }
+    }
+
+    public static void writeRGBColor() {
+        if (currentDevice != null) {
+            currentDevice.userSettingsBytes[4] = (byte) Helper.getRed(currentDevice.systemData.buttonColor);
+            currentDevice.userSettingsBytes[5] = (byte) Helper.getGreen(currentDevice.systemData.buttonColor);
+            currentDevice.userSettingsBytes[6] = (byte) Helper.getBlue(currentDevice.systemData.buttonColor);
+            currentDevice.userSettingsBytes[7] = (byte) Helper.getRed(currentDevice.systemData.buttonWarningColor);
+            currentDevice.userSettingsBytes[8] = (byte) Helper.getGreen(currentDevice.systemData.buttonWarningColor);
+            currentDevice.userSettingsBytes[9] = (byte) Helper.getBlue(currentDevice.systemData.buttonWarningColor);
+            bluetoothService.writeUserSettings(currentDevice);
         }
     }
 

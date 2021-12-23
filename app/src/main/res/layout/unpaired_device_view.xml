@@ -20,6 +20,7 @@
             android:textSize="16sp"
             android:text="XKGLOW-0003" />
         <ImageView
+            android:id="@+id/signal"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="bottom"

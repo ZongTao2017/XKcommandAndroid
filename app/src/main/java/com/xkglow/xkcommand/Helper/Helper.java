@@ -134,4 +134,20 @@ public class Helper {
     public static int getBit(Byte b, int index) {
         return (b >> index) & 1;
     }
+
+    public static int getRGB(int r, int g, int b) {
+        return 0xff << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
+    }
+
+    public static int getRed(int rgb) {
+        return (rgb >> 16) & 0xFF;
+    }
+
+    public static int getGreen(int rgb) {
+        return (rgb >> 8) & 0xFF;
+    }
+
+    public static int getBlue(int rgb) {
+        return rgb & 0xFF;
+    }
 }

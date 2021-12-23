@@ -18,6 +18,7 @@ public class MessageEvent {
         CHANGE_DEVICE_LIST,
         SET_CAMERA_PHOTO,
         TURN_ON_OFF,
-        POWER_OFF
+        POWER_OFF,
+        UPDATE_DEVICE
     }
 }

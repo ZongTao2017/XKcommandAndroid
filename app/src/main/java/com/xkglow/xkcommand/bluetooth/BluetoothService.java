@@ -317,7 +317,7 @@ public class BluetoothService extends Service {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String address = gatt.getDevice().getAddress();
-            DeviceData deviceData = AppGlobal.getConnectedDevice(address);
+            DeviceData deviceData = AppGlobal.getDevice(address);
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 Log.d(TAG, "Device connected: " + deviceData.systemData.name);
                 deviceData.deviceState = DeviceState.CONNECTED;
@@ -346,7 +346,7 @@ public class BluetoothService extends Service {
         @Override
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
             String address = gatt.getDevice().getAddress();
-            DeviceData deviceData = AppGlobal.getConnectedDevice(address);
+            DeviceData deviceData = AppGlobal.getDevice(address);
             if (deviceData != null) {
                 deviceData.addRssi(rssi);
             }
@@ -375,7 +375,7 @@ public class BluetoothService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 final byte[] data = characteristic.getValue();
                 if (data != null && data.length > 0) {
-                    DeviceData deviceData = AppGlobal.getConnectedDevice(address);
+                    DeviceData deviceData = AppGlobal.getDevice(address);
                     if (deviceData != null) {
                         if (characteristic.getUuid().toString().equalsIgnoreCase(DEVICE_INFO)) {
                             deviceData.deviceState = DeviceState.READY;
@@ -384,6 +384,8 @@ public class BluetoothService extends Service {
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(USER_SETTINGS)) {
                             deviceData.userSettingsBytes = data;
+                            deviceData.systemData.buttonColor = Helper.getRGB(data[4], data[5], data[6]);
+                            deviceData.systemData.buttonWarningColor = Helper.getRGB(data[7], data[8], data[9]);
                             Log.d(TAG, "read user settings: " + Helper.convertBytesToBitsString(data));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(CHANNEL_STATUS)) {
@@ -398,56 +400,64 @@ public class BluetoothService extends Service {
                             deviceData.buttons[0].buttonBytes = data;
                             Log.d(TAG, "read button 1: " + Helper.convertBytesToBitsString(data));
                             setButton(deviceData.buttons[0], data);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_2_STATUS)) {
                             deviceData.buttons[1].buttonBytes = data;
                             Log.d(TAG, "read button 2: " + Helper.convertBytesToBitsString(data));
                             setButton(deviceData.buttons[1], data);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_3_STATUS)) {
                             deviceData.buttons[2].buttonBytes = data;
                             Log.d(TAG, "read button 3: " + Helper.convertBytesToBitsString(data));
                             setButton(deviceData.buttons[2], data);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_4_STATUS)) {
                             deviceData.buttons[3].buttonBytes = data;
                             Log.d(TAG, "read button 4: " + Helper.convertBytesToBitsString(data));
                             setButton(deviceData.buttons[3], data);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_5_STATUS)) {
                             deviceData.buttons[4].buttonBytes = data;
                             Log.d(TAG, "read button 5: " + Helper.convertBytesToBitsString(data));
                             setButton(deviceData.buttons[4], data);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_6_STATUS)) {
                             deviceData.buttons[5].buttonBytes = data;
                             Log.d(TAG, "read button 6: " + Helper.convertBytesToBitsString(data));
                             setButton(deviceData.buttons[5], data);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_7_STATUS)) {
                             deviceData.buttons[6].buttonBytes = data;
                             Log.d(TAG, "read button 7: " + Helper.convertBytesToBitsString(data));
                             setButton(deviceData.buttons[6], data);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_8_STATUS)) {
                             deviceData.buttons[7].buttonBytes = data;
                             Log.d(TAG, "read button 8: " + Helper.convertBytesToBitsString(data));
                             setButton(deviceData.buttons[7], data);
+                            EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(SENSOR_1_STATUS)) {
                             deviceData.sensors[0].sensorBytes = data;
                             Log.d(TAG, "read sensor 1: " + Helper.convertBytesToBitsString(data));
-                            setSensor(deviceData.sensors[0], data, deviceData.userSettingsBytes[2]);
+                            setSensor(deviceData.sensors[0], data, deviceData.userSettingsBytes[2] & 0xff);
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(SENSOR_2_STATUS)) {
                             deviceData.sensors[1].sensorBytes = data;
                             Log.d(TAG, "read sensor 2: " + Helper.convertBytesToBitsString(data));
-                            setSensor(deviceData.sensors[1], data, deviceData.userSettingsBytes[2]);
+                            setSensor(deviceData.sensors[1], data, deviceData.userSettingsBytes[2] & 0xff);
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(SENSOR_3_STATUS)) {
                             deviceData.sensors[2].sensorBytes = data;
                             Log.d(TAG, "read sensor 3: " + Helper.convertBytesToBitsString(data));
-                            setSensor(deviceData.sensors[2], data, deviceData.userSettingsBytes[2]);
+                            setSensor(deviceData.sensors[2], data, deviceData.userSettingsBytes[2] & 0xff);
                         }
                     }
                 }
@@ -461,75 +471,85 @@ public class BluetoothService extends Service {
             String address = gatt.getDevice().getAddress();
             final byte[] data = characteristic.getValue();
             if (data != null && data.length > 0) {
-                DeviceData deviceData = AppGlobal.getConnectedDevice(address);
+                DeviceData deviceData = AppGlobal.getDevice(address);
                 if (deviceData != null) {
                     if (characteristic.getUuid().toString().equalsIgnoreCase(DEVICE_INFO)) {
-//                        Log.d(TAG, "update device info: " + Helper.print(data));
+                        Log.d(TAG, "update device info: " + Helper.convertBytesToBitsString(data));
                         deviceData.deviceInfoBytes[4] = data[4];
                         deviceData.deviceInfoBytes[5] = data[5];
                         deviceData.deviceInfoBytes[6] = data[6];
                         deviceData.deviceInfoBytes[7] = data[7];
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(CHANNEL_STATUS)) {
-//                        Log.d(TAG, "update channel: " + Helper.print(data));
+                        Log.d(TAG, "update channel: " + Helper.convertBytesToBitsString(data));
                         for (int i = 0; i < deviceData.channels.length; i++) {
                             deviceData.channels[i].amp = data[i * 2];
                         }
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_1_STATUS)) {
                         deviceData.buttons[0].buttonBytes[0] = Helper.setBit(deviceData.buttons[0].buttonBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.buttons[0].buttonBytes[0] = Helper.setBit(deviceData.buttons[0].buttonBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update button 1: " + Helper.print(data));
+                        Log.d(TAG, "update button 1: " + Helper.convertBytesToBitsString(data));
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_2_STATUS)) {
                         deviceData.buttons[1].buttonBytes[0] = Helper.setBit(deviceData.buttons[1].buttonBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.buttons[1].buttonBytes[0] = Helper.setBit(deviceData.buttons[1].buttonBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update button 2: " + Helper.print(data));
+                        Log.d(TAG, "update button 2: " + Helper.convertBytesToBitsString(data));
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_3_STATUS)) {
                         deviceData.buttons[2].buttonBytes[0] = Helper.setBit(deviceData.buttons[2].buttonBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.buttons[2].buttonBytes[0] = Helper.setBit(deviceData.buttons[2].buttonBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update button 3: " + Helper.print(data));
+                        Log.d(TAG, "update button 3: " + Helper.convertBytesToBitsString(data));
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_4_STATUS)) {
                         deviceData.buttons[3].buttonBytes[0] = Helper.setBit(deviceData.buttons[3].buttonBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.buttons[3].buttonBytes[0] = Helper.setBit(deviceData.buttons[3].buttonBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update button 4: " + Helper.print(data));
+                        Log.d(TAG, "update button 4: " + Helper.convertBytesToBitsString(data));
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_5_STATUS)) {
                         deviceData.buttons[4].buttonBytes[0] = Helper.setBit(deviceData.buttons[4].buttonBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.buttons[4].buttonBytes[0] = Helper.setBit(deviceData.buttons[4].buttonBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update button 5: " + Helper.print(data));
+                        Log.d(TAG, "update button 5: " + Helper.convertBytesToBitsString(data));
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_6_STATUS)) {
                         deviceData.buttons[5].buttonBytes[0] = Helper.setBit(deviceData.buttons[5].buttonBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.buttons[5].buttonBytes[0] = Helper.setBit(deviceData.buttons[5].buttonBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update button 6: " + Helper.print(data));
+                        Log.d(TAG, "update button 6: " + Helper.convertBytesToBitsString(data));
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_7_STATUS)) {
                         deviceData.buttons[6].buttonBytes[0] = Helper.setBit(deviceData.buttons[6].buttonBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.buttons[6].buttonBytes[0] = Helper.setBit(deviceData.buttons[6].buttonBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update button 7: " + Helper.print(data));
+                        Log.d(TAG, "update button 7: " + Helper.convertBytesToBitsString(data));
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(BUTTON_8_STATUS)) {
                         deviceData.buttons[7].buttonBytes[0] = Helper.setBit(deviceData.buttons[7].buttonBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.buttons[7].buttonBytes[0] = Helper.setBit(deviceData.buttons[7].buttonBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update button 8: " + Helper.print(data));
+                        Log.d(TAG, "update button 8: " + Helper.convertBytesToBitsString(data));
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.UPDATE_DEVICE, address));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(SENSOR_1_STATUS)) {
                         deviceData.sensors[0].sensorBytes[0] = Helper.setBit(deviceData.sensors[0].sensorBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.sensors[0].sensorBytes[0] = Helper.setBit(deviceData.sensors[0].sensorBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update sensor 1: " + Helper.print(data));
+                        Log.d(TAG, "update sensor 1: " + Helper.convertBytesToBitsString(data));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(SENSOR_2_STATUS)) {
                         deviceData.sensors[1].sensorBytes[0] = Helper.setBit(deviceData.sensors[1].sensorBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.sensors[1].sensorBytes[0] = Helper.setBit(deviceData.sensors[1].sensorBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update sensor 2: " + Helper.print(data));
+                        Log.d(TAG, "update sensor 2: " + Helper.convertBytesToBitsString(data));
                     }
                     if (characteristic.getUuid().toString().equalsIgnoreCase(SENSOR_3_STATUS)) {
                         deviceData.sensors[2].sensorBytes[0] = Helper.setBit(deviceData.sensors[2].sensorBytes[0], 0, Helper.getBit(data[0], 0));
                         deviceData.sensors[2].sensorBytes[0] = Helper.setBit(deviceData.sensors[2].sensorBytes[0], 1, Helper.getBit(data[0], 1));
-//                        Log.d(TAG, "update sensor 3: " + Helper.print(data));
+                        Log.d(TAG, "update sensor 3: " + Helper.convertBytesToBitsString(data));
                     }
                 }
             }
@@ -540,7 +560,7 @@ public class BluetoothService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
 //                Log.d(TAG, "get notification.");
             } else {
-//                Log.e(TAG, "get notification error: " + status + ".");
+                Log.e(TAG, "get notification error: " + status + ".");
             }
             isSending = false;
             sendNext();
@@ -641,12 +661,13 @@ public class BluetoothService extends Service {
                 service = SENSOR_3_STATUS;
                 break;
         }
-        BluetoothData bluetoothData = new BluetoothData(BluetoothDataType.Write_Char, deviceData.address, service, sensorData.sensorBytes);
-        mWaitingList.add(bluetoothData);
         if (sensorData.function == 0) {
+            deviceData.userSettingsBytes[2] = (byte) (sensorData.brightness * 255 / 100);
             BluetoothData bluetoothData2 = new BluetoothData(BluetoothDataType.Write_Char, deviceData.address, USER_SETTINGS, deviceData.userSettingsBytes);
             mWaitingList.add(bluetoothData2);
         }
+        BluetoothData bluetoothData = new BluetoothData(BluetoothDataType.Write_Char, deviceData.address, service, sensorData.sensorBytes);
+        mWaitingList.add(bluetoothData);
         sendNext();
     }
 
@@ -723,7 +744,8 @@ public class BluetoothService extends Service {
     }
 
     private void setSensor(SensorData sensorData, byte[] data, int brightness) {
-        sensorData.brightness = brightness;
+        int b = (int) (100 * brightness / 255f) / 5 * 5;
+        sensorData.brightness = Math.min(Math.max(20, b), 100);
         sensorData.function = 1 - Helper.getBit(data[0], 6);
         if (data[1] == 0) {
             sensorData.channels[0] = false;

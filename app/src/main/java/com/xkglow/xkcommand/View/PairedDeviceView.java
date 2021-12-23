@@ -2,6 +2,7 @@ package com.xkglow.xkcommand.View;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ public class PairedDeviceView extends LinearLayout {
     LinearLayout topLayout, bottomLayout;
     TextView deviceNameText, deviceStateText;
     DeviceState deviceState;
+    ImageView signalImage;
     boolean isCurrent;
 
     public PairedDeviceView(Context context) {
@@ -22,6 +24,7 @@ public class PairedDeviceView extends LinearLayout {
         topLayout = findViewById(R.id.top_layout);
         bottomLayout = findViewById(R.id.bottom_layout);
         deviceNameText = findViewById(R.id.device_name);
+        signalImage = findViewById(R.id.signal);
         deviceStateText = findViewById(R.id.device_state);
     }
 
@@ -38,6 +41,18 @@ public class PairedDeviceView extends LinearLayout {
         deviceState = state;
         deviceStateText.setText(state.name());
         update();
+    }
+
+    public void setSignal(int percent) {
+        if (percent == 0) {
+            signalImage.setImageResource(R.drawable.blt0);
+        } else if (percent < 33) {
+            signalImage.setImageResource(R.drawable.blt1);
+        } else if (percent < 66) {
+            signalImage.setImageResource(R.drawable.blt2);
+        } else {
+            signalImage.setImageResource(R.drawable.blt3);
+        }
     }
 
     private void update() {

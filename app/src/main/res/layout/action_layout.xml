@@ -76,7 +76,7 @@
             android:lines="1"
             android:ellipsize="end"
             android:textSize="16sp"
-            android:text="Strobe"/>
+            android:text="Triple Burst Flash A"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -111,7 +111,7 @@
             android:lines="1"
             android:ellipsize="end"
             android:textSize="16sp"
-            android:text="50% power on"/>
+            android:text="Triple Burst Flash B"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -146,6 +146,403 @@
             android:lines="1"
             android:ellipsize="end"
             android:textSize="16sp"
+            android:text="Single Flash A"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_5"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="Single Flash B"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_6"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="Turn Signal Flash A"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="80% power on"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_7"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_7"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="Turn Signal Flash B"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_8"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_8"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="90% power on"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_9"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_9"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="80% power on"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_10"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="70% power on"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_11"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_11"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
             android:text="60% power on"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_12"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_12"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="50% power on"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_13"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_13"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="40% power on"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_14"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_14"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="30% power on"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="60dp"
+        android:background="@color/gray" />
+    <LinearLayout
+        android:id="@+id/radio_button_15"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBarHeight"
+        android:orientation="horizontal"
+        android:background="@color/tab_bg"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/radio_button_image_15"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/radio_unselected"
+                android:scaleType="fitXY"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:text="20% power on"/>
     </LinearLayout>
 </LinearLayout>

@@ -30,6 +30,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
+import com.xkglow.xkcommand.Helper.DeviceData;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.View.DeviceControlView;
 import com.xkglow.xkcommand.View.DeviceList;
@@ -49,7 +50,7 @@ public class MainActivity extends FragmentActivity {
     private TabHost mTabHost;
     private int mCurrentTab;
     private TextView mTitle;
-    private ImageView mLogo;
+    private ImageView mLogo, mSignal;
     private DeviceList mDeviceList;
     private boolean alreadyStarted = false;
     private UpdateDeviceTimerTask mTimerTask;
@@ -93,6 +94,7 @@ public class MainActivity extends FragmentActivity {
         });
 
         mLogo = findViewById(R.id.logo);
+        mSignal = findViewById(R.id.signal);
         mTitle = findViewById(R.id.controller_name);
 
         mTabHost = findViewById(R.id.tabhost);
@@ -348,6 +350,19 @@ public class MainActivity extends FragmentActivity {
                 public void run() {
                     if (mDeviceList != null)
                         mDeviceList.update();
+                    DeviceData currentDevice = AppGlobal.getCurrentDevice();
+                    if (currentDevice != null) {
+                        int percent = currentDevice.signalPercent;
+                        if (percent == 0) {
+                            mSignal.setImageResource(R.drawable.blt0);
+                        } else if (percent < 33) {
+                            mSignal.setImageResource(R.drawable.blt1);
+                        } else if (percent < 66) {
+                            mSignal.setImageResource(R.drawable.blt2);
+                        } else {
+                            mSignal.setImageResource(R.drawable.blt3);
+                        }
+                    }
                 }
             });
         }

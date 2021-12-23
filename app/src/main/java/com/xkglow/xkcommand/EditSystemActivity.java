@@ -38,6 +38,7 @@ public class EditSystemActivity extends Activity {
             @Override
             public void onClick(View v) {
                 AppGlobal.writeDeviceCutoffInput(cutoffInput);
+                AppGlobal.writeRGBColor();
                 finish();
             }
         });

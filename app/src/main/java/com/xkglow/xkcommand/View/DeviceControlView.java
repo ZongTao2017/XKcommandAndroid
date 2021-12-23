@@ -34,7 +34,7 @@ public class DeviceControlView extends LinearLayout {
     DeviceData deviceData;
     ControlButton button1, button2, button3, button4, button5, button6, button7, button8;
     PowerView power;
-    TextView textNotConnected, textVolt, textAmp, textTemp;
+    TextView textVolt, textAmp, textTemp;
     ArrayList<ControlButton> controlButtons;
 
     public DeviceControlView(@NonNull Context context, int w, int h, DeviceData deviceData) {
@@ -111,7 +111,6 @@ public class DeviceControlView extends LinearLayout {
         button8.setIconSize(iconSize);
         controlButtons.add(button8);
 
-        textNotConnected = findViewById(R.id.not_connected);
         textVolt = findViewById(R.id.status_volt);
         textAmp = findViewById(R.id.status_amp);
         textTemp = findViewById(R.id.status_temp);
@@ -267,11 +266,12 @@ public class DeviceControlView extends LinearLayout {
         }
 
         reset();
-        checkConnection();
     }
 
     public void reset() {
-        deviceData = AppGlobal.findDevice(deviceData);
+        if (AppGlobal.findDevice(deviceData) != null) {
+            deviceData = AppGlobal.findDevice(deviceData);
+        }
         if (deviceData != null) {
             for (int i = 0; i < 8; i++) {
                 ControlButton controlButton = controlButtons.get(i);
@@ -281,20 +281,10 @@ public class DeviceControlView extends LinearLayout {
         }
     }
 
-    public void checkConnection() {
-        deviceData = AppGlobal.findDevice(deviceData);
-        if (deviceData != null) {
-            if (deviceData.deviceState == DeviceState.DISCONNECTED ||
-                    deviceData.deviceState == DeviceState.OFFLINE) {
-                textNotConnected.setVisibility(VISIBLE);
-            } else {
-                textNotConnected.setVisibility(GONE);
-            }
-        }
-    }
-
     public void resetPower() {
-        deviceData = AppGlobal.findDevice(deviceData);
+        if (AppGlobal.findDevice(deviceData) != null) {
+            deviceData = AppGlobal.findDevice(deviceData);
+        }
         if (deviceData != null) {
             if (deviceData.isPowerOn()) {
                 power.setPowerClickable(true);
@@ -353,7 +343,6 @@ public class DeviceControlView extends LinearLayout {
                 }
             }
             resetPower();
-            checkConnection();
         }
     }
 }

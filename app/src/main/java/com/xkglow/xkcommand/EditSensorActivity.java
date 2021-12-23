@@ -122,7 +122,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (sensorData.brightness > 0) {
-                    sensorData.brightness = sensorData.brightness - 10;
+                    sensorData.brightness = sensorData.brightness - 5;
                     brightnessTextView.setText(sensorData.brightness + "%");
                     AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
@@ -134,7 +134,7 @@ public class EditSensorActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (sensorData.brightness < 100) {
-                    sensorData.brightness = sensorData.brightness + 10;
+                    sensorData.brightness = sensorData.brightness + 5;
                     brightnessTextView.setText(sensorData.brightness + "%");
                     AppGlobal.getCurrentDevice().setSensor(sensorData);
                 }
@@ -301,10 +301,10 @@ public class EditSensorActivity extends Activity {
     }
 
     private void setBackColorButtons() {
-        if (sensorData.brightness == 0) {
+        if (sensorData.brightness <= 20) {
             minusImage.setColorFilter(getResources().getColor(R.color.gray));
             minus.setClickable(false);
-        } else if (sensorData.brightness == 100) {
+        } else if (sensorData.brightness >= 100) {
             plusImage.setColorFilter(getResources().getColor(R.color.gray));
             plus.setClickable(false);
         } else {

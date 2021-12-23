@@ -235,7 +235,7 @@ public class ControlButton extends FrameLayout {
                 }
             }
             deviceData.setButton(buttonData);
-            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF, AppGlobal.findDeviceIndex(deviceData)));
+            if (!released) EventBus.getDefault().post(new MessageEvent(MessageEvent.MessageEventType.TURN_ON_OFF, deviceData.address));
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
             imageUnpressed.setVisibility(View.VISIBLE);
             imagePressed.setVisibility(View.GONE);
