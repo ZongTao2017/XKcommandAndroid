@@ -56,7 +56,6 @@ public class DeviceData implements Serializable {
         channelBytes = new byte[16];
 
         deviceState = DeviceState.OFFLINE;
-        signalPercent = 0;
     }
 
     public void setSensor(SensorData sensorData) {

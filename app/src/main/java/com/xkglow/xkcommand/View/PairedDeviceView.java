@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.xkglow.xkcommand.Helper.DeviceData;
 import com.xkglow.xkcommand.Helper.DeviceState;
 import com.xkglow.xkcommand.R;
 
@@ -41,18 +42,6 @@ public class PairedDeviceView extends LinearLayout {
         deviceState = state;
         deviceStateText.setText(state.name());
         update();
-    }
-
-    public void setSignal(int percent) {
-        if (percent == 0) {
-            signalImage.setImageResource(R.drawable.blt0);
-        } else if (percent < 33) {
-            signalImage.setImageResource(R.drawable.blt1);
-        } else if (percent < 66) {
-            signalImage.setImageResource(R.drawable.blt2);
-        } else {
-            signalImage.setImageResource(R.drawable.blt3);
-        }
     }
 
     private void update() {

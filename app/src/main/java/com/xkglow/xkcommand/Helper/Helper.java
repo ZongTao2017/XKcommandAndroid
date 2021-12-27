@@ -15,6 +15,7 @@ import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SoundEffectConstants;
+import android.widget.ImageView;
 
 import com.xkglow.xkcommand.R;
 
@@ -149,5 +150,22 @@ public class Helper {
 
     public static int getBlue(int rgb) {
         return rgb & 0xFF;
+    }
+
+    public static void setSignal(ImageView signalImage, DeviceData deviceData) {
+        if (deviceData == null || signalImage == null) return;
+        if (deviceData.deviceState == DeviceState.DISCONNECTED ||
+                deviceData.deviceState == DeviceState.OFFLINE) {
+            signalImage.setImageResource(R.drawable.blt0);
+        } else {
+            int percent = deviceData.signalPercent;
+            if (percent < 50) {
+                signalImage.setImageResource(R.drawable.blt1);
+            } else if (percent < 80) {
+                signalImage.setImageResource(R.drawable.blt2);
+            } else {
+                signalImage.setImageResource(R.drawable.blt3);
+            }
+        }
     }
 }

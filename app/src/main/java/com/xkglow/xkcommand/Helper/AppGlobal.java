@@ -316,7 +316,6 @@ public class AppGlobal {
                 if (!deviceData.equals(currentDevice) ||
                         currentDevice.deviceState == DeviceState.DISCONNECTED) {
                     deviceData.deviceState = DeviceState.OFFLINE;
-                    deviceData.signalPercent = 0;
                 }
             }
         }
@@ -335,7 +334,6 @@ public class AppGlobal {
         for (String address : deviceMap.keySet()) {
             DeviceData deviceData = deviceMap.get(address);
             deviceData.deviceState = DeviceState.OFFLINE;
-            deviceData.signalPercent = 0;
         }
         bluetoothGattMap.clear();
         scanDeviceMap.clear();
@@ -351,18 +349,15 @@ public class AppGlobal {
         return null;
     }
 
-    public static void writeDeviceCutoffInput(float volt) {
+    public static void writeUserSettings() {
         if (currentDevice != null) {
+            float volt = currentDevice.systemData.cutoffInput;
             byte voltByte = (byte) ((volt + 0.001f) / 0.2f);
-            if (currentDevice.userSettingsBytes[0] != voltByte) {
-                currentDevice.userSettingsBytes[0] = voltByte;
-                bluetoothService.writeUserSettings(currentDevice);
+            currentDevice.userSettingsBytes[0] = voltByte;
+            currentDevice.userSettingsBytes[3] = (byte) currentDevice.systemData.turnBluetoothOffAfter;
+            if (!currentDevice.systemData.bluetoothAutoOff) {
+                currentDevice.userSettingsBytes[3] = 0;
             }
-        }
-    }
-
-    public static void writeRGBColor() {
-        if (currentDevice != null) {
             currentDevice.userSettingsBytes[4] = (byte) Helper.getRed(currentDevice.systemData.buttonColor);
             currentDevice.userSettingsBytes[5] = (byte) Helper.getGreen(currentDevice.systemData.buttonColor);
             currentDevice.userSettingsBytes[6] = (byte) Helper.getBlue(currentDevice.systemData.buttonColor);

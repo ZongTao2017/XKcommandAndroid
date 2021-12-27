@@ -217,18 +217,6 @@
             android:ellipsize="end"
             android:textSize="16sp"
             android:text="Turn Signal Flash A"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:lines="1"
-            android:text="80% power on"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"

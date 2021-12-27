@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.DeviceData;
+import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.View.DeviceControlView;
 import com.xkglow.xkcommand.View.DeviceList;
@@ -351,18 +352,7 @@ public class MainActivity extends FragmentActivity {
                     if (mDeviceList != null)
                         mDeviceList.update();
                     DeviceData currentDevice = AppGlobal.getCurrentDevice();
-                    if (currentDevice != null) {
-                        int percent = currentDevice.signalPercent;
-                        if (percent == 0) {
-                            mSignal.setImageResource(R.drawable.blt0);
-                        } else if (percent < 33) {
-                            mSignal.setImageResource(R.drawable.blt1);
-                        } else if (percent < 66) {
-                            mSignal.setImageResource(R.drawable.blt2);
-                        } else {
-                            mSignal.setImageResource(R.drawable.blt3);
-                        }
-                    }
+                    Helper.setSignal(mSignal, currentDevice);
                 }
             });
         }

@@ -34,7 +34,7 @@ public class DeviceControlView extends LinearLayout {
     DeviceData deviceData;
     ControlButton button1, button2, button3, button4, button5, button6, button7, button8;
     PowerView power;
-    TextView textVolt, textAmp, textTemp;
+    TextView textDisconnected, textVolt, textAmp, textTemp;
     ArrayList<ControlButton> controlButtons;
 
     public DeviceControlView(@NonNull Context context, int w, int h, DeviceData deviceData) {
@@ -111,6 +111,7 @@ public class DeviceControlView extends LinearLayout {
         button8.setIconSize(iconSize);
         controlButtons.add(button8);
 
+        textDisconnected = findViewById(R.id.not_connected);
         textVolt = findViewById(R.id.status_volt);
         textAmp = findViewById(R.id.status_amp);
         textTemp = findViewById(R.id.status_temp);
@@ -302,7 +303,7 @@ public class DeviceControlView extends LinearLayout {
 
     public void updateDeviceInfo() {
         deviceData = AppGlobal.findDevice(deviceData);
-        if (deviceData != null) {
+        if (deviceData != null && deviceData.deviceState == DeviceState.READY) {
             textVolt.setText(String.format("%.1fV", deviceData.deviceInfoBytes[4] * 0.2f));
             textAmp.setText(String.format("%.1fA",(deviceData.deviceInfoBytes[6] + deviceData.deviceInfoBytes[7] * 0xff) * 0.2f));
             textTemp.setText(deviceData.deviceInfoBytes[5] - 50 + "\u2103");
@@ -343,6 +344,18 @@ public class DeviceControlView extends LinearLayout {
                 }
             }
             resetPower();
+        }
+    }
+
+    public void updateDeviceConnection() {
+        if (deviceData.deviceState == DeviceState.OFFLINE ||
+                deviceData.deviceState == DeviceState.DISCONNECTED) {
+            textDisconnected.setVisibility(VISIBLE);
+            textVolt.setText("——");
+            textAmp.setText("——");
+            textTemp.setText("——");
+        } else {
+            textDisconnected.setVisibility(GONE);
         }
     }
 }

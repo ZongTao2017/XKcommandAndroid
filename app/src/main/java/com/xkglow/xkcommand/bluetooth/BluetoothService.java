@@ -49,7 +49,6 @@ public class BluetoothService extends Service {
     private ConnectTimerTask mConnectTimerTask;
     private ArrayList<String> mScanDeviceAddressList;
     private LinkedBlockingDeque<BluetoothData> mWaitingList;
-    private boolean isSending;
 
     public static final String CONTROLLER_SERVICE = "02A8AF3E-C199-4735-BACE-FA8E9F74803E";
     public static final String DEVICE_INFO = "02A8AF3E-C001-4735-BACE-FA8E9F74803E";
@@ -91,7 +90,6 @@ public class BluetoothService extends Service {
     public void init() {
         mScanDeviceAddressList = new ArrayList<>();
         mWaitingList = new LinkedBlockingDeque<>();
-        isSending = false;
         mHandler = new Handler();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter != null) {
@@ -365,7 +363,6 @@ public class BluetoothService extends Service {
             } else {
                 Log.e(TAG, "Write fail: " + service);
             }
-            isSending = false;
             sendNext();
         }
 
@@ -386,6 +383,14 @@ public class BluetoothService extends Service {
                             deviceData.userSettingsBytes = data;
                             deviceData.systemData.buttonColor = Helper.getRGB(data[4], data[5], data[6]);
                             deviceData.systemData.buttonWarningColor = Helper.getRGB(data[7], data[8], data[9]);
+                            deviceData.systemData.turnBluetoothOffAfter = data[3];
+                            if (deviceData.systemData.turnBluetoothOffAfter == 0) {
+                                deviceData.systemData.bluetoothAutoOff = false;
+                            }
+                            deviceData.systemData.cutoffInput = data[0] * 0.2f;
+                            if (deviceData.systemData.cutoffInput < 10.8f || deviceData.systemData.cutoffInput > 13.2f) {
+                                deviceData.systemData.cutoffInput = 12f;
+                            }
                             Log.d(TAG, "read user settings: " + Helper.convertBytesToBitsString(data));
                         }
                         if (characteristic.getUuid().toString().equalsIgnoreCase(CHANNEL_STATUS)) {
@@ -462,7 +467,6 @@ public class BluetoothService extends Service {
                     }
                 }
             }
-            isSending = false;
             sendNext();
         }
 
@@ -562,7 +566,6 @@ public class BluetoothService extends Service {
             } else {
                 Log.e(TAG, "get notification error: " + status + ".");
             }
-            isSending = false;
             sendNext();
         }
     };
@@ -672,21 +675,18 @@ public class BluetoothService extends Service {
     }
 
     private void sendNext() {
-        if (!isSending) {
-            BluetoothData bluetoothData = mWaitingList.poll();
-            if (bluetoothData != null) {
-                isSending = true;
-                BluetoothGatt gatt = AppGlobal.getBluetoothGatt(bluetoothData.address);
-                switch (bluetoothData.type) {
-                    case Write_Char:
-                        writeCharacteristic(gatt, bluetoothData.service, bluetoothData.data);
-                        break;
-                    case Read_Char:
-                        readCharacteristic(gatt, bluetoothData.service);
-                        break;
-                    case Write_Descriptor:
-                        writeDescriptor(gatt, bluetoothData.service);
-                }
+        BluetoothData bluetoothData = mWaitingList.poll();
+        if (bluetoothData != null) {
+            BluetoothGatt gatt = AppGlobal.getBluetoothGatt(bluetoothData.address);
+            switch (bluetoothData.type) {
+                case Write_Char:
+                    writeCharacteristic(gatt, bluetoothData.service, bluetoothData.data);
+                    break;
+                case Read_Char:
+                    readCharacteristic(gatt, bluetoothData.service);
+                    break;
+                case Write_Descriptor:
+                    writeDescriptor(gatt, bluetoothData.service);
             }
         }
     }
@@ -697,49 +697,49 @@ public class BluetoothService extends Service {
             buttonData.channels[0] = false;
         } else {
             buttonData.channels[0] = true;
-            buttonData.actions[0] = data[1];
+            buttonData.actions[0] = data[1] & 0xff;
         }
         if (data[2] == 0) {
             buttonData.channels[1] = false;
         } else {
             buttonData.channels[1] = true;
-            buttonData.actions[1] = data[2];
+            buttonData.actions[1] = data[2] & 0xff;
         }
         if (data[3] == 0) {
             buttonData.channels[2] = false;
         } else {
             buttonData.channels[2] = true;
-            buttonData.actions[2] = data[3];
+            buttonData.actions[2] = data[3] & 0xff;
         }
         if (data[4] == 0) {
             buttonData.channels[3] = false;
         } else {
             buttonData.channels[3] = true;
-            buttonData.actions[3] = data[4];
+            buttonData.actions[3] = data[4] & 0xff;
         }
         if (data[5] == 0) {
             buttonData.channels[4] = false;
         } else {
             buttonData.channels[4] = true;
-            buttonData.actions[4] = data[5];
+            buttonData.actions[4] = data[5] & 0xff;
         }
         if (data[6] == 0) {
             buttonData.channels[5] = false;
         } else {
             buttonData.channels[5] = true;
-            buttonData.actions[5] = data[6];
+            buttonData.actions[5] = data[6] & 0xff;
         }
         if (data[7] == 0) {
             buttonData.channels[6] = false;
         } else {
             buttonData.channels[6] = true;
-            buttonData.actions[6] = data[7];
+            buttonData.actions[6] = data[7] & 0xff;
         }
         if (data[8] == 0) {
             buttonData.channels[7] = false;
         } else {
             buttonData.channels[7] = true;
-            buttonData.actions[7] = data[8];
+            buttonData.actions[7] = data[8] & 0xff;
         }
     }
 
@@ -751,49 +751,49 @@ public class BluetoothService extends Service {
             sensorData.channels[0] = false;
         } else {
             sensorData.channels[0] = true;
-            sensorData.actions[0] = data[1];
+            sensorData.actions[0] = data[1] & 0xff;
         }
         if (data[2] == 0) {
             sensorData.channels[1] = false;
         } else {
             sensorData.channels[1] = true;
-            sensorData.actions[1] = data[2];
+            sensorData.actions[1] = data[2] & 0xff;
         }
         if (data[3] == 0) {
             sensorData.channels[2] = false;
         } else {
             sensorData.channels[2] = true;
-            sensorData.actions[2] = data[3];
+            sensorData.actions[2] = data[3] & 0xff;
         }
         if (data[4] == 0) {
             sensorData.channels[3] = false;
         } else {
             sensorData.channels[3] = true;
-            sensorData.actions[3] = data[4];
+            sensorData.actions[3] = data[4] & 0xff;
         }
         if (data[5] == 0) {
             sensorData.channels[4] = false;
         } else {
             sensorData.channels[4] = true;
-            sensorData.actions[4] = data[5];
+            sensorData.actions[4] = data[5] & 0xff;
         }
         if (data[6] == 0) {
             sensorData.channels[5] = false;
         } else {
             sensorData.channels[5] = true;
-            sensorData.actions[5] = data[6];
+            sensorData.actions[5] = data[6] & 0xff;
         }
         if (data[7] == 0) {
             sensorData.channels[6] = false;
         } else {
             sensorData.channels[6] = true;
-            sensorData.actions[6] = data[7];
+            sensorData.actions[6] = data[7] & 0xff;
         }
         if (data[8] == 0) {
             sensorData.channels[7] = false;
         } else {
             sensorData.channels[7] = true;
-            sensorData.actions[7] = data[8];
+            sensorData.actions[7] = data[8] & 0xff;
         }
     }
 }

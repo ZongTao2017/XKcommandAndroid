@@ -25,7 +25,7 @@
     </LinearLayout>
     <ImageView
         android:id="@+id/lock"
-        android:layout_width="240dp"
+        android:layout_width="283dp"
         android:layout_height="80dp"
         android:src="@drawable/mob_con_lock"
         android:layout_gravity="bottom|center_horizontal"

@@ -134,6 +134,22 @@ public class ActionView extends LinearLayout {
                     if (buttonData != null) {
                         for (int channelId : channelIds) {
                             buttonData.actions[channelId] = index + 1;
+                            if (index == 7)
+                                buttonData.actions[channelId] = 230;
+                            if (index == 8)
+                                buttonData.actions[channelId] = 204;
+                            if (index == 9)
+                                buttonData.actions[channelId] = 179;
+                            if (index == 10)
+                                buttonData.actions[channelId] = 153;
+                            if (index == 11)
+                                buttonData.actions[channelId] = 128;
+                            if (index == 12)
+                                buttonData.actions[channelId] = 102;
+                            if (index == 13)
+                                buttonData.actions[channelId] = 77;
+                            if (index == 14)
+                                buttonData.actions[channelId] = 51;
                         }
                         AppGlobal.getCurrentDevice().setButton(buttonData);
                     }
@@ -187,6 +203,7 @@ public class ActionView extends LinearLayout {
             else if (index == 102) index = 12;
             else if (index == 77) index = 13;
             else if (index == 51) index = 14;
+            else if (index > 7) index = 0;
             else index = index - 1;
             radioButtonImages.get(index).setImageResource(R.drawable.radio_selected);
         }

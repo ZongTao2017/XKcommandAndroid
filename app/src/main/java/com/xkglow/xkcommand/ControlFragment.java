@@ -112,7 +112,7 @@ public class ControlFragment extends Fragment {
                     public void run() {
                         String address1 = (String) event.data;
                         DeviceControlView deviceControlView1 = deviceControlViews.get(address1);
-                        deviceControlView1.updateDeviceInfo();
+                        if (deviceControlView1 != null) deviceControlView1.updateDeviceInfo();
                     }
                 });
                 break;
@@ -142,7 +142,9 @@ public class ControlFragment extends Fragment {
     }
 
     private void resetArrows() {
-        getActivity().runOnUiThread(new Runnable() {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 int current = AppGlobal.findDeviceIndex(AppGlobal.getCurrentDevice());
@@ -224,7 +226,7 @@ public class ControlFragment extends Fragment {
                 deviceControlViews.remove(address);
                 contentLayout.removeView(deviceControlView);
             } else {
-//                deviceControlView.updateDeviceInfo();
+                deviceControlView.updateDeviceConnection();
             }
         }
 

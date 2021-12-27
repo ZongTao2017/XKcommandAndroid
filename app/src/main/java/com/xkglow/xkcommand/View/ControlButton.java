@@ -39,6 +39,7 @@ public class ControlButton extends FrameLayout {
     private boolean editButton;
     private FrameLayout warning;
     private boolean error;
+    private boolean isTouching;
 
     public ControlButton(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -49,6 +50,7 @@ public class ControlButton extends FrameLayout {
         released = false;
         editButton = false;
         error = false;
+        isTouching = false;
 
         imagePressed = findViewById(R.id.background_image_pressed);
         imageUnpressed = findViewById(R.id.background_image_unpressed);
@@ -156,8 +158,6 @@ public class ControlButton extends FrameLayout {
 
     public void turnOff() {
         buttonData.isPressed = false;
-        imageUnpressed.setVisibility(View.VISIBLE);
-        imagePressed.setVisibility(View.GONE);
         imageIllumination.setVisibility(View.GONE);
     }
 
@@ -172,13 +172,17 @@ public class ControlButton extends FrameLayout {
     }
 
     public void press() {
-        imageUnpressed.setVisibility(View.GONE);
-        imagePressed.setVisibility(View.VISIBLE);
+        if (!isTouching) {
+            imageUnpressed.setVisibility(View.GONE);
+            imagePressed.setVisibility(View.VISIBLE);
+        }
     }
 
     public void release() {
-        imageUnpressed.setVisibility(View.VISIBLE);
-        imagePressed.setVisibility(View.GONE);
+        if (!isTouching) {
+            imageUnpressed.setVisibility(View.VISIBLE);
+            imagePressed.setVisibility(View.GONE);
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -192,6 +196,7 @@ public class ControlButton extends FrameLayout {
                 getContext().startActivity(intent);
                 return false;
             }
+            isTouching = true;
             if (deviceData.deviceInfoBytes[4] < deviceData.userSettingsBytes[0]) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert)
                         .setCancelable(true)
@@ -246,6 +251,7 @@ public class ControlButton extends FrameLayout {
                 Helper.vibrate(context);
                 AppGlobal.writeButtonOnOff(buttonData.id, false);
             }
+            isTouching = false;
         }
         return true;
     }

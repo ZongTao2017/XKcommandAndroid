@@ -78,7 +78,7 @@ public class DeviceList extends ScrollView {
                     return true;
                 }
             });
-            pairedDeviceView.setSignal(deviceData.signalPercent);
+            Helper.setSignal(pairedDeviceView.signalImage, deviceData);
             if (currentDevice == null) {
                 AppGlobal.setCurrentDevice(deviceData);
                 pairedDeviceView.setCurrent(true);
@@ -111,7 +111,7 @@ public class DeviceList extends ScrollView {
                     getContext().startActivity(new Intent(getContext(), DevicePairActivity.class));
                 }
             });
-            unpairedDeviceView.setSignal(deviceData.signalPercent);
+            Helper.setSignal(unpairedDeviceView.signalImage, deviceData);
         }
     }
 

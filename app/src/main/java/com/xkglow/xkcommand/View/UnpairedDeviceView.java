@@ -24,16 +24,4 @@ public class UnpairedDeviceView extends LinearLayout {
     public void setDeviceName(String name) {
         deviceNameText.setText(name);
     }
-
-    public void setSignal(int percent) {
-        if (percent == 0) {
-            signalImage.setImageResource(R.drawable.blt0);
-        } else if (percent < 33) {
-            signalImage.setImageResource(R.drawable.blt1);
-        } else if (percent < 66) {
-            signalImage.setImageResource(R.drawable.blt2);
-        } else {
-            signalImage.setImageResource(R.drawable.blt3);
-        }
-    }
 }
