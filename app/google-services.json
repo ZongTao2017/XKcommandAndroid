@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "933111795406",
+    "project_id": "xkcommand",
+    "storage_bucket": "xkcommand.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933111795406:android:0b675d10534cfa9f594a9f",
+        "android_client_info": {
+          "package_name": "com.xkglow.xkcommand"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933111795406-eu9afgorbs4bnq5ot01n0ajkv13f6aoq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIlcja2O-JT8ycmVHbUmSVvb0joQH6J3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933111795406-eu9afgorbs4bnq5ot01n0ajkv13f6aoq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

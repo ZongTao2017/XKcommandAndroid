@@ -304,9 +304,9 @@ public class BluetoothService extends Service {
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         boolean result = bluetoothGatt.writeDescriptor(descriptor);
         if (result) {
-//            Log.d(TAG, "set notification: " + service);
+            Log.d(TAG, "set notification: " + service);
         } else {
-//            Log.e(TAG, "set notification fail: " + service);
+            Log.e(TAG, "set notification fail: " + service);
         }
     }
 
@@ -356,12 +356,12 @@ public class BluetoothService extends Service {
             String service = characteristic.getUuid().toString().toUpperCase();
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 if (data != null && data.length > 0) {
-                    Log.d(TAG, "Write done: " + service + ", " + Helper.convertBytesToBitsString(data));
+                    Log.d(TAG, "Write char done: " + service + ", " + Helper.convertBytesToBitsString(data));
                 } else {
-                    Log.e(TAG, "Write empty: " + service);
+                    Log.e(TAG, "Write char empty: " + service);
                 }
             } else {
-                Log.e(TAG, "Write fail: " + service);
+                Log.e(TAG, "Write char fail: " + service);
             }
             sendNext();
         }
@@ -386,6 +386,7 @@ public class BluetoothService extends Service {
                             deviceData.systemData.turnBluetoothOffAfter = data[3];
                             if (deviceData.systemData.turnBluetoothOffAfter == 0) {
                                 deviceData.systemData.bluetoothAutoOff = false;
+                                deviceData.systemData.turnBluetoothOffAfter = 1;
                             }
                             deviceData.systemData.cutoffInput = data[0] * 0.2f;
                             if (deviceData.systemData.cutoffInput < 10.8f || deviceData.systemData.cutoffInput > 13.2f) {
@@ -562,7 +563,7 @@ public class BluetoothService extends Service {
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-//                Log.d(TAG, "get notification.");
+                Log.d(TAG, "get notification.");
             } else {
                 Log.e(TAG, "get notification error: " + status + ".");
             }
@@ -671,6 +672,42 @@ public class BluetoothService extends Service {
         }
         BluetoothData bluetoothData = new BluetoothData(BluetoothDataType.Write_Char, deviceData.address, service, sensorData.sensorBytes);
         mWaitingList.add(bluetoothData);
+        sendNext();
+    }
+
+    public void writeAllButtons(DeviceData deviceData) {
+        String service = BUTTON_1_STATUS;
+        for (int i = 0; i < 8; i++) {
+            ButtonData buttonData = deviceData.buttons[i];
+            switch (buttonData.id) {
+                case 1:
+                    service = BUTTON_1_STATUS;
+                    break;
+                case 2:
+                    service = BUTTON_2_STATUS;
+                    break;
+                case 3:
+                    service = BUTTON_3_STATUS;
+                    break;
+                case 4:
+                    service = BUTTON_4_STATUS;
+                    break;
+                case 5:
+                    service = BUTTON_5_STATUS;
+                    break;
+                case 6:
+                    service = BUTTON_6_STATUS;
+                    break;
+                case 7:
+                    service = BUTTON_7_STATUS;
+                    break;
+                case 8:
+                    service = BUTTON_8_STATUS;
+                    break;
+            }
+            BluetoothData bluetoothData = new BluetoothData(BluetoothDataType.Write_Char, deviceData.address, service, buttonData.buttonBytes);
+            mWaitingList.add(bluetoothData);
+        }
         sendNext();
     }
 

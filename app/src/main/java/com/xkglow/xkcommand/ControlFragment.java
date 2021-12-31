@@ -217,8 +217,14 @@ public class ControlFragment extends Fragment {
         params.leftMargin = Math.min(-index * width, 0);
         contentLayout.setLayoutParams(params);
 
-        viewPagerIndicator.setDotsCount(AppGlobal.getPairedDeviceMap().size());
-        viewPagerIndicator.setCurrent(AppGlobal.getCurrentDeviceIndex());
+        int size = AppGlobal.getPairedDeviceMap().size();
+        if (size <= 1) {
+            viewPagerIndicator.setVisibility(View.GONE);
+        } else {
+            viewPagerIndicator.setVisibility(View.VISIBLE);
+            viewPagerIndicator.setDotsCount(size);
+            viewPagerIndicator.setCurrent(AppGlobal.getCurrentDeviceIndex());
+        }
 
         for (String address : deviceControlViews.keySet()) {
             DeviceControlView deviceControlView = deviceControlViews.get(address);

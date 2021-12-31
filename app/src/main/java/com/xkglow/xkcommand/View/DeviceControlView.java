@@ -350,12 +350,12 @@ public class DeviceControlView extends LinearLayout {
     public void updateDeviceConnection() {
         if (deviceData.deviceState == DeviceState.OFFLINE ||
                 deviceData.deviceState == DeviceState.DISCONNECTED) {
-            textDisconnected.setVisibility(VISIBLE);
+            if (textDisconnected != null) textDisconnected.setVisibility(VISIBLE);
             textVolt.setText("——");
             textAmp.setText("——");
             textTemp.setText("——");
         } else {
-            textDisconnected.setVisibility(GONE);
+            if (textDisconnected != null) textDisconnected.setVisibility(GONE);
         }
     }
 }

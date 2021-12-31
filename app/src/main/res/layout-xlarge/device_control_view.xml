@@ -3,6 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <TextView
+        android:id="@+id/not_connected"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/red"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:text="Controller not connected."
+        android:visibility="gone"/>
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
@@ -67,6 +77,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
             <TextView
+                android:id="@+id/status_volt"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -76,6 +87,7 @@
                 android:textColor="@color/gray"
                 android:text="13.4V" />
             <TextView
+                android:id="@+id/status_amp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -84,13 +96,14 @@
                 android:textColor="@color/gray"
                 android:text="23.2A" />
             <TextView
+                android:id="@+id/status_temp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginEnd="20dp"
                 android:gravity="center"
                 android:textSize="14sp"
-                android:textColor="@color/red"
+                android:textColor="@color/gray"
                 android:text="121\u2109" />
         </LinearLayout>
     </FrameLayout>

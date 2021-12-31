@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 
 import com.xkglow.xkcommand.Helper.AppGlobal;
 import com.xkglow.xkcommand.Helper.DeviceData;
+import com.xkglow.xkcommand.Helper.DeviceState;
 import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.Helper.MessageEvent;
 import com.xkglow.xkcommand.View.DeviceControlView;
@@ -50,7 +52,7 @@ public class MainActivity extends FragmentActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TabHost mTabHost;
     private int mCurrentTab;
-    private TextView mTitle;
+    private TextView mTitle, textDisconnected;
     private ImageView mLogo, mSignal;
     private DeviceList mDeviceList;
     private boolean alreadyStarted = false;
@@ -67,6 +69,7 @@ public class MainActivity extends FragmentActivity {
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_main);
 
+        textDisconnected = findViewById(R.id.not_connected);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         final FrameLayout slidingBtn = findViewById(R.id.sliding_btn);
@@ -163,14 +166,12 @@ public class MainActivity extends FragmentActivity {
     public void onEvent(MessageEvent event) {
         switch (event.type) {
             case CHANGE_DEVICE:
-                mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
                 if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                     mDrawerLayout.closeDrawer(GravityCompat.START);
                 }
                 break;
             case CHANGE_DEVICE_LIST:
                 int index = (int) event.data;
-                mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
                 mDeviceList.setCurrent(index);
                 break;
         }
@@ -353,8 +354,25 @@ public class MainActivity extends FragmentActivity {
                         mDeviceList.update();
                     DeviceData currentDevice = AppGlobal.getCurrentDevice();
                     Helper.setSignal(mSignal, currentDevice);
+                    updateDeviceConnection();
+                    mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
                 }
             });
+        }
+    }
+
+    public void updateDeviceConnection() {
+        DeviceData deviceData = AppGlobal.getCurrentDevice();
+        boolean horizontal = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        if (horizontal) {
+            if (deviceData.deviceState == DeviceState.OFFLINE ||
+                    deviceData.deviceState == DeviceState.DISCONNECTED) {
+                textDisconnected.setVisibility(View.VISIBLE);
+            } else {
+                textDisconnected.setVisibility(View.GONE);
+            }
+        } else {
+            textDisconnected.setVisibility(View.GONE);
         }
     }
 }

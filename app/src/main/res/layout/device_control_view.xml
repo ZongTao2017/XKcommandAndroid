@@ -82,6 +82,7 @@
                 android:layout_marginStart="20dp"
                 android:gravity="center"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 android:textColor="@color/gray"
                 android:text="0.0V" />
             <TextView
@@ -91,6 +92,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 android:textColor="@color/gray"
                 android:text="0.0A" />
             <TextView
@@ -101,6 +103,7 @@
                 android:layout_marginEnd="20dp"
                 android:gravity="center"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 android:textColor="@color/gray"
                 android:text="0\u2109" />
         </LinearLayout>

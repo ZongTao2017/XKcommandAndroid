@@ -28,7 +28,6 @@ public class AppGlobal {
     private static LinkedHashMap<String, DeviceData> scanDeviceMap;
     private static HashMap<String, DeviceData> pairedDeviceMap;
     private static boolean isSavingPairedDevices = false;
-    private static boolean isCurrentDeviceDisconnected = false;
 
     public static int loaderId;
 
@@ -319,13 +318,6 @@ public class AppGlobal {
                 }
             }
         }
-        if (!isCurrentDeviceDisconnected &&
-                (currentDevice == null || currentDevice.deviceState == DeviceState.OFFLINE)) {
-
-            isCurrentDeviceDisconnected = true;
-        } else {
-            isCurrentDeviceDisconnected = false;
-        }
     }
 
     public static void turnOffBluetooth() {
@@ -398,7 +390,7 @@ public class AppGlobal {
             for (int i = 0; i < 8; i++) {
                 currentDevice.buttons[i].buttonBytes[0] = Helper.setBit(currentDevice.buttons[i].buttonBytes[0], 3, 1);
                 currentDevice.buttons[i].buttonBytes[0] = Helper.setBit(currentDevice.buttons[i].buttonBytes[0], 0, 0);
-                bluetoothService.writeButton(currentDevice, currentDevice.buttons[i]);
+                bluetoothService.writeAllButtons(currentDevice);
             }
         }
     }

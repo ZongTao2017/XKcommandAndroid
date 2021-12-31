@@ -20,6 +20,14 @@
                 android:src="@drawable/device_list"
                 android:scaleType="fitCenter"/>
         </FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="v4"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="90dp" />
         <ImageView
             android:id="@+id/logo"
             android:layout_width="130dp"
@@ -27,13 +35,17 @@
             android:layout_gravity="center"
             android:src="@drawable/xkglow_logo" />
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="v3"
-            android:textColor="@color/white"
-            android:textSize="14sp"
+            android:id="@+id/not_connected"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="Device Not Connected"
+            android:textColor="@color/red"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="90dp" />
+            android:gravity="end|center_vertical"
+            android:layout_marginEnd="90dp"
+            />
         <TextView
             android:id="@+id/controller_name"
             android:layout_width="match_parent"
