@@ -193,10 +193,11 @@ public class ControlFragment extends Fragment {
         if (pairedDeviceMap.isEmpty()) {
             if (fakeControlView == null) {
                 DeviceData deviceData = new DeviceData("", "XK-Device");
-                deviceData.deviceState = DeviceState.CONNECTED;
+                deviceData.deviceState = DeviceState.OFFLINE;
                 fakeControlView = new DeviceControlView(getContext(), width, height, deviceData);
                 fakeControlView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
                 contentLayout.addView(fakeControlView);
+                fakeControlView.updateDeviceConnection();
                 AppGlobal.setCurrentDevice(deviceData);
             }
         } else if (fakeControlView != null) {

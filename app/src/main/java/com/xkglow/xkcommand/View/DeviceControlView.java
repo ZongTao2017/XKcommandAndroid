@@ -304,11 +304,17 @@ public class DeviceControlView extends LinearLayout {
     public void updateDeviceInfo() {
         deviceData = AppGlobal.findDevice(deviceData);
         if (deviceData != null && deviceData.deviceState == DeviceState.READY) {
-            textVolt.setText(String.format("%.1fV", deviceData.deviceInfoBytes[4] * 0.2f));
-            textAmp.setText(String.format("%.1fA",(deviceData.deviceInfoBytes[6] + deviceData.deviceInfoBytes[7] * 0xff) * 0.2f));
-            textTemp.setText(deviceData.deviceInfoBytes[5] - 50 + "\u2103");
+            textVolt.setText(String.format("%.1fV", (deviceData.deviceInfoBytes[4] & 0xff) * 0.1f));
+            textAmp.setText(String.format("%.1fA",(deviceData.deviceInfoBytes[6] & 0xff + deviceData.deviceInfoBytes[7] * 0xff) * 0.2f));
+            if (deviceData.systemData.tempUnitC) {
+                textTemp.setText((deviceData.deviceInfoBytes[5] & 0xff) - 50 + "\u2103");
+            } else {
+                textTemp.setText((deviceData.deviceInfoBytes[5] & 0xff) - 18 + "\u2109");
+            }
             boolean error = false;
-            if (deviceData.deviceInfoBytes[4] < deviceData.userSettingsBytes[0]) {
+            float currentVolt = (deviceData.deviceInfoBytes[4] & 0xff) * 0.1f;
+            float maxVolt = (deviceData.userSettingsBytes[0] & 0xff) * 0.2f;
+            if (currentVolt < maxVolt && Math.abs(currentVolt - maxVolt) > 0.1f) {
                 powerOff();
                 error = true;
             }

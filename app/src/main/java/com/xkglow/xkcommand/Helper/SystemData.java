@@ -8,6 +8,7 @@ public class SystemData implements Serializable {
     public int turnBluetoothOffAfter;
     public boolean bluetoothAutoOff;
     public float cutoffInput;
+    public boolean tempUnitC;
 
     public SystemData() {
         buttonColor = 0xff009be3;
@@ -15,5 +16,6 @@ public class SystemData implements Serializable {
         turnBluetoothOffAfter = 2;
         cutoffInput = 12;
         bluetoothAutoOff = true;
+        tempUnitC = true;
     }
 }

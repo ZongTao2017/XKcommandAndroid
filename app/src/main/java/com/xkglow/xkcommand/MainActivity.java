@@ -354,8 +354,10 @@ public class MainActivity extends FragmentActivity {
                         mDeviceList.update();
                     DeviceData currentDevice = AppGlobal.getCurrentDevice();
                     Helper.setSignal(mSignal, currentDevice);
-                    updateDeviceConnection();
-                    mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
+                    if (currentDevice != null) {
+                        mTitle.setText(AppGlobal.getCurrentDevice().getSystemData().name);
+                        updateDeviceConnection();
+                    }
                 }
             });
         }

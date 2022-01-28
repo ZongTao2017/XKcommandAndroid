@@ -22,7 +22,7 @@ public class EditSystemActivity extends Activity {
     FrameLayout minus1, plus1, minus2, plus2;
     ImageView minusImage1, plusImage1, minusImage2, plusImage2;
     SystemData systemData;
-    TextView controllerName, cutoffInputText, turnOffBluetoothText;
+    TextView controllerName, cutoffInputText, turnOffBluetoothText, tempCText, tempFText;
     SwitchView switchAutoOff;
     LinearLayout autoOffLayout;
 
@@ -35,6 +35,7 @@ public class EditSystemActivity extends Activity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppGlobal.getCurrentDevice().setSystem(systemData);
                 AppGlobal.writeUserSettings();
                 finish();
             }
@@ -131,7 +132,6 @@ public class EditSystemActivity extends Activity {
                 if (systemData.turnBluetoothOffAfter > 2) {
                     systemData.turnBluetoothOffAfter -= 1;
                     turnOffBluetoothText.setText(systemData.turnBluetoothOffAfter + "min");
-                    AppGlobal.getCurrentDevice().setSystem(systemData);
                 }
                 setButtons2();
             }
@@ -143,9 +143,28 @@ public class EditSystemActivity extends Activity {
                 if (systemData.turnBluetoothOffAfter < 240) {
                     systemData.turnBluetoothOffAfter += 1;
                     turnOffBluetoothText.setText(systemData.turnBluetoothOffAfter + "min");
-                    AppGlobal.getCurrentDevice().setSystem(systemData);
                 }
                 setButtons2();
+            }
+        });
+
+        tempCText = findViewById(R.id.unit_c);
+        tempFText = findViewById(R.id.unit_f);
+
+        tempCText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                systemData.tempUnitC = true;
+                tempCText.setTextColor(getColor(R.color.blue));
+                tempFText.setTextColor(getColor(R.color.white));
+            }
+        });
+        tempFText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                systemData.tempUnitC = false;
+                tempCText.setTextColor(getColor(R.color.white));
+                tempFText.setTextColor(getColor(R.color.blue));
             }
         });
     }
@@ -169,6 +188,14 @@ public class EditSystemActivity extends Activity {
                 }
             }
         });
+
+        if (systemData.tempUnitC) {
+            tempCText.setTextColor(getColor(R.color.blue));
+            tempFText.setTextColor(getColor(R.color.white));
+        } else {
+            tempCText.setTextColor(getColor(R.color.white));
+            tempFText.setTextColor(getColor(R.color.blue));
+        }
 
         float r = 8;
         ShapeDrawable shape = new ShapeDrawable (new RoundRectShape(new float[] { r, r, r, r, r, r, r, r },null,null));

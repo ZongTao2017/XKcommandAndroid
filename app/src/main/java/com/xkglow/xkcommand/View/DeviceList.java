@@ -19,11 +19,13 @@ import com.xkglow.xkcommand.Helper.DeviceData;
 import com.xkglow.xkcommand.Helper.Helper;
 import com.xkglow.xkcommand.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class DeviceList extends ScrollView {
-    HashMap<String, PairedDeviceView> pairedDeviceViewMap;
-    HashMap<String, UnpairedDeviceView> unpairedDeviceViewMap;
+    LinkedHashMap<String, PairedDeviceView> pairedDeviceViewMap;
+    LinkedHashMap<String, UnpairedDeviceView> unpairedDeviceViewMap;
     LinearLayout pairedLayout, unpairedLayout;
 
 
@@ -31,8 +33,8 @@ public class DeviceList extends ScrollView {
         super(context, attrs);
         inflate(getContext(), R.layout.device_list, this);
 
-        pairedDeviceViewMap = new HashMap<>();
-        unpairedDeviceViewMap= new HashMap<>();
+        pairedDeviceViewMap = new LinkedHashMap<>();
+        unpairedDeviceViewMap= new LinkedHashMap<>();
         pairedLayout = findViewById(R.id.paired_device_layout);
         unpairedLayout = findViewById(R.id.unpaired_device_layout);
     }
@@ -123,7 +125,11 @@ public class DeviceList extends ScrollView {
     }
 
     public void setCurrent(int index) {
-
+        ArrayList<PairedDeviceView> pairedDevices = new ArrayList<>(pairedDeviceViewMap.values());
+        for (int i = 0; i < pairedDevices.size(); i++) {
+            PairedDeviceView pairedDeviceView = pairedDevices.get(i);
+            pairedDeviceView.setCurrent(i == index);
+        }
     }
 
     private void showMenu(final DeviceData deviceData, View view) {

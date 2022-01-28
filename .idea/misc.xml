@@ -6,6 +6,7 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.30885416666666665" />
         <entry key="../xkcommand/app/src/main/res/drawable/dot_blue.xml" value="0.22" />
         <entry key="../xkcommand/app/src/main/res/drawable/dot_white.xml" value="0.147" />
+        <entry key="../xkcommand/app/src/main/res/drawable/ic_menu_color_selector.xml" value="0.22" />
         <entry key="../xkcommand/app/src/main/res/drawable/rect_border.xml" value="0.2285" />
         <entry key="../xkcommand/app/src/main/res/drawable/round_corner.xml" value="0.22" />
         <entry key="../xkcommand/app/src/main/res/layout-land/activity_device_pair.xml" value="0.23897707231040563" />
@@ -24,7 +25,7 @@
         <entry key="../xkcommand/app/src/main/res/layout/activity_edit_color.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_edit_name.xml" value="0.2164855072463768" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_edit_sensor.xml" value="0.2164855072463768" />
-        <entry key="../xkcommand/app/src/main/res/layout/activity_edit_system.xml" value="0.23268698060941828" />
+        <entry key="../xkcommand/app/src/main/res/layout/activity_edit_system.xml" value="0.45" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_select_button.xml" value="0.25" />
         <entry key="../xkcommand/app/src/main/res/layout/activity_select_channel.xml" value="0.2164855072463768" />
@@ -43,6 +44,7 @@
         <entry key="../xkcommand/app/src/main/res/layout/recycler_view_item.xml" value="0.2318840579710145" />
         <entry key="../xkcommand/app/src/main/res/layout/status_bar.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/status_bar_vertical.xml" value="0.21331521739130435" />
+        <entry key="../xkcommand/app/src/main/res/layout/tabs_icon.xml" value="0.28229166666666666" />
         <entry key="../xkcommand/app/src/main/res/layout/test.xml" value="0.21331521739130435" />
         <entry key="../xkcommand/app/src/main/res/layout/unpaired_device_view.xml" value="0.375" />
         <entry key="../xkcommand/app/src/main/res/menu/device_pop_up_menu.xml" value="0.28229166666666666" />

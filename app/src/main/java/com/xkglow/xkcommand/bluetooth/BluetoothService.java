@@ -49,6 +49,7 @@ public class BluetoothService extends Service {
     private ConnectTimerTask mConnectTimerTask;
     private ArrayList<String> mScanDeviceAddressList;
     private LinkedBlockingDeque<BluetoothData> mWaitingList;
+    private BluetoothData mLast;
 
     public static final String CONTROLLER_SERVICE = "02A8AF3E-C199-4735-BACE-FA8E9F74803E";
     public static final String DEVICE_INFO = "02A8AF3E-C001-4735-BACE-FA8E9F74803E";
@@ -67,6 +68,8 @@ public class BluetoothService extends Service {
     public static final String SENSOR_3_STATUS = "02A8AF3E-C01A-4735-BACE-FA8E9F74803E";
 
     public static final String TAG = "BleService";
+    public static final int MAX_RETRY_TIMES = 5;
+    public static int mRetry;
 
     public class LocalBinder extends Binder {
         public BluetoothService getService() {
@@ -92,6 +95,8 @@ public class BluetoothService extends Service {
         mWaitingList = new LinkedBlockingDeque<>();
         mHandler = new Handler();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mLast = null;
+        mRetry = 0;
         if (mBluetoothAdapter != null) {
             startScanTimers();
             startConnectTimers();
@@ -255,15 +260,15 @@ public class BluetoothService extends Service {
         }
     }
 
-    public void writeCharacteristic(final BluetoothGatt bluetoothGatt, String service, final byte[] value) {
+    public boolean writeCharacteristic(final BluetoothGatt bluetoothGatt, String service, final byte[] value) {
         if (bluetoothGatt == null)
-            return;
+            return false;
         BluetoothGattService gattService = bluetoothGatt.getService(UUID.fromString(CONTROLLER_SERVICE));
         if (gattService == null)
-            return;
+            return false;
         BluetoothGattCharacteristic gattChar = gattService.getCharacteristic(UUID.fromString(service));
         if (gattChar == null)
-            return;
+            return false;
         gattChar.setValue(value);
         boolean result = bluetoothGatt.writeCharacteristic(gattChar);
         if (result) {
@@ -271,34 +276,36 @@ public class BluetoothService extends Service {
         } else {
             Log.e(TAG, "write char fail: " + service + ", " + Helper.convertBytesToBitsString(value));
         }
+        return result;
     }
 
-    public void readCharacteristic(BluetoothGatt bluetoothGatt, String service) {
+    public boolean readCharacteristic(BluetoothGatt bluetoothGatt, String service) {
         if (bluetoothGatt == null)
-            return;
+            return false;
         BluetoothGattService gattService = bluetoothGatt.getService(UUID.fromString(CONTROLLER_SERVICE));
         if (gattService == null)
-            return;
+            return false;
         BluetoothGattCharacteristic gattChar = gattService.getCharacteristic(UUID.fromString(service));
         if (gattChar == null)
-            return;
+            return false;
         boolean result = bluetoothGatt.readCharacteristic(gattChar);
         if (result) {
             Log.d(TAG, "read char: " + service);
         } else {
             Log.e(TAG, "read char fail: " + service);
         }
+        return result;
     }
 
-    private void writeDescriptor(BluetoothGatt bluetoothGatt, String service) {
+    private boolean writeDescriptor(BluetoothGatt bluetoothGatt, String service) {
         if (bluetoothGatt == null)
-            return;
+            return false;
         BluetoothGattService gattService = bluetoothGatt.getService(UUID.fromString(CONTROLLER_SERVICE));
         if (gattService == null)
-            return;
+            return false;
         BluetoothGattCharacteristic gattChar = gattService.getCharacteristic(UUID.fromString(service));
         if (gattChar == null)
-            return;
+            return false;
         bluetoothGatt.setCharacteristicNotification(gattChar, true);
         BluetoothGattDescriptor descriptor = gattChar.getDescriptors().get(0);
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
@@ -308,6 +315,7 @@ public class BluetoothService extends Service {
         } else {
             Log.e(TAG, "set notification fail: " + service);
         }
+        return result;
     }
 
 
@@ -360,15 +368,17 @@ public class BluetoothService extends Service {
                 } else {
                     Log.e(TAG, "Write char empty: " + service);
                 }
+                sendNext();
             } else {
                 Log.e(TAG, "Write char fail: " + service);
+                retry();
             }
-            sendNext();
         }
 
         @Override
         public void onCharacteristicRead(final BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             String address = gatt.getDevice().getAddress();
+            String service = characteristic.getUuid().toString().toUpperCase();
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 final byte[] data = characteristic.getValue();
                 if (data != null && data.length > 0) {
@@ -467,8 +477,11 @@ public class BluetoothService extends Service {
                         }
                     }
                 }
+                sendNext();
+            } else {
+                Log.e(TAG, "Read char fail: " + service);
+                retry();
             }
-            sendNext();
         }
 
         @Override
@@ -564,10 +577,11 @@ public class BluetoothService extends Service {
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(TAG, "get notification.");
+                sendNext();
             } else {
                 Log.e(TAG, "get notification error: " + status + ".");
+                retry();
             }
-            sendNext();
         }
     };
 
@@ -712,18 +726,22 @@ public class BluetoothService extends Service {
     }
 
     private void sendNext() {
-        BluetoothData bluetoothData = mWaitingList.poll();
-        if (bluetoothData != null) {
-            BluetoothGatt gatt = AppGlobal.getBluetoothGatt(bluetoothData.address);
-            switch (bluetoothData.type) {
+        mLast = mWaitingList.poll();
+        if (mLast != null) {
+            BluetoothGatt gatt = AppGlobal.getBluetoothGatt(mLast.address);
+            boolean result = false;
+            switch (mLast.type) {
                 case Write_Char:
-                    writeCharacteristic(gatt, bluetoothData.service, bluetoothData.data);
+                    result = writeCharacteristic(gatt, mLast.service, mLast.data);
                     break;
                 case Read_Char:
-                    readCharacteristic(gatt, bluetoothData.service);
+                    result = readCharacteristic(gatt, mLast.service);
                     break;
                 case Write_Descriptor:
-                    writeDescriptor(gatt, bluetoothData.service);
+                    result = writeDescriptor(gatt, mLast.service);
+            }
+            if (!result) {
+                retry();
             }
         }
     }
@@ -831,6 +849,15 @@ public class BluetoothService extends Service {
         } else {
             sensorData.channels[7] = true;
             sensorData.actions[7] = data[8] & 0xff;
+        }
+    }
+
+    public void retry() {
+        if (++mRetry <= MAX_RETRY_TIMES) {
+            mWaitingList.addFirst(mLast);
+            sendNext();
+        } else {
+            Log.e(TAG, "Retry too many times !!!");
         }
     }
 }

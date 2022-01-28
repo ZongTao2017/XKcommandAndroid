@@ -120,6 +120,11 @@ public class AppGlobal {
         }
     }
 
+    public DeviceData getDevice(int index) {
+        ArrayList<DeviceData> pairedDevices = new ArrayList<>(getPairedDeviceMap().values());
+        return pairedDevices.get(index);
+    }
+
     public static void setCurrentDevice(DeviceData deviceData) {
         if (currentDevice != null && !currentDevice.equals(deviceData)) {
             disconnect(currentDevice, false);
@@ -200,7 +205,7 @@ public class AppGlobal {
     }
 
     public static void disconnect(DeviceData deviceData, boolean shouldRemove) {
-        if (bluetoothService != null) {
+        if (bluetoothService != null && deviceData.deviceState != DeviceState.OFFLINE) {
             deviceData.deviceState = DeviceState.DISCONNECTING;
             bluetoothService.disconnect(deviceData, shouldRemove);
         }

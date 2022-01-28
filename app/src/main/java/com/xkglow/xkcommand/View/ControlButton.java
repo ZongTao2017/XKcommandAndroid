@@ -197,7 +197,9 @@ public class ControlButton extends FrameLayout {
                 return false;
             }
             isTouching = true;
-            if (deviceData.deviceInfoBytes[4] < deviceData.userSettingsBytes[0]) {
+            float currentVolt = (deviceData.deviceInfoBytes[4] & 0xff) * 0.1f;
+            float maxVolt = (deviceData.userSettingsBytes[0] & 0xff) * 0.2f;
+            if (currentVolt < maxVolt && Math.abs(currentVolt - maxVolt) > 0.1f) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert)
                         .setCancelable(true)
                         .setMessage("Current volt is lower than auto cutoff volt.")
